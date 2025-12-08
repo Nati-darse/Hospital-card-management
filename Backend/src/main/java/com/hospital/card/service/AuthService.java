@@ -18,7 +18,7 @@ public class AuthService {
     
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    // JWT removed for Phase 1
     
     public AuthResponse register(RegisterRequest request) {
         // Create new user
@@ -37,14 +37,11 @@ public class AuthService {
         // Save user
         User savedUser = userService.registerUser(user);
         
-        // Generate token
-        String token = jwtService.generateToken(savedUser.getUsername());
-        
         // Update last login
         userService.updateLastLogin(savedUser.getUsername());
-        
+
         return new AuthResponse(
-            token,
+            null,
             savedUser.getId(),
             savedUser.getUsername(),
             savedUser.getEmail(),
@@ -70,14 +67,11 @@ public class AuthService {
         User user = userService.findByUsername(request.getUsername())
             .orElseThrow(() -> new RuntimeException("User not found"));
         
-        // Generate token
-        String token = jwtService.generateToken(user.getUsername());
-        
         // Update last login
         userService.updateLastLogin(user.getUsername());
-        
+
         return new AuthResponse(
-            token,
+            null,
             user.getId(),
             user.getUsername(),
             user.getEmail(),
