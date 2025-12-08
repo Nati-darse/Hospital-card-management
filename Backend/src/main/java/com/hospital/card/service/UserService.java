@@ -73,4 +73,31 @@ public class UserService {
         user.setIsActive(true);
         userRepository.save(user);
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public User updateUser(Long id, User update) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (update.getEmail() != null) user.setEmail(update.getEmail());
+        if (update.getFirstName() != null) user.setFirstName(update.getFirstName());
+        if (update.getLastName() != null) user.setLastName(update.getLastName());
+        if (update.getPhoneNumber() != null) user.setPhoneNumber(update.getPhoneNumber());
+        if (update.getDateOfBirth() != null) user.setDateOfBirth(update.getDateOfBirth());
+        if (update.getGender() != null) user.setGender(update.getGender());
+        if (update.getAddress() != null) user.setAddress(update.getAddress());
+        if (update.getRole() != null) user.setRole(update.getRole());
+        if (update.getIsActive() != null) user.setIsActive(update.getIsActive());
+        if (update.getPassword() != null && !update.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(update.getPassword()));
+        }
+
+        return userRepository.save(user);
+    }
 }
