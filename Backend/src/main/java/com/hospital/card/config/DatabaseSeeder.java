@@ -17,7 +17,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Create admin user 'Nati' if not present
+    //create Admin with my name and pasword 
         String adminUsername = "Nati";
         if (userService.findByUsername(adminUsername).isEmpty()) {
             User admin = new User();
