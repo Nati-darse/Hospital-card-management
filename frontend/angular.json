@@ -3,7 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": false
+    "analytics": "7a6398bd-8fc3-458c-a430-625d43c2442f"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -53,6 +53,7 @@
               }
             ],
             "styles": [
+              "src/tailwind.css",
               "src/styles.scss"
             ]
           },
