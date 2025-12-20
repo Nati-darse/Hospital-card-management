@@ -20,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,8 +31,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**", "/api/test/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin().disable()
-            .httpBasic();
+            .sessionManagement()
+            .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS)
+            .and()
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
