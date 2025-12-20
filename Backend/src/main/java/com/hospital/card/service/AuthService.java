@@ -18,7 +18,7 @@ public class AuthService {
     
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    // JWT removed for Phase 1
+    private final JwtService jwtService;
     
     public AuthResponse register(RegisterRequest request) {
         // Create new user
@@ -40,8 +40,11 @@ public class AuthService {
         // Update last login
         userService.updateLastLogin(savedUser.getUsername());
 
+        // Generate token
+        String jwtToken = jwtService.generateToken(savedUser);
+
         return new AuthResponse(
-            null,
+            jwtToken,
             savedUser.getId(),
             savedUser.getUsername(),
             savedUser.getEmail(),
@@ -70,8 +73,11 @@ public class AuthService {
         // Update last login
         userService.updateLastLogin(user.getUsername());
 
+        // Generate token
+        String jwtToken = jwtService.generateToken(user);
+
         return new AuthResponse(
-            null,
+            jwtToken,
             user.getId(),
             user.getUsername(),
             user.getEmail(),
