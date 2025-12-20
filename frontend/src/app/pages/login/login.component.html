@@ -1,0 +1,111 @@
+<div class="min-h-screen flex bg-white font-sans overflow-hidden">
+  <!-- Left Column: Visual Branding -->
+  <div class="hidden lg:block lg:w-1/2 relative">
+    <img src="/atlas_hero.png" alt="Atlas Hospital" class="absolute inset-0 w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-tr from-primary/60 to-secondary/40 mix-blend-multiply"></div>
+    <div class="absolute bottom-12 left-12 right-12 text-white">
+      <h2 class="text-5xl font-black tracking-tight mb-4 leading-tight">ATLAS<br>HOSPITAL</h2>
+      <p class="text-xl font-light text-slate-100 max-w-md">Precision healthcare powered by state-of-the-art management
+        systems. Welcome to the future of medical care.</p>
+    </div>
+  </div>
+
+  <!-- Right Column: Login Form -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+    <div class="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div class="mb-10 text-center lg:text-left">
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6 shadow-2xl shadow-primary/30">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+        <h1 class="text-4xl font-black text-secondary tracking-tight mb-2">Hospital Login</h1>
+        <p class="text-slate-500 font-medium">Access your Atlas Hospital management portal.</p>
+      </div>
+
+      <div *ngIf="error"
+        class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl flex items-center gap-3 animate-in shake duration-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd" />
+        </svg>
+        <span class="text-sm font-semibold">{{ error }}</span>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div>
+          <label class="block text-sm font-bold text-secondary mb-2 uppercase tracking-widest">Username</label>
+          <div class="relative group">
+            <span
+              class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-primary transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+            </span>
+            <input type="text" formControlName="username" class="input-field pl-12" placeholder="e.g. jsmith_md"
+              [class.border-red-500]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
+          </div>
+          <p *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid"
+            class="mt-2 text-xs font-bold text-red-500 uppercase">Username is required</p>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-sm font-bold text-secondary uppercase tracking-widest">Password</label>
+            <a href="#"
+              class="text-xs font-bold text-primary hover:text-primary-dark uppercase tracking-widest">Forgot?</a>
+          </div>
+          <div class="relative group">
+            <span
+              class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-primary transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd" />
+              </svg>
+            </span>
+            <input type="password" formControlName="password" class="input-field pl-12" placeholder="••••••••"
+              [class.border-red-500]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+          </div>
+          <p *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+            class="mt-2 text-xs font-bold text-red-500 uppercase">Password is required</p>
+        </div>
+
+        <button type="submit" [disabled]="loginForm.invalid || loading"
+          class="btn-primary w-full group overflow-hidden relative">
+          <span *ngIf="!loading" class="relative z-10 flex items-center justify-center gap-3">
+            Sign In to Portal
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform group-hover:translate-x-1"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </span>
+          <span *ngIf="loading" class="relative z-10 flex items-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+            Authorizing...
+          </span>
+          <div
+            class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+          </div>
+        </button>
+      </form>
+
+      <div class="mt-12 text-center">
+        <p class="text-slate-500 font-medium">New medical staff?</p>
+        <a routerLink="/register"
+          class="mt-2 inline-block font-black text-secondary hover:text-primary transition-colors border-b-2 border-primary/20 hover:border-primary pb-1">Register
+          New Account</a>
+      </div>
+    </div>
+  </div>
+</div>
