@@ -1,0 +1,215 @@
+<div class="min-h-screen bg-slate-50 flex font-sans">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20 overflow-hidden">
+        <div class="p-8 flex items-center gap-4 bg-primary/10">
+            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-black tracking-tighter uppercase leading-none">Atlas</h2>
+                <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 leading-none">Management
+                </p>
+            </div>
+        </div>
+
+        <nav class="mt-10 flex-1 px-6 space-y-3">
+            <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span class="font-bold tracking-tight">Overview</span>
+            </a>
+
+            <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span class="font-bold tracking-tight">Patients</span>
+            </a>
+
+            <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
+                </svg>
+                <span class="font-bold tracking-tight">Access Cards</span>
+            </a>
+
+            <a *ngIf="isAdmin" routerLink="/staff-management"
+                routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span class="font-bold tracking-tight">Staffing</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5">
+            <div class="p-5 bg-white/5 rounded-[30px] flex items-center gap-4">
+                <div
+                    class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center text-secondary font-black text-xs">
+                    {{ currentUser?.firstName?.charAt(0) }}{{ currentUser?.lastName?.charAt(0) }}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-black truncate uppercase leading-none mb-1">{{ currentUser?.firstName }}</p>
+                    <p class="text-[9px] text-primary font-black uppercase tracking-wider leading-none">Secured</p>
+                </div>
+                <button (click)="onLogout()" class="text-white hover:text-red-400 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-10 py-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-black text-secondary tracking-tight">Access Control Cards</h1>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">NFC Identity Management</p>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <button class="btn-primary py-2 px-6 rounded-2xl text-xs uppercase tracking-widest shadow-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Issue New Card
+                </button>
+            </div>
+        </header>
+
+        <!-- Card Grid -->
+        <div class="p-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+                <!-- Visual Hospital Card -->
+                <div *ngFor="let i of [1,2,3,4,5,6]" class="relative group perspective">
+                    <div
+                        class="relative w-full aspect-[1.6/1] bg-secondary rounded-[32px] overflow-hidden shadow-2xl transition-transform duration-700 preserve-3d group-hover:rotate-y-12 ring-1 ring-white/10">
+                        <!-- Background Patterns -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent pointer-events-none">
+                        </div>
+                        <div
+                            class="absolute right-[-20%] bottom-[-20%] w-64 h-64 bg-primary/10 rounded-full blur-[60px]">
+                        </div>
+
+                        <div class="relative p-10 flex flex-col h-full text-white">
+                            <div class="flex justify-between items-start mb-auto">
+                                <div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xl font-black tracking-tighter uppercase leading-none">Atlas
+                                            </h4>
+                                            <p
+                                                class="text-[8px] font-black text-primary uppercase tracking-[0.2em] leading-none mt-1">
+                                                Medical Center</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[8px] font-black text-white/40 uppercase tracking-[0.2em] mb-1">Card
+                                        Rank</p>
+                                    <p
+                                        class="text-[10px] font-black uppercase text-primary tracking-widest leading-none">
+                                        VIP ACCESS</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4 mb-8">
+                                <div>
+                                    <p class="text-[8px] font-black text-white/40 uppercase tracking-[0.2em] mb-1">
+                                        Authorized Patient</p>
+                                    <h3 class="text-2xl font-black tracking-tighter">Abebe Bikila</h3>
+                                </div>
+                                <div class="flex gap-8">
+                                    <div>
+                                        <p class="text-[8px] font-black text-white/40 uppercase tracking-[0.2em] mb-1">
+                                            Network ID</p>
+                                        <p class="text-xs font-mono font-bold tracking-widest">ATL-882-{{i}}01-X</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[8px] font-black text-white/40 uppercase tracking-[0.2em] mb-1">
+                                            Valid Thru</p>
+                                        <p class="text-xs font-mono font-bold tracking-widest">12/28</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between pt-6 border-t border-white/5">
+                                <div class="flex gap-2">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 17h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                        </svg>
+                                    </div>
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="text-[8px] font-black uppercase tracking-[0.3em] text-white/20">Digital
+                                    Identity Protocol v4.1</span>
+                            </div>
+                        </div>
+
+                        <!-- Glowing Border Effect -->
+                        <div
+                            class="absolute inset-0 rounded-[32px] border-2 border-white/0 group-hover:border-primary/40 transition-all duration-700 pointer-events-none shadow-[inset_0_0_20px_rgba(0,132,255,0.1)] group-hover:shadow-[inset_0_0_40px_rgba(0,132,255,0.2)]">
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center px-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active
+                                Status</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <button
+                                class="text-[10px] font-black text-primary uppercase border-b border-primary/20 pb-0.5 transition-all hover:border-primary">Regenerate</button>
+                            <button
+                                class="text-[10px] font-black text-secondary uppercase border-b border-secondary/20 pb-0.5 transition-all hover:border-secondary">Revoke</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

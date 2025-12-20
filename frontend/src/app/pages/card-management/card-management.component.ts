@@ -5,13 +5,13 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/auth.models';
 
 @Component({
-  selector: 'app-patients',
+  selector: 'app-card-management',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './patients.component.html',
-  styleUrl: './patients.scss'
+  templateUrl: './card-management.component.html',
+  styleUrl: './card-management.component.scss'
 })
-export class PatientsComponent implements OnInit {
+export class CardManagementComponent implements OnInit {
   currentUser: User | null = null;
   isAdmin = false;
 

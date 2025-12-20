@@ -5,13 +5,13 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/auth.models';
 
 @Component({
-  selector: 'app-patients',
+  selector: 'app-staff-management',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './patients.component.html',
-  styleUrl: './patients.scss'
+  templateUrl: './staff-management.component.html',
+  styleUrl: './staff-management.component.scss'
 })
-export class PatientsComponent implements OnInit {
+export class StaffManagementComponent implements OnInit {
   currentUser: User | null = null;
   isAdmin = false;
 
@@ -23,6 +23,11 @@ export class PatientsComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.isAdmin = this.currentUser?.role === 'ADMIN';
+
+    // Safety check for non-admin access (guard already handles this, but good practice)
+    if (!this.isAdmin) {
+      // this.router.navigate(['/dashboard']);
+    }
   }
 
   onLogout(): void {
