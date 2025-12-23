@@ -1,0 +1,157 @@
+<div class="min-h-screen bg-slate-50 flex font-sans">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20 overflow-hidden">
+        <div class="p-8 flex items-center gap-4 bg-primary/10">
+            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-black tracking-tighter uppercase leading-none">Atlas</h2>
+                <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 leading-none">Management
+                </p>
+            </div>
+        </div>
+
+        <nav class="mt-10 flex-1 px-6 space-y-3">
+            <a routerLink="/dashboard"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span class="font-bold tracking-tight">Overview</span>
+            </a>
+            <a routerLink="/patients"
+                class="flex items-center space-x-4 p-4 rounded-2xl bg-primary/20 text-primary border-l-4 border-primary transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span class="font-bold tracking-tight">Patients</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative flex flex-col p-10">
+        <div class="max-w-4xl mx-auto w-full">
+            <header class="mb-12">
+                <h1 class="text-4xl font-black text-secondary tracking-tight">Enroll New Patient</h1>
+                <p class="text-slate-500 font-bold uppercase tracking-widest mt-2 text-xs">Patient Identity & Clinical
+                    Setup</p>
+            </header>
+
+            <div *ngIf="error" class="mb-8 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl font-bold">
+                {{ error }}
+            </div>
+
+            <div *ngIf="success"
+                class="mb-8 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-xl font-bold">
+                {{ success }}
+            </div>
+
+            <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-10">
+                <!-- Account Info -->
+                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                    <h3
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        Account Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">First
+                                Name</label>
+                            <input type="text" formControlName="firstName"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="Abebe">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Last
+                                Name</label>
+                            <input type="text" formControlName="lastName"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="Bikila">
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Username</label>
+                            <input type="text" formControlName="username"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="a_bikila">
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Email</label>
+                            <input type="email" formControlName="email"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="abebe@example.com">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clinical Info -->
+                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                    <h3
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        Clinical Parameters</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Blood
+                                Group</label>
+                            <select formControlName="bloodGroup"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 appearance-none">
+                                <option value="">Select Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Insurance
+                                Provider</label>
+                            <input type="text" formControlName="insuranceProvider"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="Nile Insurance">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Assignment -->
+                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                    <h3
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        Staff Assignment</h3>
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Primary
+                            Doctor</label>
+                        <select formControlName="assignedDoctorId"
+                            class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 appearance-none">
+                            <option value="">Search MD...</option>
+                            <option *ngFor="let doc of doctors" [value]="doc.id">Dr. {{ doc.user?.firstName }} {{
+                                doc.user?.lastName }} ({{ doc.specialization }})</option>
+                        </select>
+                    </div>
+                </section>
+
+                <div class="flex gap-6 pb-10">
+                    <button type="button" routerLink="/patients"
+                        class="flex-1 bg-slate-200 text-secondary py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em]">Cancel</button>
+                    <button type="submit" [disabled]="registrationForm.invalid || loading"
+                        class="flex-[2] bg-primary text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
+                        {{ loading ? 'ENROLLING...' : 'CONFIRM ENROLLMENT' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
