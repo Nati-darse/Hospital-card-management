@@ -17,16 +17,24 @@ export class AuthService {
     constructor(private http: HttpClient) { }
 
     login(credentials: LoginRequest): Observable<AuthResponse> {
+        console.log('Attempting login for:', credentials.username);
         return this.http.post<AuthResponse>(`${this.API_URL}/login`, credentials)
             .pipe(
-                tap(response => this.handleAuthResponse(response))
+                tap(response => {
+                    console.log('Login successful for:', response.username);
+                    this.handleAuthResponse(response);
+                })
             );
     }
 
     register(userData: RegisterRequest): Observable<AuthResponse> {
+        console.log('Attempting registration for:', userData.username, 'with role:', userData.role);
         return this.http.post<AuthResponse>(`${this.API_URL}/register`, userData)
             .pipe(
-                tap(response => this.handleAuthResponse(response))
+                tap(response => {
+                    console.log('Registration successful for:', response.username);
+                    this.handleAuthResponse(response);
+                })
             );
     }
 

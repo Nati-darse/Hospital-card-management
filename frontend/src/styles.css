@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #0084ff;
+    --color-primary-dark: #0066cc;
+    --color-secondary: #0f172a;
+    --color-accent: #f0f9ff;
+}
+
+@layer base {
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        color: var(--color-secondary);
+        background-color: #f8fafc;
+        -webkit-font-smoothing: antialiased;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply px-8 py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer flex items-center justify-center;
+    }
+
+    .btn-secondary {
+        @apply px-8 py-4 bg-white text-secondary border border-slate-200 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-50 active:scale-95 transition-all cursor-pointer flex items-center justify-center;
+    }
+
+    .input-field {
+        @apply w-full bg-slate-100/50 border-2 border-transparent rounded-2xl py-4 px-6 text-sm font-bold text-secondary placeholder:text-slate-400 focus:bg-white focus:border-primary/20 focus:outline-none transition-all;
+    }
+
+    .card-premium {
+        @apply bg-white rounded-[40px] p-8 shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-primary/5 transition-all;
+    }
+
+    /* Custom Utilities */
+    .glass {
+        @apply bg-white/70 backdrop-blur-2xl border border-white/20;
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px) rotate(3deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(0px) rotate(3deg);
+    }
+}

@@ -20,4 +20,5 @@ public class PatientDTO {
     private String chronicConditions;
     private String insuranceProvider;
     private String insuranceNumber;
+    private Long assignedDoctorId;
 }

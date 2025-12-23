@@ -67,33 +67,33 @@
                 <!-- Account Info Section -->
                 <div>
                     <h3
-                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6 border-b border-slate-100 pb-2">
+                        class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-6 border-b border-slate-100 pb-2">
                         Account Information</h3>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label
-                                class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">Username</label>
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Username</label>
                             <input type="text" formControlName="username" class="input-field" placeholder="md_smith">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">Email</label>
+                            <label
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Email</label>
                             <input type="email" formControlName="email" class="input-field"
                                 placeholder="smith@atlashospital.com">
                         </div>
                         <div class="space-y-2">
                             <label
-                                class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">Password</label>
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Password</label>
                             <input type="password" formControlName="password" class="input-field"
                                 placeholder="••••••••">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">Professional
-                                Role</label>
+                            <label
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Role</label>
                             <select formControlName="role" class="input-field appearance-none">
-                                <option value="DOCTOR">Medical Doctor</option>
-                                <option value="NURSE">Nursing Staff</option>
-                                <option value="ADMIN">Hospital Administration</option>
-                                <option value="STAFF">General Services</option>
+                                <option value="USER">Medical Doctor</option>
+                                <option value="ADMIN">Administration</option>
+                                <option value="PATIENT">Patient</option>
                             </select>
                         </div>
                     </div>
@@ -102,50 +102,25 @@
                 <!-- Personal Info Section -->
                 <div>
                     <h3
-                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6 border-b border-slate-100 pb-2">
+                        class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-6 border-b border-slate-100 pb-2">
                         Personal Details</h3>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">First
+                            <label class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">First
                                 Name</label>
                             <input type="text" formControlName="firstName" class="input-field" placeholder="John">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">Last
+                            <label class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Last
                                 Name</label>
                             <input type="text" formControlName="lastName" class="input-field" placeholder="Doe">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">Phone
-                                Number</label>
-                            <input type="text" formControlName="phoneNumber" class="input-field"
-                                placeholder="+1 (555) 000-0000">
-                        </div>
-                        <div class="space-y-2">
-                            <label
-                                class="text-sm font-bold text-secondary uppercase tracking-widest pl-1">Gender</label>
-                            <div class="flex gap-4">
-                                <label class="flex-1">
-                                    <input type="radio" value="MALE" formControlName="gender" class="sr-only peer">
-                                    <div
-                                        class="w-full py-3 text-center rounded-xl border border-slate-200 font-bold text-slate-500 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all cursor-pointer">
-                                        Male</div>
-                                </label>
-                                <label class="flex-1">
-                                    <input type="radio" value="FEMALE" formControlName="gender" class="sr-only peer">
-                                    <div
-                                        class="w-full py-3 text-center rounded-xl border border-slate-200 font-bold text-slate-500 peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-all cursor-pointer">
-                                        Female</div>
-                                </label>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" [disabled]="registerForm.invalid || loading"
-                    class="btn-primary w-full py-4 text-lg">
-                    <span *ngIf="!loading">Create Staff Member Account</span>
-                    <span *ngIf="loading" class="flex items-center gap-3">
+                <button type="submit" [disabled]="registerForm.invalid || loading" class="btn-primary w-full py-5">
+                    <span *ngIf="!loading">Create Account</span>
+                    <span *ngIf="loading" class="flex items-center gap-3 justify-center">
                         <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                             </circle>
@@ -153,7 +128,7 @@
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
                             </path>
                         </svg>
-                        Processing registration...
+                        Preparing access...
                     </span>
                 </button>
             </form>

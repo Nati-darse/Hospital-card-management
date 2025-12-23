@@ -43,16 +43,18 @@ public class HospitalCardService {
     }
 
     if (dto.getCardNumber() == null) {
-      // basic card number generation
-      card.setCardNumber("CARD-" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10));
+      // Improved card number generation: ATL-YYYY-RANDOM
+      String year = String.valueOf(LocalDate.now().getYear());
+      String random = String.format("%06d", (int) (Math.random() * 1000000));
+      card.setCardNumber("ATL-" + year + "-" + random);
     } else {
       card.setCardNumber(dto.getCardNumber());
     }
 
-    card.setQrCodeData(dto.getQrCodeData());
+    card.setQrCodeData(null); // No longer using QR codes
     card.setIssueDate(dto.getIssueDate() != null ? dto.getIssueDate() : LocalDate.now());
-    card.setExpiryDate(dto.getExpiryDate());
-    card.setStatus(dto.getStatus());
+    card.setExpiryDate(dto.getExpiryDate() != null ? dto.getExpiryDate() : LocalDate.now().plusYears(5));
+    card.setStatus(dto.getStatus() != null ? dto.getStatus() : "ACTIVE");
 
     HospitalCard saved = hospitalCardRepository.save(card);
     return toDto(saved);

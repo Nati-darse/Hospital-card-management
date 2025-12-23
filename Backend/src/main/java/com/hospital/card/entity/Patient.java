@@ -42,4 +42,8 @@ public class Patient {
 
     @Column(name = "insurance_number")
     private String insuranceNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_doctor_id")
+    private Staff assignedDoctor;
 }

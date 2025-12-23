@@ -17,6 +17,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
+    private final com.hospital.card.repository.StaffRepository staffRepository;
 
     public List<PatientDTO> getAllPatients() {
         return patientRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
@@ -24,16 +25,33 @@ public class PatientService {
 
     public PatientDTO getPatient(Long id) {
         return patientRepository.findById(id).map(this::toDto)
-            .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+    }
+
+    public List<PatientDTO> getPatientsByDoctor(Long doctorId) {
+        return patientRepository.findByAssignedDoctorId(doctorId).stream().map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public PatientDTO getPatientByUserId(Long userId) {
+        return patientRepository.findByUserId(userId).map(this::toDto)
+                .orElseThrow(() -> new RuntimeException("Patient profile not found for user: " + userId));
     }
 
     public PatientDTO createPatient(PatientDTO dto) {
         Patient p = new Patient();
         if (dto.getUserId() != null) {
             User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found for patient"));
+                    .orElseThrow(() -> new RuntimeException("User not found for patient"));
             p.setUser(user);
         }
+
+        if (dto.getAssignedDoctorId() != null) {
+            com.hospital.card.entity.Staff doctor = staffRepository.findById(dto.getAssignedDoctorId())
+                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+            p.setAssignedDoctor(doctor);
+        }
+
         p.setMedicalRecordNumber(dto.getMedicalRecordNumber());
         p.setBloodGroup(dto.getBloodGroup());
         p.setEmergencyContactName(dto.getEmergencyContactName());
@@ -49,16 +67,29 @@ public class PatientService {
 
     public PatientDTO updatePatient(Long id, PatientDTO dto) {
         Patient p = patientRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-        if (dto.getMedicalRecordNumber() != null) p.setMedicalRecordNumber(dto.getMedicalRecordNumber());
-        if (dto.getBloodGroup() != null) p.setBloodGroup(dto.getBloodGroup());
-        if (dto.getEmergencyContactName() != null) p.setEmergencyContactName(dto.getEmergencyContactName());
-        if (dto.getEmergencyContactPhone() != null) p.setEmergencyContactPhone(dto.getEmergencyContactPhone());
-        if (dto.getAllergies() != null) p.setAllergies(dto.getAllergies());
-        if (dto.getChronicConditions() != null) p.setChronicConditions(dto.getChronicConditions());
-        if (dto.getInsuranceProvider() != null) p.setInsuranceProvider(dto.getInsuranceProvider());
-        if (dto.getInsuranceNumber() != null) p.setInsuranceNumber(dto.getInsuranceNumber());
+        if (dto.getMedicalRecordNumber() != null)
+            p.setMedicalRecordNumber(dto.getMedicalRecordNumber());
+        if (dto.getBloodGroup() != null)
+            p.setBloodGroup(dto.getBloodGroup());
+        if (dto.getEmergencyContactName() != null)
+            p.setEmergencyContactName(dto.getEmergencyContactName());
+        if (dto.getEmergencyContactPhone() != null)
+            p.setEmergencyContactPhone(dto.getEmergencyContactPhone());
+        if (dto.getAllergies() != null)
+            p.setAllergies(dto.getAllergies());
+        if (dto.getChronicConditions() != null)
+            p.setChronicConditions(dto.getChronicConditions());
+        if (dto.getInsuranceProvider() != null)
+            p.setInsuranceProvider(dto.getInsuranceProvider());
+        if (dto.getInsuranceNumber() != null)
+            p.setInsuranceNumber(dto.getInsuranceNumber());
+        if (dto.getAssignedDoctorId() != null) {
+            com.hospital.card.entity.Staff doctor = staffRepository.findById(dto.getAssignedDoctorId())
+                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+            p.setAssignedDoctor(doctor);
+        }
 
         Patient saved = patientRepository.save(p);
         return toDto(saved);
@@ -71,7 +102,8 @@ public class PatientService {
     private PatientDTO toDto(Patient p) {
         PatientDTO dto = new PatientDTO();
         dto.setId(p.getId());
-        if (p.getUser() != null) dto.setUserId(p.getUser().getId());
+        if (p.getUser() != null)
+            dto.setUserId(p.getUser().getId());
         dto.setMedicalRecordNumber(p.getMedicalRecordNumber());
         dto.setBloodGroup(p.getBloodGroup());
         dto.setEmergencyContactName(p.getEmergencyContactName());
@@ -80,6 +112,8 @@ public class PatientService {
         dto.setChronicConditions(p.getChronicConditions());
         dto.setInsuranceProvider(p.getInsuranceProvider());
         dto.setInsuranceNumber(p.getInsuranceNumber());
+        if (p.getAssignedDoctor() != null)
+            dto.setAssignedDoctorId(p.getAssignedDoctor().getId());
         return dto;
     }
 }

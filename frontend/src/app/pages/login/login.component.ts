@@ -37,12 +37,23 @@ export class LoginComponent {
 
         this.authService.login(this.loginForm.value).subscribe({
             next: (response) => {
+                console.log('Login component: Success', response);
                 this.loading = false;
-                this.router.navigate(['/dashboard']);
+                const user = this.authService.getCurrentUser();
+                if (user?.role === 'ADMIN') {
+                    this.router.navigate(['/dashboard']);
+                } else if (user?.role === 'PATIENT') {
+                    this.router.navigate(['/patient-portal']);
+                } else if (user?.role === 'USER') { // Doctor
+                    this.router.navigate(['/doctor-portal']);
+                } else {
+                    this.router.navigate(['/dashboard']);
+                }
             },
             error: (err) => {
+                console.error('Login component: Error', err);
                 this.loading = false;
-                this.error = err.error?.message || 'Login failed. Please check your credentials.';
+                this.error = err.error?.message || 'Access denied. Please check your credentials.';
             }
         });
     }

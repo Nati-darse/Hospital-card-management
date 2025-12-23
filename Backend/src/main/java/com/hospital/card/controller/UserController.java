@@ -20,9 +20,16 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
-        List<UserDTO> users = userService.getAllUsers().stream().map(this::toDto).collect(Collectors.toList());
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserDTO>> getAll(
+            @RequestParam(required = false) com.hospital.card.entity.UserRole role) {
+        List<User> users;
+        if (role != null) {
+            users = userService.getUsersByRole(role);
+        } else {
+            users = userService.getAllUsers();
+        }
+        List<UserDTO> dtoList = users.stream().map(this::toDto).collect(Collectors.toList());
+        return ResponseEntity.ok(dtoList);
     }
 
     @GetMapping("/{id}")

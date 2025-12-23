@@ -18,13 +18,21 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping
-    public ResponseEntity<List<PatientDTO>> getAll() {
+    public ResponseEntity<List<PatientDTO>> getAll(@RequestParam(required = false) Long doctorId) {
+        if (doctorId != null) {
+            return ResponseEntity.ok(patientService.getPatientsByDoctor(doctorId));
+        }
         return ResponseEntity.ok(patientService.getAllPatients());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PatientDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(patientService.getPatient(id));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<PatientDTO> getByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(patientService.getPatientByUserId(userId));
     }
 
     @PostMapping

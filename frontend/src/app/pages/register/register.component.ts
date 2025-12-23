@@ -45,12 +45,23 @@ export class RegisterComponent {
 
         this.authService.register(this.registerForm.value).subscribe({
             next: (response) => {
+                console.log('Register component: Success', response);
                 this.loading = false;
-                this.router.navigate(['/dashboard']);
+                const user = this.authService.getCurrentUser();
+                if (user?.role === 'ADMIN') {
+                    this.router.navigate(['/dashboard']);
+                } else if (user?.role === 'PATIENT') {
+                    this.router.navigate(['/patient-portal']);
+                } else if (user?.role === 'USER') {
+                    this.router.navigate(['/doctor-portal']);
+                } else {
+                    this.router.navigate(['/dashboard']);
+                }
             },
             error: (err) => {
+                console.error('Register component: Error', err);
                 this.loading = false;
-                this.error = err.error?.message || 'Registration failed. Please try again.';
+                this.error = err.error?.message || 'Registration failed. The username or email might already be in use.';
             }
         });
     }

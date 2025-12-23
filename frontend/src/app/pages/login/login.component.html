@@ -38,7 +38,7 @@
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
         <div>
-          <label class="block text-sm font-bold text-secondary mb-2 uppercase tracking-widest">Username</label>
+          <label class="block text-[10px] font-black text-secondary mb-2 uppercase tracking-[0.2em]">Username</label>
           <div class="relative group">
             <span
               class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400 group-focus-within:text-primary transition-colors">
@@ -46,18 +46,15 @@
                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
               </svg>
             </span>
-            <input type="text" formControlName="username" class="input-field pl-12" placeholder="e.g. jsmith_md"
-              [class.border-red-500]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
+            <input type="text" formControlName="username" class="input-field pl-12" placeholder="e.g. nati_admin">
           </div>
-          <p *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.invalid"
-            class="mt-2 text-xs font-bold text-red-500 uppercase">Username is required</p>
         </div>
 
         <div>
           <div class="flex items-center justify-between mb-2">
-            <label class="block text-sm font-bold text-secondary uppercase tracking-widest">Password</label>
+            <label class="block text-[10px] font-black text-secondary uppercase tracking-[0.2em]">Password</label>
             <a href="#"
-              class="text-xs font-bold text-primary hover:text-primary-dark uppercase tracking-widest">Forgot?</a>
+              class="text-[10px] font-black text-primary hover:text-primary-dark uppercase tracking-widest">Forgot?</a>
           </div>
           <div class="relative group">
             <span
@@ -68,35 +65,23 @@
                   clip-rule="evenodd" />
               </svg>
             </span>
-            <input type="password" formControlName="password" class="input-field pl-12" placeholder="••••••••"
-              [class.border-red-500]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+            <input type="password" formControlName="password" class="input-field pl-12" placeholder="••••••••">
           </div>
-          <p *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
-            class="mt-2 text-xs font-bold text-red-500 uppercase">Password is required</p>
         </div>
 
-        <button type="submit" [disabled]="loginForm.invalid || loading"
-          class="btn-primary w-full group overflow-hidden relative">
-          <span *ngIf="!loading" class="relative z-10 flex items-center justify-center gap-3">
-            Sign In to Portal
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform group-hover:translate-x-1"
-              fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
+        <button type="submit" [disabled]="loginForm.invalid || loading" class="btn-primary w-full py-5">
+          <span *ngIf="!loading" class="flex items-center justify-center gap-3">
+            Sign In to Platform
           </span>
-          <span *ngIf="loading" class="relative z-10 flex items-center gap-2">
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24">
+          <span *ngIf="loading" class="flex items-center justify-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor"
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
               </path>
             </svg>
-            Authorizing...
+            Verifying...
           </span>
-          <div
-            class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-          </div>
         </button>
       </form>
 

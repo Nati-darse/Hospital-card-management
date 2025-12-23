@@ -7,7 +7,7 @@ export interface RegisterRequest {
   username: string;
   email: string;
   password: string;
-  role: 'ADMIN' | 'DOCTOR' | 'NURSE' | 'RECEPTIONIST' | 'PATIENT';
+  role: 'ADMIN' | 'USER' | 'PATIENT';
   firstName: string;
   lastName: string;
   phoneNumber?: string;
@@ -21,7 +21,7 @@ export interface AuthResponse {
   id: number;
   username: string;
   email: string;
-  role: 'ADMIN' | 'DOCTOR' | 'NURSE' | 'RECEPTIONIST' | 'PATIENT';
+  role: 'ADMIN' | 'USER' | 'PATIENT';
   firstName: string;
   lastName: string;
   message: string;
@@ -31,7 +31,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  role: 'ADMIN' | 'DOCTOR' | 'NURSE' | 'RECEPTIONIST' | 'PATIENT';
+  role: 'ADMIN' | 'USER' | 'PATIENT';
   firstName: string;
   lastName: string;
 }
