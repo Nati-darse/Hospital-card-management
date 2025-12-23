@@ -1,0 +1,218 @@
+<div class="min-h-screen bg-slate-50 flex font-sans">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20 overflow-hidden">
+        <div class="p-8 flex items-center gap-4 bg-primary/10">
+            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-black tracking-tighter uppercase leading-none">Atlas</h2>
+                <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 leading-none">Medical
+                    Staff
+                </p>
+            </div>
+        </div>
+
+        <nav class="mt-10 flex-1 px-6 space-y-3">
+            <a routerLink="/doctor-portal" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span class="font-bold tracking-tight">Today's Schedule</span>
+            </a>
+
+            <a routerLink="/doctor-portal/patients"
+                routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span class="font-bold tracking-tight">Patient Directory</span>
+            </a>
+
+            <a routerLink="/doctor-portal/prescriptions"
+                routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <span class="font-bold tracking-tight">Prescriptions</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5">
+            <div class="p-5 bg-white/5 rounded-[30px] flex items-center gap-4">
+                <div
+                    class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center text-secondary font-black text-xs">
+                    DR
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-black truncate uppercase leading-none mb-1">{{ currentUser?.firstName }}</p>
+                    <p class="text-[9px] text-primary font-black uppercase tracking-wider leading-none">Physician</p>
+                </div>
+                <button (click)="onLogout()" class="text-white hover:text-red-400 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-10 py-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-black text-secondary tracking-tight">Doctor Portal</h1>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Status: On Duty</p>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Search -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </span>
+                    <input type="text" placeholder="Patient ID or Name..."
+                        class="bg-slate-50 border-none rounded-2xl py-2 pl-12 pr-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 w-64">
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <div class="p-10 space-y-10 flex-1">
+            <!-- Stats Row -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Total Patients</p>
+                    <h3 class="text-4xl font-black text-secondary">{{ patients.length }}</h3>
+                </div>
+                <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Today's Visits</p>
+                    <h3 class="text-4xl font-black text-primary">0</h3>
+                </div>
+                <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Pending Reports</p>
+                    <h3 class="text-4xl font-black text-orange-500">0</h3>
+                </div>
+                <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Consultations</p>
+                    <h3 class="text-4xl font-black text-blue-500">24</h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <!-- Patient Queue -->
+                <section
+                    class="lg:col-span-1 bg-white rounded-[50px] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+                    <div class="p-8 border-b border-slate-50 flex items-center justify-between">
+                        <h3 class="text-xl font-black text-secondary">My Patients</h3>
+                        <span
+                            class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase">{{
+                            patients.length }} Total</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto max-h-[600px] divide-y divide-slate-50">
+                        <div *ngFor="let p of patients" (click)="selectPatient(p)"
+                            class="p-6 hover:bg-slate-50 transition-all cursor-pointer group"
+                            [class.bg-slate-50]="selectedPatient?.id === p.id">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center font-black text-primary group-hover:scale-110 transition-transform">
+                                    {{ p.user?.firstName?.charAt(0) }}{{ p.user?.lastName?.charAt(0) }}
+                                </div>
+                                <div>
+                                    <p class="font-black text-secondary">{{ p.user?.firstName }} {{ p.user?.lastName }}
+                                    </p>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">ID: {{
+                                        p.medicalRecordNumber }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="patients.length === 0" class="p-10 text-center text-slate-400 font-bold">
+                            No patients assigned to you yet.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prescription / Visit Entry -->
+                <section
+                    class="lg:col-span-2 bg-white rounded-[50px] shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-8 border-b border-slate-50 bg-slate-50/50">
+                        <h3 class="text-xl font-black text-secondary">Clinical Documentation</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">
+                            {{ selectedPatient ? 'Documenting visit for: ' + selectedPatient.user?.firstName + ' ' +
+                            selectedPatient.user?.lastName : 'Select a patient from the queue to start' }}
+                        </p>
+                    </div>
+
+                    <div class="p-10">
+                        <form [formGroup]="prescriptionForm" (ngSubmit)="submitPrescription()" class="space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-2 lg:col-span-2">
+                                    <label
+                                        class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Diagnosis
+                                        / Clinical Impression</label>
+                                    <input type="text" formControlName="diagnosis"
+                                        class="w-full bg-slate-50 border-none rounded-2xl py-5 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                        placeholder="e.g. Acute Respiratory Infection">
+                                </div>
+                                <div class="space-y-2 lg:col-span-2">
+                                    <label
+                                        class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Prescription
+                                        & Advice</label>
+                                    <textarea formControlName="prescriptions" rows="4"
+                                        class="w-full bg-slate-50 border-none rounded-[30px] py-5 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 resize-none"
+                                        placeholder="Enter dosage, frequency and instructions..."></textarea>
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Laboratory
+                                        Tests</label>
+                                    <input type="text" formControlName="labTests"
+                                        class="w-full bg-slate-50 border-none rounded-2xl py-5 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                        placeholder="CBC, Chest X-Ray, etc.">
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Follow-up
+                                        Date</label>
+                                    <input type="date" formControlName="followUpDate"
+                                        class="w-full bg-slate-50 border-none rounded-2xl py-5 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                                </div>
+                            </div>
+
+                            <div class="pt-6 border-t border-slate-50 flex justify-end gap-4">
+                                <button type="button" (click)="prescriptionForm.reset(); selectedPatient = null"
+                                    class="px-10 py-4 bg-slate-100 text-secondary rounded-2xl font-black text-xs uppercase tracking-widest">Clear</button>
+                                <button type="submit"
+                                    [disabled]="prescriptionForm.invalid || !selectedPatient || loading"
+                                    class="px-12 py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 transition-transform">
+                                    {{ loading ? 'SAVING...' : 'SAVE & FINALIZE VISIT' }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
