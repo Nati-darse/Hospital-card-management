@@ -1,0 +1,256 @@
+<div class="min-h-screen bg-slate-50 flex font-sans">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20 overflow-hidden">
+        <div class="p-8 flex items-center gap-4 bg-primary/10">
+            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-black tracking-tighter uppercase leading-none">Atlas</h2>
+                <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mt-1 leading-none">Patient
+                </p>
+            </div>
+        </div>
+
+        <nav class="mt-10 flex-1 px-6 space-y-3">
+            <a routerLink="/patient-portal" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span class="font-bold tracking-tight">Dashboard</span>
+            </a>
+
+            <a routerLink="/patient-portal/card" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
+                </svg>
+                <span class="font-bold tracking-tight">My Digital Card</span>
+            </a>
+
+            <a routerLink="/patient-portal/appointments"
+                routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span class="font-bold tracking-tight">Appointments</span>
+            </a>
+
+            <a routerLink="/patient-portal/history"
+                routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="font-bold tracking-tight">Medical History</span>
+            </a>
+        </nav>
+
+        <div class="p-8 mt-auto border-t border-white/5">
+            <div class="p-5 bg-white/5 rounded-[30px] flex items-center gap-4">
+                <div
+                    class="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center text-secondary font-black text-xs">
+                    {{ currentUser?.firstName?.charAt(0) }}{{ currentUser?.lastName?.charAt(0) }}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs font-black truncate uppercase leading-none mb-1">{{ currentUser?.firstName }}</p>
+                    <p class="text-[9px] text-primary font-black uppercase tracking-wider leading-none">Patient</p>
+                </div>
+                <button (click)="onLogout()" class="text-white hover:text-red-400 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative flex flex-col">
+        <!-- Header -->
+        <header
+            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-10 py-6 border-b border-slate-100 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-black text-secondary tracking-tight">Patient Portal</h1>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Welcome back, {{
+                    currentUser?.firstName }}</p>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-xs font-black text-secondary uppercase">{{ currentUser?.firstName }} {{
+                            currentUser?.lastName }}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none">Patient
+                            ID: ATL-2023-0881</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="p-10 space-y-10">
+            <!-- Welcome Banner -->
+            <section
+                class="relative overflow-hidden bg-primary rounded-[50px] p-12 text-white shadow-2xl shadow-primary/30">
+                <div class="relative z-10 max-w-2xl">
+                    <h2 class="text-5xl font-black tracking-tighter leading-tight">Welcome, {{ currentUser?.firstName
+                        }}!</h2>
+                    <p class="mt-4 text-primary-foreground/80 font-bold text-lg leading-relaxed">Your digital health
+                        companion is ready. Manage your appointments and medical records in one secure place.</p>
+                </div>
+            </section>
+
+            <!-- Quick Action Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Digital Card Preview -->
+                <div class="bg-white p-10 rounded-[50px] shadow-sm border border-slate-100 flex flex-col items-center">
+                    <h3 class="text-xs font-black text-secondary uppercase tracking-[0.2em] mb-10 self-start">Digital
+                        Health Pass</h3>
+
+                    <div *ngIf="card"
+                        class="w-full max-w-md aspect-[1.6/1] bg-gradient-to-br from-secondary to-slate-800 rounded-[32px] p-8 text-white relative shadow-2xl overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-3xl">
+                        </div>
+
+                        <div class="flex justify-between items-start relative z-10">
+                            <div>
+                                <h1 class="text-2xl font-black tracking-tight">Atlas Hospital</h1>
+                                <p class="text-[10px] uppercase font-bold tracking-widest text-primary mt-1">Global
+                                    Medical Identity</p>
+                            </div>
+                            <div
+                                class="h-10 w-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="mt-12 relative z-10">
+                            <p class="text-[10px] uppercase font-bold text-white/40 tracking-[0.2em]">Patient Number</p>
+                            <p class="text-3xl font-mono mt-2 tracking-widest font-black">{{ card.cardNumber }}</p>
+                        </div>
+
+                        <div class="mt-auto pt-8 flex justify-between items-end relative z-10">
+                            <div>
+                                <p class="text-lg font-black">{{ currentUser?.firstName }} {{ currentUser?.lastName }}
+                                </p>
+                                <p class="text-[10px] uppercase font-bold text-white/40 tracking-widest mt-1">Valid
+                                    Until: {{ card.expiryDate }}</p>
+                            </div>
+                            <div *ngIf="patientProfile" class="text-right">
+                                <p class="text-[10px] uppercase font-bold text-white/40 tracking-widest mb-1">Blood Type
+                                </p>
+                                <p class="text-2xl font-black text-primary">{{ patientProfile.bloodGroup }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Appointment -->
+                <div class="bg-white p-10 rounded-[50px] shadow-sm border border-slate-100">
+                    <h3 class="text-xs font-black text-secondary uppercase tracking-[0.2em] mb-10">Next Scheduled Visit
+                    </h3>
+
+                    <div class="flex flex-col items-center justify-center h-full -mt-10">
+                        <div
+                            class="w-20 h-20 bg-primary/5 rounded-[30px] flex items-center justify-center text-primary mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z" />
+                            </svg>
+                        </div>
+                        <p class="text-slate-400 font-bold">No upcoming appointments found</p>
+                        <button
+                            class="mt-8 text-primary font-black uppercase tracking-widest text-xs hover:underline">Schedule
+                            New Appointment</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Medical Visits -->
+            <section class="bg-white rounded-[50px] shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-10 border-b border-slate-50 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-2xl font-black text-secondary tracking-tight">Clinical History</h3>
+                        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Verified Medical
+                            Records</p>
+                    </div>
+                    <button
+                        class="text-primary font-black uppercase text-xs tracking-widest px-6 py-3 bg-primary/5 rounded-2xl hover:bg-primary/10 transition-colors">Download
+                        Full Report</button>
+                </div>
+
+                <div class="divide-y divide-slate-50">
+                    <div *ngFor="let visit of visits" class="p-10 hover:bg-slate-50/50 transition-colors group">
+                        <div class="flex items-start justify-between">
+                            <div class="flex gap-8">
+                                <div
+                                    class="w-16 h-16 bg-blue-50 text-primary rounded-3xl flex flex-col items-center justify-center">
+                                    <span class="text-xs font-black uppercase leading-none">{{ visit.visitDate |
+                                        date:'MMM' }}</span>
+                                    <span class="text-xl font-black">{{ visit.visitDate | date:'dd' }}</span>
+                                </div>
+                                <div class="space-y-2">
+                                    <h4 class="text-xl font-black text-secondary">{{ visit.diagnosis }}</h4>
+                                    <div class="flex items-center gap-4">
+                                        <span
+                                            class="text-xs font-bold text-slate-400 uppercase tracking-widest">Attending
+                                            Physician: Dr. {{ visit.doctor?.user?.firstName }} {{
+                                            visit.doctor?.user?.lastName }}</span>
+                                        <div class="h-1 w-1 bg-slate-300 rounded-full"></div>
+                                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{{
+                                            visit.doctor?.department }}</span>
+                                    </div>
+                                    <p class="text-slate-500 font-medium leading-relaxed max-w-2xl mt-4">
+                                        {{ visit.prescriptions }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button
+                                    class="p-4 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-primary transition-all shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
+                                <button
+                                    class="p-4 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-primary transition-all shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
