@@ -1,0 +1,130 @@
+<div class="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-primary/20">
+    <!-- Clean Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass px-8 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-xl font-black tracking-tighter uppercase leading-none text-secondary">Atlas Hospital
+                </h2>
+                <p class="text-[8px] font-black text-primary uppercase tracking-[0.2em] mt-1 leading-none">Health
+                    Management System</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <a routerLink="/login"
+                class="text-xs font-black text-secondary uppercase tracking-widest hover:text-primary transition-colors px-4">Sign
+                In</a>
+            <a routerLink="/register" class="btn-primary py-3 px-6 text-[10px]">Create Account</a>
+        </div>
+    </nav>
+
+    <!-- Smooth Hero Section -->
+    <main class="flex-1 flex items-center justify-center px-10 pt-20">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+
+            <div class="space-y-12 text-center lg:text-left">
+                <div class="space-y-6">
+                    <h1 class="text-6xl md:text-8xl font-black text-secondary tracking-tighter leading-[0.9]">
+                        Modern <span class="text-primary italic">Identity</span> for Healthcare.
+                    </h1>
+                    <p class="text-xl font-medium text-slate-500 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Atlas streamlines hospital registration, clinical documentation, and digital patient
+                        identification in one smooth experience.
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
+                    <a routerLink="/login" class="btn-primary py-5 px-12 group">
+                        <span class="flex items-center gap-3">
+                            Enter Platform
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </span>
+                    </a>
+                    <a routerLink="/register" class="btn-secondary py-5 px-12">
+                        Join Atlas Hospital
+                    </a>
+                </div>
+
+                <!-- Trust Stats -->
+                <div
+                    class="pt-10 border-t border-slate-200 flex flex-wrap gap-12 justify-center lg:justify-start grayscale opacity-50">
+                    <div class="text-center lg:text-left">
+                        <p class="text-2xl font-black text-secondary">100%</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest">Secure Access</p>
+                    </div>
+                    <div class="text-center lg:text-left">
+                        <p class="text-2xl font-black text-secondary">Instant</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest">Card Issuance</p>
+                    </div>
+                    <div class="text-center lg:text-left">
+                        <p class="text-2xl font-black text-secondary">Unified</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest">Health Record</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Visual -->
+            <div class="relative hidden lg:block">
+                <div class="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
+
+                <div class="relative card-premium p-16 rotate-2 hover:rotate-0 cursor-default">
+                    <div class="flex items-center gap-6 mb-12">
+                        <div
+                            class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Identity
+                                Verified</p>
+                            <h3 class="text-2xl font-black text-secondary uppercase tracking-tighter">Digital Pass v4.0
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="h-4 bg-slate-100 rounded-full w-full"></div>
+                        <div class="h-4 bg-slate-100 rounded-full w-5/6"></div>
+                        <div class="h-4 bg-slate-100 rounded-full w-4/6"></div>
+                    </div>
+
+                    <!-- Floating Identity Card Overlay -->
+                    <div
+                        class="absolute -bottom-10 -right-10 w-80 aspect-[1.6/1] bg-secondary rounded-[32px] p-8 text-white shadow-2xl animate-float">
+                        <div class="flex justify-between items-start">
+                            <div class="h-4 w-12 bg-primary/20 rounded-full"></div>
+                            <div class="h-10 w-10 bg-white/10 rounded-xl"></div>
+                        </div>
+                        <div class="mt-8">
+                            <p class="text-xl font-mono tracking-widest text-primary mb-1">ATL-2025-0812</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">System Core Member
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-12 px-10 text-center">
+        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Atlas Hospital Systems &copy; 2025
+        </p>
+    </footer>
+</div>
