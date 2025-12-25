@@ -34,4 +34,7 @@ export interface User {
   role: 'ADMIN' | 'USER' | 'PATIENT';
   firstName: string;
   lastName: string;
+  phoneNumber?: string;
+  address?: string;
+  createdAt?: string;
 }

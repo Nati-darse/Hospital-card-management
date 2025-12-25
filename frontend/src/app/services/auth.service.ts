@@ -38,6 +38,12 @@ export class AuthService {
             );
     }
 
+    // Admin version: Does NOT login the newly created user
+    adminRegister(userData: RegisterRequest): Observable<any> {
+        console.log('Admin creating account for:', userData.username);
+        return this.http.post<any>(`${this.API_URL}/register`, userData);
+    }
+
     logout(): void {
         localStorage.removeItem(this.TOKEN_KEY);
         localStorage.removeItem(this.USER_KEY);
