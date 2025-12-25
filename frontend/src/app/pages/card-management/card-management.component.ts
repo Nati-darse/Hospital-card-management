@@ -40,4 +40,19 @@ export class CardManagementComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  viewCardDetails(card: any): void {
+    alert(`Card Details:\nNumber: ${card.cardNumber}\nStatus: ${card.status}\nIssue Date: ${card.issueDate}\nExpiry: ${card.expiryDate}`);
+  }
+
+  deleteCard(card: any): void {
+    if (!confirm('Are you sure you want to delete this card?')) return;
+    this.apiService.delete(`cards/${card.id}`).subscribe({
+      next: () => {
+        this.cards = this.cards.filter(c => c.id !== card.id);
+        alert('Card deleted successfully.');
+      },
+      error: (err) => alert('Failed to delete card.')
+    });
+  }
 }
