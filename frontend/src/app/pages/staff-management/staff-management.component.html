@@ -18,44 +18,48 @@
 
         <nav class="mt-10 flex-1 px-6 space-y-3">
             <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                <span class="font-bold tracking-tight">Overview</span>
+                <span class="font-bold tracking-tight pointer-events-none">Overview</span>
             </a>
 
             <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span class="font-bold tracking-tight">Patients</span>
+                <span class="font-bold tracking-tight pointer-events-none">Patients</span>
             </a>
 
             <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
                 </svg>
-                <span class="font-bold tracking-tight">Access Cards</span>
+                <span class="font-bold tracking-tight pointer-events-none">Access Cards</span>
             </a>
 
             <a *ngIf="isAdmin" routerLink="/staff-management"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span class="font-bold tracking-tight">Staffing</span>
+                <span class="font-bold tracking-tight pointer-events-none">Staffing</span>
             </a>
         </nav>
 
@@ -69,9 +73,17 @@
                     <p class="text-xs font-black truncate uppercase leading-none mb-1">{{ currentUser?.firstName }}</p>
                     <p class="text-[9px] text-primary font-black uppercase tracking-wider leading-none">Secured</p>
                 </div>
+                <button (click)="togglePasswordModal()" class="text-white hover:text-primary transition-all"
+                    title="Change Password">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 hover:opacity-100" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </button>
                 <button (click)="onLogout()" class="text-white hover:text-red-400 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 hover:opacity-100" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
@@ -91,7 +103,8 @@
             </div>
 
             <div class="flex items-center gap-6">
-                <button class="btn-primary py-2 px-6 rounded-2xl text-xs uppercase tracking-widest shadow-none">
+                <button (click)="toggleCreateForm()"
+                    class="btn-primary py-2 px-6 rounded-2xl text-xs uppercase tracking-widest shadow-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -104,25 +117,104 @@
 
         <!-- Content -->
         <div class="p-10">
+            <!-- Creation Form -->
+            <div *ngIf="showCreateForm"
+                class="mb-10 p-8 bg-white border border-primary/10 shadow-xl shadow-primary/5 rounded-[40px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-black text-secondary tracking-tight">Create New Staff Profile</h3>
+                    <button (click)="toggleCreateForm()" class="text-slate-400 hover:text-red-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div *ngIf="error"
+                    class="mb-6 p-4 bg-red-50 text-red-600 rounded-xl font-bold border-l-4 border-red-500 text-sm">
+                    {{ error }}
+                </div>
+                <div *ngIf="success"
+                    class="mb-6 p-4 bg-green-50 text-green-600 rounded-xl font-bold border-l-4 border-green-500 text-sm">
+                    {{ success }}
+                </div>
+
+                <form [formGroup]="staffForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">First
+                                Name</label>
+                            <input type="text" formControlName="firstName" class="input-field" placeholder="John">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Last
+                                Name</label>
+                            <input type="text" formControlName="lastName" class="input-field" placeholder="Doe">
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Username</label>
+                            <input type="text" formControlName="username" class="input-field" placeholder="dr_john">
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Email</label>
+                            <input type="email" formControlName="email" class="input-field"
+                                placeholder="john@atlas.com">
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Password</label>
+                            <input type="text" formControlName="password"
+                                class="input-field opacity-60 cursor-not-allowed" readonly>
+                            <p class="text-[9px] text-slate-400 pl-1">Default password provided.</p>
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Role</label>
+                            <select formControlName="role" class="input-field appearance-none">
+                                <option value="USER">Medical Doctor</option>
+                                <option *ngIf="isSuperAdmin" value="ADMIN">Administrator</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2" *ngIf="staffForm.get('role')?.value === 'USER'">
+                            <label
+                                class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">Department</label>
+                            <input type="text" formControlName="department" class="input-field"
+                                placeholder="e.g. Cardiology">
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-4">
+                        <button type="submit" [disabled]="staffForm.invalid || loading" class="btn-primary py-4 px-10">
+                            {{ loading ? 'Creating...' : 'Create Account' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <div *ngFor="let i of [1,2,3,4,5,6,7,8]"
+                <div *ngFor="let staff of staffList"
                     class="bg-white p-8 rounded-[40px] shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group">
                     <div class="flex flex-col items-center text-center">
                         <div class="relative mb-6">
                             <div
                                 class="w-24 h-24 bg-slate-100 rounded-[32px] flex items-center justify-center font-black text-secondary text-3xl group-hover:bg-primary group-hover:text-white transition-all duration-500 overflow-hidden shadow-inner">
-                                {{ i % 2 == 0 ? 'JD' : 'AS' }}
+                                {{ staff.firstName?.charAt(0) }}{{ staff.lastName?.charAt(0) }}
                             </div>
-                            <div
-                                class="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 border-4 border-white rounded-full flex items-center justify-center">
+                            <div [ngClass]="{'bg-green-500': staff.isActive, 'bg-red-500': !staff.isActive}"
+                                class="absolute -bottom-2 -right-2 w-8 h-8 border-4 border-white rounded-full flex items-center justify-center">
                                 <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                             </div>
                         </div>
 
-                        <h4 class="text-xl font-black text-secondary tracking-tight leading-none mb-1">Staff Member
-                            {{i}}</h4>
-                        <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-6">Senior
-                            Practitioner</p>
+                        <h4 class="text-xl font-black text-secondary tracking-tight leading-none mb-1">{{
+                            staff.firstName }} {{ staff.lastName }}</h4>
+                        <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">{{ staff.role ===
+                            'USER' ? 'Medical Doctor' : 'Administrator' }}</p>
+                        <p *ngIf="staff.department"
+                            class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-6 border-t border-slate-50 pt-1 w-full">
+                            {{ staff.department }}</p>
+                        <div *ngIf="!staff.department" class="mb-6"></div>
 
                         <div class="w-full space-y-4 pt-10 border-t border-slate-50">
                             <div
@@ -132,29 +224,72 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
-                                <span class="text-xs font-bold tracking-tight">staff{{i}}@atlascare.com</span>
-                            </div>
-                            <div
-                                class="flex items-center justify-center gap-3 text-slate-500 hover:text-secondary transition-colors cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                </svg>
-                                <span class="text-xs font-bold tracking-tight">+251 900 112 233</span>
+                                <span class="text-xs font-bold tracking-tight truncate max-w-[150px]">{{ staff.email
+                                    }}</span>
                             </div>
                         </div>
 
-                        <div class="flex gap-4 mt-8 w-full">
-                            <button
-                                class="flex-1 py-3 bg-slate-50 hover:bg-secondary hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100">Edit
-                                Profile</button>
-                            <button
-                                class="flex-1 py-3 bg-red-50 hover:bg-red-600 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-red-100 text-red-500">Deactivate</button>
+                        <div class="flex flex-col gap-3 mt-8 w-full">
+                            <div class="flex gap-3">
+                                <button (click)="viewStaffDetails(staff)"
+                                    class="flex-1 py-3 bg-slate-50 hover:bg-secondary hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100">
+                                    Details
+                                </button>
+                                <button (click)="deactivateStaff(staff)"
+                                    [class]="staff.isActive ? 'bg-orange-50 text-orange-600 hover:bg-orange-600' : 'bg-green-50 text-green-600 hover:bg-green-600'"
+                                    class="flex-1 py-3 hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-transparent">
+                                    {{ staff.isActive ? 'Deactivate' : 'Activate' }}
+                                </button>
+                            </div>
+                            <div class="flex gap-3">
+                                <button (click)="resetUserPassword(staff)"
+                                    class="flex-1 py-3 bg-primary/10 hover:bg-primary hover:text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-primary/20 text-primary">
+                                    Reset Password
+                                </button>
+                                <button (click)="deleteStaff(staff)"
+                                    class="px-4 py-3 bg-red-50 hover:bg-red-600 hover:text-white rounded-2xl text-red-500 transition-all border border-red-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mx-auto" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <div *ngIf="staffList.length === 0" class="col-span-full text-center py-20 text-slate-400 font-bold">
+                    No staff members found.
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Password Change Modal -->
+    <div *ngIf="showPasswordModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-[30px] p-8 w-full max-w-md shadow-2xl animate-float">
+            <h3 class="text-xl font-black text-secondary mb-6">Change Security Credentials</h3>
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">New
+                        Password</label>
+                    <input type="password" formControlName="newPassword"
+                        class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner"
+                        placeholder="••••••••">
+                    <p *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']"
+                        class="text-[9px] text-red-500 font-bold uppercase pl-1">Minimum 6 characters required</p>
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" (click)="togglePasswordModal()"
+                        class="flex-1 py-4 bg-slate-100 text-secondary rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
+                    <button type="submit" [disabled]="passwordForm.invalid || passwordLoading"
+                        class="flex-1 py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:shadow-xl hover:shadow-primary/20 transition-all">
+                        {{ passwordLoading ? 'Updating...' : 'Update' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
