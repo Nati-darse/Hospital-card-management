@@ -17,23 +17,49 @@
         </div>
 
         <nav class="mt-10 flex-1 px-6 space-y-3">
-            <a routerLink="/dashboard"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+            <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                <span class="font-bold tracking-tight">Overview</span>
+                <span class="font-bold tracking-tight pointer-events-none">Overview</span>
             </a>
-            <a routerLink="/patients"
-                class="flex items-center space-x-4 p-4 rounded-2xl bg-primary/20 text-primary border-l-4 border-primary transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+
+            <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span class="font-bold tracking-tight">Patients</span>
+                <span class="font-bold tracking-tight pointer-events-none">Patients</span>
+            </a>
+
+            <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
+                </svg>
+                <span class="font-bold tracking-tight pointer-events-none">Access Cards</span>
+            </a>
+
+            <a *ngIf="isAdmin" routerLink="/staff-management"
+                routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span class="font-bold tracking-tight pointer-events-none">Staffing</span>
             </a>
         </nav>
     </aside>
@@ -42,9 +68,10 @@
     <main class="flex-1 overflow-y-auto relative flex flex-col p-10">
         <div class="max-w-4xl mx-auto w-full">
             <header class="mb-12">
-                <h1 class="text-4xl font-black text-secondary tracking-tight">Enroll New Patient</h1>
-                <p class="text-slate-500 font-bold uppercase tracking-widest mt-2 text-xs">Patient Identity & Clinical
-                    Setup</p>
+                <h1 class="text-4xl font-black text-secondary tracking-tight">{{ isEdit ? 'Update Patient Profile' :
+                    'Enroll New Patient' }}</h1>
+                <p class="text-slate-500 font-bold uppercase tracking-widest mt-2 text-xs">{{ isEdit ? 'Updating
+                    Clinical & Personal Identity' : 'Patient Identity & Clinical Setup' }}</p>
             </header>
 
             <div *ngIf="error" class="mb-8 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl font-bold">
@@ -61,7 +88,7 @@
                 <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
                     <h3
                         class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
-                        Account Information</h3>
+                        Account & Contact Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-2">
                             <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">First
@@ -81,7 +108,7 @@
                             <label
                                 class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Username</label>
                             <input type="text" formControlName="username"
-                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
                                 placeholder="a_bikila">
                         </div>
                         <div class="space-y-2">
@@ -90,6 +117,53 @@
                             <input type="email" formControlName="email"
                                 class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
                                 placeholder="abebe@example.com">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Phone
+                                Number</label>
+                            <input type="text" formControlName="phoneNumber"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="+251...">
+                        </div>
+                        <div *ngIf="!isEdit" class="space-y-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Initial
+                                Password</label>
+                            <input type="password" formControlName="password"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="••••••">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Personal Bio -->
+                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                    <h3
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        Personal Bio & Demographics</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label
+                                class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Gender</label>
+                            <select formControlName="gender"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 appearance-none">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Date of
+                                Birth</label>
+                            <input type="date" formControlName="dateOfBirth"
+                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                        </div>
+                        <div class="space-y-2 md:col-span-2">
+                            <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Residential
+                                Address</label>
+                            <textarea formControlName="address" rows="3"
+                                class="w-full bg-slate-50 border-none rounded-3xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                placeholder="Street, City, Country"></textarea>
                         </div>
                     </div>
                 </section>
@@ -148,7 +222,8 @@
                         class="flex-1 bg-slate-200 text-secondary py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em]">Cancel</button>
                     <button type="submit" [disabled]="registrationForm.invalid || loading"
                         class="flex-[2] bg-primary text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
-                        {{ loading ? 'ENROLLING...' : 'CONFIRM ENROLLMENT' }}
+                        {{ loading ? (isEdit ? 'UPDATING...' : 'ENROLLING...') : (isEdit ? 'SAVE CHANGES' : 'CONFIRM
+                        ENROLLMENT') }}
                     </button>
                 </div>
             </form>

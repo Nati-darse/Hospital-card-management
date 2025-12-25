@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -18,12 +18,18 @@ export class PatientRegistrationComponent implements OnInit {
     loading = false;
     error = '';
     success = '';
+    currentUser: any;
+    isAdmin = false;
+    editId: string | null = null;
+    isEdit = false;
+    patientToEdit: any;
 
     constructor(
         private fb: FormBuilder,
         private apiService: ApiService,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.registrationForm = this.fb.group({
             // User Info
@@ -41,20 +47,70 @@ export class PatientRegistrationComponent implements OnInit {
             insuranceNumber: [''],
             emergencyContactName: [''],
             emergencyContactPhone: [''],
+            gender: [''],
+            dateOfBirth: [''],
+            address: [''],
             // Assignment
             assignedDoctorId: ['']
         });
     }
 
     ngOnInit(): void {
+        this.currentUser = this.authService.getCurrentUser();
+        this.isAdmin = this.currentUser?.role === 'ADMIN';
         this.loadDoctors();
+
+        this.route.queryParams.subscribe(params => {
+            if (params['editId']) {
+                this.editId = params['editId'];
+                this.isEdit = true;
+                this.loadPatientForEdit();
+            }
+        });
+    }
+
+    loadPatientForEdit(): void {
+        this.loading = true;
+        this.apiService.get(`patients/${this.editId}`).subscribe({
+            next: (data: any) => {
+                this.patientToEdit = data;
+                this.registrationForm.patchValue({
+                    username: data.user?.username,
+                    email: data.user?.email,
+                    firstName: data.user?.firstName,
+                    lastName: data.user?.lastName,
+                    phoneNumber: data.user?.phoneNumber,
+                    bloodGroup: data.bloodGroup,
+                    allergies: data.allergies,
+                    chronicConditions: data.chronicConditions,
+                    insuranceProvider: data.insuranceProvider,
+                    insuranceNumber: data.insuranceNumber,
+                    emergencyContactName: data.emergencyContactName,
+                    emergencyContactPhone: data.emergencyContactPhone,
+                    gender: data.user?.gender,
+                    dateOfBirth: data.user?.dateOfBirth,
+                    address: data.user?.address,
+                    assignedDoctorId: data.assignedDoctorId
+                });
+                // In edit mode, username and password are not meant to be updated through this form usually
+                this.registrationForm.get('username')?.disable();
+                this.registrationForm.get('password')?.clearValidators();
+                this.registrationForm.get('password')?.updateValueAndValidity();
+
+                this.loading = false;
+            },
+            error: (err) => {
+                this.error = 'Failed to load patient data.';
+                this.loading = false;
+            }
+        });
     }
 
     loadDoctors(): void {
         this.apiService.get('staff').subscribe({
             next: (data: any) => {
-                // Filter for doctors if needed, or assume all staff in the list are doctors for now
-                this.doctors = data;
+                // Filter for active doctors
+                this.doctors = data.filter((s: any) => s.user?.isActive);
             },
             error: (err: any) => console.error('Error loading doctors', err)
         });
@@ -69,6 +125,11 @@ export class PatientRegistrationComponent implements OnInit {
 
         const val = this.registrationForm.value;
 
+        if (this.isEdit) {
+            this.updatePatient();
+            return;
+        }
+
         // Step 1: Register User
         const userData = {
             username: val.username,
@@ -77,39 +138,93 @@ export class PatientRegistrationComponent implements OnInit {
             role: 'PATIENT' as const,
             firstName: val.firstName,
             lastName: val.lastName,
-            phoneNumber: val.phoneNumber
+            phoneNumber: val.phoneNumber,
+            gender: val.gender,
+            dateOfBirth: val.dateOfBirth,
+            address: val.address
         };
 
-        this.authService.register(userData).subscribe({
+        this.authService.adminRegister(userData).subscribe({
             next: (userResponse: any) => {
                 // Step 2: Create Patient Profile
+                // Note: AuthService now creates a Patient record automatically.
+                // We should find it and update it with the additional details.
+                this.apiService.get(`patients/user/${userResponse.id}`).subscribe({
+                    next: (patientResponse: any) => {
+                        const patientData = {
+                            bloodGroup: val.bloodGroup,
+                            allergies: val.allergies,
+                            chronicConditions: val.chronicConditions,
+                            insuranceProvider: val.insuranceProvider,
+                            insuranceNumber: val.insuranceNumber,
+                            emergencyContactName: val.emergencyContactName,
+                            emergencyContactPhone: val.emergencyContactPhone,
+                            assignedDoctorId: val.assignedDoctorId
+                        };
+
+                        this.apiService.put(`patients/${patientResponse.id}`, patientData).subscribe({
+                            next: () => {
+                                // Step 3: Issue Card
+                                const cardData = {
+                                    patientId: patientResponse.id,
+                                    status: 'ACTIVE'
+                                };
+
+                                this.apiService.post('cards', cardData).subscribe({
+                                    next: () => {
+                                        this.loading = false;
+                                        this.success = 'Patient registered and card issued successfully!';
+                                        this.registrationForm.reset({
+                                            password: 'atlas123'
+                                        });
+                                    },
+                                    error: (err: any) => this.handleError(err)
+                                });
+                            },
+                            error: (err: any) => this.handleError(err)
+                        });
+                    },
+                    error: (err: any) => this.handleError(err)
+                });
+            },
+            error: (err: any) => this.handleError(err)
+        });
+    }
+
+    updatePatient(): void {
+        const val = this.registrationForm.value;
+        const userId = this.patientToEdit.user?.id;
+
+        // 1. Update User
+        const userData = {
+            email: val.email,
+            firstName: val.firstName,
+            lastName: val.lastName,
+            phoneNumber: val.phoneNumber,
+            gender: val.gender,
+            dateOfBirth: val.dateOfBirth,
+            address: val.address
+        };
+
+        this.apiService.put(`users/${userId}`, userData).subscribe({
+            next: () => {
+                // 2. Update Patient
                 const patientData = {
-                    userId: userResponse.id,
                     bloodGroup: val.bloodGroup,
                     allergies: val.allergies,
                     chronicConditions: val.chronicConditions,
                     insuranceProvider: val.insuranceProvider,
                     insuranceNumber: val.insuranceNumber,
                     emergencyContactName: val.emergencyContactName,
-                    emergencyContactPhone: val.emergencyContactPhone
+                    emergencyContactPhone: val.emergencyContactPhone,
+                    assignedDoctorId: val.assignedDoctorId
                 };
 
-                this.apiService.post('patients', patientData).subscribe({
-                    next: (patientResponse: any) => {
-                        // Step 3: Issue Card
-                        const cardData = {
-                            patientId: patientResponse.id,
-                            status: 'ACTIVE'
-                        };
-
-                        this.apiService.post('cards', cardData).subscribe({
-                            next: () => {
-                                this.loading = false;
-                                this.success = 'Patient registered and card issued successfully!';
-                                setTimeout(() => this.router.navigate(['/patients']), 2000);
-                            },
-                            error: (err: any) => this.handleError(err)
-                        });
+                this.apiService.put(`patients/${this.editId}`, patientData).subscribe({
+                    next: () => {
+                        this.loading = false;
+                        this.success = 'Patient profile updated successfully!';
+                        setTimeout(() => this.router.navigate(['/patients']), 2000);
                     },
                     error: (err: any) => this.handleError(err)
                 });
