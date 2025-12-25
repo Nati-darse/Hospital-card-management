@@ -16,11 +16,16 @@ import { User } from '../../models/auth.models';
 export class DoctorPortalComponent implements OnInit {
     currentUser: User | null = null;
     staffProfile: any = null;
-    patients: any[] = [];
-    selectedPatient: any = null;
-
-    prescriptionForm: FormGroup;
+    patientsCount = 0;
+    todaysVisitsCount = 0;
+    recentPatients: any[] = [];
     loading = false;
+
+    // Password Update
+    showPasswordForm = false;
+    passwordForm: FormGroup;
+    passwordError = '';
+    passwordSuccess = '';
 
     constructor(
         private authService: AuthService,
@@ -28,65 +33,79 @@ export class DoctorPortalComponent implements OnInit {
         private router: Router,
         private fb: FormBuilder
     ) {
-        this.prescriptionForm = this.fb.group({
-            patientId: ['', [Validators.required]],
-            diagnosis: ['', [Validators.required]],
-            prescriptions: ['', [Validators.required]],
-            labTests: [''],
-            followUpDate: ['']
-        });
+        this.passwordForm = this.fb.group({
+            currentPassword: ['', [Validators.required]],
+            newPassword: ['', [Validators.required, Validators.minLength(6)]],
+            confirmPassword: ['', [Validators.required]]
+        }, { validator: this.passwordMatchValidator });
+    }
+
+    passwordMatchValidator(g: FormGroup) {
+        return g.get('newPassword')?.value === g.get('confirmPassword')?.value
+            ? null : { 'mismatch': true };
     }
 
     ngOnInit(): void {
         this.currentUser = this.authService.getCurrentUser();
         if (this.currentUser) {
-            this.loadDoctorData();
+            this.loadDashboardData();
         }
     }
 
-    loadDoctorData(): void {
+    loadDashboardData(): void {
         if (!this.currentUser) return;
 
-        // 1. Get Staff record for this User
         this.apiService.get('staff').subscribe({
             next: (staffList: any[]) => {
                 this.staffProfile = staffList.find(s => s.user?.id === this.currentUser?.id);
                 if (this.staffProfile) {
-                    // 2. Load assigned patients
+                    // Load assigned patients count and list
                     this.apiService.get(`patients?doctorId=${this.staffProfile.id}`).subscribe({
-                        next: (patients) => this.patients = patients
+                        next: (assignedPatients: any[]) => {
+                            this.patientsCount = assignedPatients.length;
+                            this.recentPatients = assignedPatients.slice(0, 5);
+                        }
+                    });
+
+                    // Load today's visits count
+                    this.apiService.get(`visits/doctor/${this.staffProfile.id}`).subscribe({
+                        next: (visits: any[]) => {
+                            const today = new Date().toISOString().split('T')[0];
+                            this.todaysVisitsCount = visits.filter(v => v.visitDate === today).length;
+                        }
                     });
                 }
             }
         });
     }
 
-    selectPatient(patient: any): void {
-        this.selectedPatient = patient;
-        this.prescriptionForm.patchValue({ patientId: patient.id });
+    togglePasswordForm(): void {
+        this.showPasswordForm = !this.showPasswordForm;
+        this.passwordError = '';
+        this.passwordSuccess = '';
+        if (this.showPasswordForm) {
+            this.passwordForm.reset();
+        }
     }
 
-    submitPrescription(): void {
-        if (this.prescriptionForm.invalid) return;
-
+    updatePassword(): void {
+        if (this.passwordForm.invalid) return;
         this.loading = true;
-        const val = {
-            ...this.prescriptionForm.value,
-            doctor: { id: this.staffProfile.id },
-            patient: { id: this.prescriptionForm.value.patientId },
-            visitDate: new Date().toISOString().split('T')[0]
-        };
+        this.passwordError = '';
+        this.passwordSuccess = '';
 
-        this.apiService.post('visits', val).subscribe({
+        this.apiService.post('users/change-password', {
+            currentPassword: this.passwordForm.value.currentPassword,
+            newPassword: this.passwordForm.value.newPassword
+        }).subscribe({
             next: () => {
                 this.loading = false;
-                this.prescriptionForm.reset();
-                this.selectedPatient = null;
-                alert('Prescription saved successfully!');
+                this.passwordSuccess = 'Password updated successfully!';
+                setTimeout(() => this.showPasswordForm = false, 2000);
             },
             error: (err) => {
                 this.loading = false;
-                console.error('Error saving visit', err);
+                this.passwordError = err.error?.message || 'Failed to update password. Please check your current password.';
             }
         });
     }
