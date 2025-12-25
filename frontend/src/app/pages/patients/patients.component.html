@@ -18,44 +18,48 @@
 
         <nav class="mt-10 flex-1 px-6 space-y-3">
             <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                <span class="font-bold tracking-tight">Overview</span>
+                <span class="font-bold tracking-tight pointer-events-none">Overview</span>
             </a>
 
             <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span class="font-bold tracking-tight">Patients</span>
+                <span class="font-bold tracking-tight pointer-events-none">Patients</span>
             </a>
 
             <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
                 </svg>
-                <span class="font-bold tracking-tight">Access Cards</span>
+                <span class="font-bold tracking-tight pointer-events-none">Access Cards</span>
             </a>
 
             <a *ngIf="isAdmin" routerLink="/staff-management"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
-                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span class="font-bold tracking-tight">Staffing</span>
+                <span class="font-bold tracking-tight pointer-events-none">Staffing</span>
             </a>
         </nav>
 
@@ -69,9 +73,17 @@
                     <p class="text-xs font-black truncate uppercase leading-none mb-1">{{ currentUser?.firstName }}</p>
                     <p class="text-[9px] text-primary font-black uppercase tracking-wider leading-none">Secured</p>
                 </div>
+                <button (click)="togglePasswordModal()" class="text-white hover:text-primary transition-all"
+                    title="Change Password">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 hover:opacity-100" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </button>
                 <button (click)="onLogout()" class="text-white hover:text-red-400 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 hover:opacity-100" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
@@ -146,48 +158,104 @@
                         <tr class="bg-slate-50 text-left border-b border-slate-100">
                             <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Clinical
                                 Identity</th>
-                            <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Secure
-                                Contact</th>
-                            <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
-                                Enrollment</th>
+                            <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Personal
+                                Info</th>
+                            <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">MD
+                                Assignment</th>
                             <th
                                 class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">
                                 Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
-                        <tr *ngFor="let i of [1,2,3,4,5,6,7,8]" class="group hover:bg-slate-50/50 transition-colors">
+                        <tr *ngFor="let p of patients" class="group hover:bg-slate-50/50 transition-colors">
                             <td class="px-10 py-10">
                                 <div class="flex items-center gap-6">
                                     <div
                                         class="w-14 h-14 bg-blue-50 text-primary font-black rounded-2xl flex items-center justify-center ring-4 ring-transparent group-hover:ring-blue-100 transition-all">
-                                        AB
+                                        {{ p.user?.firstName?.charAt(0) }}{{ p.user?.lastName?.charAt(0) }}
                                     </div>
                                     <div>
-                                        <p class="font-black text-secondary text-lg">Abebe Bikila</p>
+                                        <p class="font-black text-secondary text-lg">{{ p.user?.firstName }} {{
+                                            p.user?.lastName }}</p>
                                         <div class="flex items-center gap-2 mt-1">
                                             <span
-                                                class="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-black uppercase rounded-md border border-green-100">Active</span>
+                                                [class]="p.user?.isActive ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'"
+                                                class="px-2 py-0.5 text-[10px] font-black uppercase rounded-md border">
+                                                {{ p.user?.isActive ? 'Active' : 'Deactivated' }}
+                                            </span>
                                             <span
-                                                class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">ID:
-                                                #ATLAS-88219</span>
+                                                class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">MRN:
+                                                #{{ p.medicalRecordNumber }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-10 py-10">
-                                <p class="font-bold text-secondary">+251 911 223 344</p>
-                                <p class="text-xs text-slate-400 mt-1">beckham@atlascare.com</p>
+                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">{{
+                                    p.user?.gender || '---' }} | {{ p.user?.phoneNumber || 'No phone' }}</p>
+                                <p class="text-xs font-bold text-secondary truncate max-w-[200px]"
+                                    [title]="p.user?.address || ''">{{ p.user?.address || 'No address provided' }}</p>
+                                <p class="text-[9px] text-slate-400 mt-1 uppercase">{{ p.user?.email || 'No email' }}
+                                </p>
                             </td>
                             <td class="px-10 py-10">
-                                <p class="text-sm font-black text-secondary uppercase">Oct 12, 2025</p>
-                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Assigned
-                                    MD: Smith</p>
+                                <div class="flex items-center gap-4">
+                                    <div class="flex-1">
+                                        <p class="text-[10px] text-primary font-black uppercase tracking-widest mb-1">
+                                            Current Doctor</p>
+                                        <p class="text-xs font-black text-secondary uppercase">{{
+                                            p.assignedDoctor?.user?.lastName ? 'Dr. ' + p.assignedDoctor.user.lastName :
+                                            'Unassigned' }}</p>
+                                    </div>
+                                    <div class="relative">
+                                        <button (click)="assigningId = assigningId === p.id ? null : p.id"
+                                            class="p-2 bg-slate-50 border border-slate-100 rounded-lg text-slate-400 hover:text-primary transition-all">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </button>
+
+                                        <!-- Doctor Selector Overlay -->
+                                        <div *ngIf="assigningId === p.id"
+                                            class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 p-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                                            <p
+                                                class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">
+                                                Appoint Specialist</p>
+                                            <div class="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                                                <button *ngFor="let doc of doctors" (click)="appointDoctor(p, doc.id)"
+                                                    class="w-full text-left p-3 hover:bg-slate-50 rounded-xl transition-all group flex items-center justify-between">
+                                                    <div>
+                                                        <p class="text-[11px] font-black text-secondary leading-none">
+                                                            Dr. {{ doc.user?.firstName || 'Unknown' }} {{
+                                                            doc.user?.lastName || '' }}</p>
+                                                        <p
+                                                            class="text-[8px] text-primary font-bold uppercase tracking-widest mt-1">
+                                                            {{ doc.specialization || (doc.department + ' Dept') ||
+                                                            'General' }}</p>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                                <div *ngIf="doctors.length === 0"
+                                                    class="p-4 text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                                                    No Active Doctors
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                             <td class="px-10 py-10 text-right">
                                 <div
                                     class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
+                                    <button (click)="viewPatient(p)" title="View Details"
                                         class="p-3 bg-white border border-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white hover:border-primary shadow-sm transition-all">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
@@ -197,7 +265,7 @@
                                                 d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
                                     </button>
-                                    <button
+                                    <button (click)="editPatient(p)" title="Edit Record"
                                         class="p-3 bg-white border border-slate-100 rounded-xl text-secondary hover:bg-secondary hover:text-white shadow-sm transition-all">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">
@@ -205,7 +273,21 @@
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </button>
+                                    <button (click)="deletePatient(p)" title="Delete Record"
+                                        class="p-3 bg-white border border-slate-100 rounded-xl text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 shadow-sm transition-all">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
                                 </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="patients.length === 0 && !loading">
+                            <td colspan="4"
+                                class="px-10 py-20 text-center text-slate-400 font-bold uppercase tracking-widest">
+                                No patient records found.
                             </td>
                         </tr>
                     </tbody>
@@ -225,4 +307,31 @@
             </div>
         </div>
     </main>
+
+    <!-- Password Change Modal -->
+    <div *ngIf="showPasswordModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-[30px] p-8 w-full max-w-md shadow-2xl animate-float">
+            <h3 class="text-xl font-black text-secondary mb-6">Change Security Credentials</h3>
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] pl-1">New
+                        Password</label>
+                    <input type="password" formControlName="newPassword"
+                        class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner"
+                        placeholder="••••••••">
+                    <p *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']"
+                        class="text-[9px] text-red-500 font-bold uppercase pl-1">Minimum 6 characters required</p>
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" (click)="togglePasswordModal()"
+                        class="flex-1 py-4 bg-slate-100 text-secondary rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
+                    <button type="submit" [disabled]="passwordForm.invalid || passwordLoading"
+                        class="flex-1 py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:shadow-xl hover:shadow-primary/20 transition-all">
+                        {{ passwordLoading ? 'Updating...' : 'Update' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
