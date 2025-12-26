@@ -20,6 +20,8 @@ export class PatientsComponent implements OnInit {
   doctors: any[] = [];
   loading = false;
   assigningId: number | null = null;
+  showDetailModal = false;
+  detailPatient: any = null;
 
   // Password Change
   showPasswordModal = false;
@@ -93,7 +95,8 @@ export class PatientsComponent implements OnInit {
   }
 
   viewPatient(patient: any): void {
-    alert(`Patient: ${patient.user?.firstName} ${patient.user?.lastName}\nMRN: ${patient.medicalRecordNumber}\nGender: ${patient.user?.gender}\nDOB: ${patient.user?.dateOfBirth}\nAddress: ${patient.user?.address}\nDoctor: Dr. ${patient.assignedDoctor?.user?.lastName || 'N/A'}`);
+    this.detailPatient = patient;
+    this.showDetailModal = true;
   }
 
   appointDoctor(patient: any, doctorId: string): void {
@@ -119,6 +122,7 @@ export class PatientsComponent implements OnInit {
   }
 
   deletePatient(patient: any): void {
+    if (!this.isAdmin) return;
     if (!confirm('Are you sure you want to delete this patient record?')) return;
     this.apiService.delete(`patients/${patient.id}`).subscribe({
       next: () => {
@@ -127,6 +131,11 @@ export class PatientsComponent implements OnInit {
       },
       error: (err) => alert('Failed to delete patient.')
     });
+  }
+
+  closeDetail(): void {
+    this.showDetailModal = false;
+    this.detailPatient = null;
   }
 
   onLogout(): void {
