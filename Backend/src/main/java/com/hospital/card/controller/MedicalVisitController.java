@@ -1,12 +1,11 @@
 package com.hospital.card.controller;
 
-import com.hospital.card.entity.MedicalVisit;
-import com.hospital.card.repository.MedicalVisitRepository;
+import com.hospital.card.dto.MedicalVisitDTO;
+import com.hospital.card.service.MedicalVisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -14,28 +13,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MedicalVisitController {
 
-    private final MedicalVisitRepository medicalVisitRepository;
+    private final MedicalVisitService medicalVisitService;
 
     @GetMapping
-    public ResponseEntity<List<MedicalVisit>> getAll() {
-        return ResponseEntity.ok(medicalVisitRepository.findAll());
+    public ResponseEntity<List<MedicalVisitDTO>> getAll() {
+        return ResponseEntity.ok(medicalVisitService.getAll());
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<MedicalVisit>> getByPatient(@PathVariable Long patientId) {
-        return ResponseEntity.ok(medicalVisitRepository.findByPatientId(patientId));
+    public ResponseEntity<List<MedicalVisitDTO>> getByPatient(@PathVariable Long patientId) {
+        return ResponseEntity.ok(medicalVisitService.getByPatient(patientId));
     }
 
     @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<List<MedicalVisit>> getByDoctor(@PathVariable Long doctorId) {
-        return ResponseEntity.ok(medicalVisitRepository.findByDoctorId(doctorId));
+    public ResponseEntity<List<MedicalVisitDTO>> getByDoctor(@PathVariable Long doctorId) {
+        return ResponseEntity.ok(medicalVisitService.getByDoctor(doctorId));
     }
 
     @PostMapping
-    public ResponseEntity<MedicalVisit> create(@RequestBody MedicalVisit visit) {
-        if (visit.getVisitDate() == null) {
-            visit.setVisitDate(LocalDate.now());
-        }
-        return ResponseEntity.ok(medicalVisitRepository.save(visit));
+    public ResponseEntity<MedicalVisitDTO> create(@RequestBody MedicalVisitDTO visitDto) {
+        return ResponseEntity.ok(medicalVisitService.create(visitDto));
     }
 }
