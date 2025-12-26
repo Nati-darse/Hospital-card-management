@@ -26,4 +26,9 @@ public class StaffController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Staff>> searchByDepartment(@RequestParam String department) {
+        return ResponseEntity.ok(staffRepository.findByDepartment(department));
+    }
 }
