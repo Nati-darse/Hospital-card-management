@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -39,5 +40,14 @@ public class MedicalVisit {
     @Column(name = "follow_up_date")
     private LocalDate followUpDate;
 
-    private String notes;
+    private String status;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @Column(name = "additional_comments", columnDefinition = "TEXT")
+    private String additionalComments;
+
+    @CreationTimestamp
+    private java.time.LocalDateTime createdAt;
 }

@@ -1,5 +1,6 @@
 package com.hospital.card.controller;
 
+import com.hospital.card.dto.ChangePasswordRequest;
 import com.hospital.card.dto.UserDTO;
 import com.hospital.card.entity.User;
 import com.hospital.card.service.UserService;
@@ -53,6 +54,23 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deactivateUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<Void> changePassword(@PathVariable Long id,
+            @Valid @RequestBody ChangePasswordRequest request) {
+        User user = userService.getUserById(id);
+        user.setPassword(request.getNewPassword()); // UserService handles encoding in updateUser? No, need to encode
+                                                    // here or use Service method
+        // Actually UserService.updateUser handles encoding if password is present.
+        // Let's reuse updateUser logic but we need to map the DTO to User entity or
+        // just call update.
+
+        User updatePayload = new User();
+        updatePayload.setPassword(request.getNewPassword());
+        userService.updateUser(id, updatePayload);
+
+        return ResponseEntity.ok().build();
     }
 
     private UserDTO toDto(User u) {

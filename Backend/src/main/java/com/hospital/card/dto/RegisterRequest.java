@@ -21,6 +21,7 @@ public class RegisterRequest {
     private LocalDate dateOfBirth;
     private String gender;
     private String address;
+    private String department;
 }
 
-//dto =data transfer objects yemiyamelekt new 
+// dto =data transfer objects yemiyamelekt new

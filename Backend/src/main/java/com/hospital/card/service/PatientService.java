@@ -1,6 +1,7 @@
 package com.hospital.card.service;
 
 import com.hospital.card.dto.PatientDTO;
+import com.hospital.card.dto.UserDTO;
 import com.hospital.card.entity.Patient;
 import com.hospital.card.entity.User;
 import com.hospital.card.repository.PatientRepository;
@@ -18,6 +19,10 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final com.hospital.card.repository.StaffRepository staffRepository;
+    private final com.hospital.card.repository.AppointmentRepository appointmentRepository;
+    private final com.hospital.card.repository.MedicalVisitRepository medicalVisitRepository;
+    private final com.hospital.card.repository.HospitalCardRepository hospitalCardRepository;
+    private final com.hospital.card.repository.BillRepository billRepository;
 
     public List<PatientDTO> getAllPatients() {
         return patientRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
@@ -96,14 +101,30 @@ public class PatientService {
     }
 
     public void deletePatient(Long id) {
+        billRepository.deleteByPatientId(id);
+        medicalVisitRepository.deleteAll(medicalVisitRepository.findByPatientId(id));
+        appointmentRepository.deleteByPatientId(id);
+        hospitalCardRepository.deleteByPatientId(id);
         patientRepository.deleteById(id);
     }
 
     private PatientDTO toDto(Patient p) {
         PatientDTO dto = new PatientDTO();
         dto.setId(p.getId());
-        if (p.getUser() != null)
+        if (p.getUser() != null) {
             dto.setUserId(p.getUser().getId());
+            UserDTO userDto = new UserDTO();
+            userDto.setId(p.getUser().getId());
+            userDto.setUsername(p.getUser().getUsername());
+            userDto.setEmail(p.getUser().getEmail());
+            userDto.setFirstName(p.getUser().getFirstName());
+            userDto.setLastName(p.getUser().getLastName());
+            userDto.setPhoneNumber(p.getUser().getPhoneNumber());
+            userDto.setAddress(p.getUser().getAddress());
+            userDto.setGender(p.getUser().getGender());
+            userDto.setDateOfBirth(p.getUser().getDateOfBirth());
+            dto.setUser(userDto);
+        }
         dto.setMedicalRecordNumber(p.getMedicalRecordNumber());
         dto.setBloodGroup(p.getBloodGroup());
         dto.setEmergencyContactName(p.getEmergencyContactName());

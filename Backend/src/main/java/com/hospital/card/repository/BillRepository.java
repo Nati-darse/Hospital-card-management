@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
+    java.util.List<Bill> findByPatientId(Long patientId);
+    void deleteByPatientId(Long patientId);
 }

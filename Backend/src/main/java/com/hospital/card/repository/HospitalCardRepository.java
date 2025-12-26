@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface HospitalCardRepository extends JpaRepository<HospitalCard, Long> {
     Optional<HospitalCard> findByCardNumber(String cardNumber);
+    Optional<HospitalCard> findByPatientId(Long patientId);
+    void deleteByPatientId(Long patientId);
 }

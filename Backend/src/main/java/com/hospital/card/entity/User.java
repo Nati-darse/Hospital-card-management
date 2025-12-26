@@ -53,6 +53,8 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
     private String address;
 
+    private String department;
+
     @Column(name = "is_active")
     private Boolean isActive = true;
 
