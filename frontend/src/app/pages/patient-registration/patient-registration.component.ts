@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-patient-registration',
@@ -195,7 +196,6 @@ export class PatientRegistrationComponent implements OnInit {
         const val = this.registrationForm.value;
         const userId = this.patientToEdit.user?.id;
 
-        // 1. Update User
         const userData = {
             email: val.email,
             firstName: val.firstName,
@@ -206,28 +206,25 @@ export class PatientRegistrationComponent implements OnInit {
             address: val.address
         };
 
-        this.apiService.put(`users/${userId}`, userData).subscribe({
-            next: () => {
-                // 2. Update Patient
-                const patientData = {
-                    bloodGroup: val.bloodGroup,
-                    allergies: val.allergies,
-                    chronicConditions: val.chronicConditions,
-                    insuranceProvider: val.insuranceProvider,
-                    insuranceNumber: val.insuranceNumber,
-                    emergencyContactName: val.emergencyContactName,
-                    emergencyContactPhone: val.emergencyContactPhone,
-                    assignedDoctorId: val.assignedDoctorId
-                };
+        const patientData = {
+            bloodGroup: val.bloodGroup,
+            allergies: val.allergies,
+            chronicConditions: val.chronicConditions,
+            insuranceProvider: val.insuranceProvider,
+            insuranceNumber: val.insuranceNumber,
+            emergencyContactName: val.emergencyContactName,
+            emergencyContactPhone: val.emergencyContactPhone,
+            assignedDoctorId: val.assignedDoctorId
+        };
 
-                this.apiService.put(`patients/${this.editId}`, patientData).subscribe({
-                    next: () => {
-                        this.loading = false;
-                        this.success = 'Patient profile updated successfully!';
-                        setTimeout(() => this.router.navigate(['/patients']), 2000);
-                    },
-                    error: (err: any) => this.handleError(err)
-                });
+        const userUpdate$ = this.apiService.put(`users/${userId}`, userData);
+        const patientUpdate$ = this.apiService.put(`patients/${this.editId}`, patientData);
+
+        forkJoin([userUpdate$, patientUpdate$]).subscribe({
+            next: () => {
+                this.loading = false;
+                this.success = 'Patient profile updated successfully!';
+                this.router.navigate(['/patients']);
             },
             error: (err: any) => this.handleError(err)
         });
