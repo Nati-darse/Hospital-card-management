@@ -71,7 +71,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
 
     @Override
     public java.util.Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
-        return java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority(role.name()));
+        return java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
