@@ -1,0 +1,51 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "HospitalCardManagementApplication",
+            "request": "launch",
+            "mainClass": "com.hospital.card.HospitalCardManagementApplication",
+            "projectName": "card-management",
+            "env": {
+                "DB_URL": "${env:DB_URL}",
+                "DB_USERNAME": "${env:DB_USERNAME}",
+                "DB_PASSWORD": "${env:DB_PASSWORD}",
+                "JWT_SECRET": "${env:JWT_SECRET}"
+            }
+        }
+    ]
+}
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "HospitalCardManagementApplication",
+            "request": "launch",
+            "mainClass": "com.hospital.card.HospitalCardManagementApplication",
+            "projectName": "card-management",
+            "env": {
+                "DB_URL": "${env:DB_URL}",
+                "DB_USERNAME": "${env:DB_USERNAME}",
+                "DB_PASSWORD": "${env:DB_PASSWORD}",
+                "JWT_SECRET": "${env:JWT_SECRET}"
+            }
+        }
+    ]
+}

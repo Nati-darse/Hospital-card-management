@@ -43,20 +43,12 @@ export class RegisterComponent {
         this.loading = true;
         this.error = '';
 
-        this.authService.register(this.registerForm.value).subscribe({
+        this.authService.registerPatient(this.registerForm.value).subscribe({
             next: (response) => {
                 console.log('Register component: Success', response);
                 this.loading = false;
-                const user = this.authService.getCurrentUser();
-                if (user?.role === 'ADMIN') {
-                    this.router.navigate(['/dashboard']);
-                } else if (user?.role === 'PATIENT') {
-                    this.router.navigate(['/patient-portal']);
-                } else if (user?.role === 'USER') {
-                    this.router.navigate(['/doctor-portal']);
-                } else {
-                    this.router.navigate(['/dashboard']);
-                }
+                alert('Registration successful! Please wait for admin approval.');
+                this.router.navigate(['/login']);
             },
             error: (err) => {
                 console.error('Register component: Error', err);

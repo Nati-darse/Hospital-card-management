@@ -1,9 +1,9 @@
 server.port=8080
 spring.application.name=hospital-card-management
 
-# PostgreSQL configuration (Neon.tech)
-spring.datasource.url=${DB_URL}
-spring.datasource.username=${DB_USERNAME}
+# PostgreSQL configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/hospital_card_db
+spring.datasource.username=postgres
 spring.datasource.password=${DB_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
 
@@ -20,5 +20,3 @@ jwt.expiration=86400000
 # Logging
 logging.level.org.springframework.web=INFO
 logging.level.com.hospital.card=DEBUG
-logging.level.org.springframework.security=DEBUG
-logging.level.org.springframework.web=DEBUG

@@ -27,21 +27,16 @@ export class AuthService {
             );
     }
 
-    register(userData: RegisterRequest): Observable<AuthResponse> {
-        console.log('Attempting registration for:', userData.username, 'with role:', userData.role);
-        return this.http.post<AuthResponse>(`${this.API_URL}/register`, userData)
-            .pipe(
-                tap(response => {
-                    console.log('Registration successful for:', response.username);
-                    this.handleAuthResponse(response);
-                })
-            );
+    registerPatient(userData: RegisterRequest): Observable<AuthResponse> {
+        console.log('Attempting patient registration for:', userData.username);
+        // Patient registration does not return a token immediately (pending approval)
+        return this.http.post<AuthResponse>(`${this.API_URL}/register-patient`, userData);
     }
 
     // Admin version: Does NOT login the newly created user
     adminRegister(userData: RegisterRequest): Observable<any> {
         console.log('Admin creating account for:', userData.username);
-        return this.http.post<any>(`${this.API_URL}/register`, userData);
+        return this.http.post<any>(`http://localhost:8080/api/admin/users`, userData);
     }
 
     logout(): void {

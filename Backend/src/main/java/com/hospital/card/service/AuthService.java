@@ -22,8 +22,45 @@ public class AuthService {
     private final com.hospital.card.repository.StaffRepository staffRepository;
     private final com.hospital.card.repository.PatientRepository patientRepository;
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse registerPatient(RegisterRequest request) {
         // Create new user
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(UserRole.PATIENT); // Force Patient role
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setDateOfBirth(request.getDateOfBirth());
+        user.setGender(request.getGender());
+        user.setAddress(request.getAddress());
+        user.setDepartment(request.getDepartment());
+        user.setIsActive(false); // Inactive by default
+
+        // Save user
+        User savedUser = userService.registerUser(user);
+
+        // Create Patient record
+        com.hospital.card.entity.Patient patient = new com.hospital.card.entity.Patient();
+        patient.setUser(savedUser);
+        patient.setMedicalRecordNumber("MRN-" + System.currentTimeMillis() + "-" + savedUser.getId());
+        patientRepository.save(patient);
+
+        // No token returned for pending users
+        return new AuthResponse(
+                null,
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getEmail(),
+                savedUser.getRole(),
+                savedUser.getFirstName(),
+                savedUser.getLastName(),
+                "Registration successful. Please wait for admin approval.");
+    }
+
+    // Admin uses this to create staff/other admins
+    public User registerStaffOrAdmin(RegisterRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
@@ -36,12 +73,12 @@ public class AuthService {
         user.setGender(request.getGender());
         user.setAddress(request.getAddress());
         user.setDepartment(request.getDepartment());
+        user.setIsActive(true); // Active by default
 
-        // Save user
         User savedUser = userService.registerUser(user);
 
-        // If role is USER (Doctor), create Staff record
-        if (savedUser.getRole() == UserRole.USER) {
+        // If role is USER (Doctor/Nurse), create Staff record
+        if (savedUser.getRole() == UserRole.USER) { // Assuming USER = Staff
             com.hospital.card.entity.Staff staff = new com.hospital.card.entity.Staff();
             staff.setUser(savedUser);
             staff.setDepartment(request.getDepartment());
@@ -49,30 +86,7 @@ public class AuthService {
             staffRepository.save(staff);
         }
 
-        // If role is PATIENT, create Patient record
-        if (savedUser.getRole() == UserRole.PATIENT) {
-            com.hospital.card.entity.Patient patient = new com.hospital.card.entity.Patient();
-            patient.setUser(savedUser);
-            // Automatically generate MRN
-            patient.setMedicalRecordNumber("MRN-" + System.currentTimeMillis() + "-" + savedUser.getId());
-            patientRepository.save(patient);
-        }
-
-        // Update last login
-        userService.updateLastLogin(savedUser.getUsername());
-
-        // Generate token
-        String jwtToken = jwtService.generateToken(savedUser);
-
-        return new AuthResponse(
-                jwtToken,
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getEmail(),
-                savedUser.getRole(),
-                savedUser.getFirstName(),
-                savedUser.getLastName(),
-                "Registration successful");
+        return savedUser;
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -87,6 +101,10 @@ public class AuthService {
         // Get user details
         User user = userService.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.getIsActive()) {
+            throw new RuntimeException("Account is not active. Please contact administrator.");
+        }
 
         // Update last login
         userService.updateLastLogin(user.getUsername());

@@ -9,6 +9,7 @@ import { roleGuard } from './guards/role.guard';
 export const routes: Routes = [
     { path: '', component: LandingComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'register-patient', component: RegisterComponent },
     { path: 'register', component: RegisterComponent },
     {
         path: 'dashboard',

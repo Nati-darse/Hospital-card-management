@@ -171,6 +171,44 @@
                 </div>
             </div>
 
+            <!-- Pending Approvals Widget -->
+            <div *ngIf="isAdmin && pendingUsers.length > 0"
+                class="bg-white rounded-[40px] p-8 shadow-sm border-l-8 border-orange-400">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-black text-secondary tracking-tight">Pending Approvals</h3>
+                    <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">{{
+                        pendingUsers.length }}</span>
+                </div>
+
+                <div class="space-y-4">
+                    <div *ngFor="let user of pendingUsers"
+                        class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-lg transition-all">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500">
+                                {{ user.firstName[0] }}
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-secondary">{{ user.firstName }} {{ user.lastName }}</p>
+                                <p class="text-[10px] text-slate-500 uppercase tracking-widest">{{ user.email }} • <span
+                                        class="text-primary">{{ user.role }}</span></p>
+                            </div>
+                        </div>
+                        <button (click)="approveUser(user)"
+                            class="bg-secondary text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-green-600 transition-colors">
+                            Approve Access
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <a routerLink="/staff-management" [queryParams]="{role: 'ADMIN'}"

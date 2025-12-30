@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { User } from '../../models/auth.models';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,9 +28,12 @@ export class DashboardComponent implements OnInit {
   passwordForm: FormGroup;
   passwordLoading = false;
 
+  pendingUsers: any[] = [];
+
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
+    private adminService: AdminService,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -42,6 +46,29 @@ export class DashboardComponent implements OnInit {
     this.currentUser = this.authService.getCurrentUser();
     this.isAdmin = this.currentUser?.role === 'ADMIN';
     this.loadStats();
+    if (this.isAdmin) {
+      this.loadPendingUsers();
+    }
+  }
+
+  loadPendingUsers(): void {
+    this.adminService.getPendingUsers().subscribe({
+      next: (users) => this.pendingUsers = users,
+      error: (err) => console.error('Error loading pending users', err)
+    });
+  }
+
+  approveUser(user: any): void {
+    if (!confirm(`Are you sure you want to approve ${user.firstName} ${user.lastName}?`)) return;
+
+    this.adminService.approveUser(user.id).subscribe({
+      next: () => {
+        alert('User approved!');
+        this.loadPendingUsers();
+        this.loadStats(); // Update stats
+      },
+      error: (err) => console.error('Error approving user', err)
+    });
   }
 
   loadStats(): void {
