@@ -7,7 +7,7 @@ import { LoginRequest, RegisterRequest, AuthResponse, User } from '../models/aut
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly API_URL = 'http://localhost:8080/api/auth';
+    private readonly API_URL = '/api/auth';
     private readonly TOKEN_KEY = 'jwt_token';
     private readonly USER_KEY = 'current_user';
 
@@ -36,7 +36,7 @@ export class AuthService {
     // Admin version: Does NOT login the newly created user
     adminRegister(userData: RegisterRequest): Observable<any> {
         console.log('Admin creating account for:', userData.username);
-        return this.http.post<any>(`http://localhost:8080/api/admin/users`, userData);
+        return this.http.post<any>(`/api/admin/users`, userData);
     }
 
     logout(): void {

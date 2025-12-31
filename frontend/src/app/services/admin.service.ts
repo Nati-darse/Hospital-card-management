@@ -7,7 +7,7 @@ import { User } from '../models/auth.models';
     providedIn: 'root'
 })
 export class AdminService {
-    private readonly API_URL = 'http://localhost:8080/api/admin';
+    private readonly API_URL = '/api/admin';
 
     constructor(private http: HttpClient) { }
 
