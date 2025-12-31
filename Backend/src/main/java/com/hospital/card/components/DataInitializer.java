@@ -7,10 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hospital.card.entity.User;
 import com.hospital.card.entity.UserRole;
-import com.hospital.card.repository.AppointmentRepository;
-import com.hospital.card.repository.MedicalVisitRepository;
-import com.hospital.card.repository.PatientRepository;
-import com.hospital.card.repository.StaffRepository;
 import com.hospital.card.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,24 +16,11 @@ import lombok.RequiredArgsConstructor;
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final StaffRepository staffRepository;
-    private final PatientRepository patientRepository;
-    private final MedicalVisitRepository medicalVisitRepository;
-    private final AppointmentRepository appointmentRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // Cleanup all data (Disabled for persistence)
-        /*
-        medicalVisitRepository.deleteAll();
-        appointmentRepository.deleteAll();
-        staffRepository.deleteAll();
-        patientRepository.deleteAll();
-        userRepository.deleteAll();
-        */
-
         // Create Default Admin
         createAdminUser();
     }

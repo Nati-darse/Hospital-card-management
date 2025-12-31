@@ -1,16 +1,18 @@
 package com.hospital.card.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.hospital.card.dto.PatientDTO;
 import com.hospital.card.dto.UserDTO;
 import com.hospital.card.entity.Patient;
 import com.hospital.card.entity.User;
 import com.hospital.card.repository.PatientRepository;
 import com.hospital.card.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
-    private final com.hospital.card.repository.StaffRepository staffRepository;
+    private final StaffService staffService;
     private final com.hospital.card.repository.AppointmentRepository appointmentRepository;
     private final com.hospital.card.repository.MedicalVisitRepository medicalVisitRepository;
     private final com.hospital.card.repository.HospitalCardRepository hospitalCardRepository;
@@ -52,8 +54,7 @@ public class PatientService {
         }
 
         if (dto.getAssignedDoctorId() != null) {
-            com.hospital.card.entity.Staff doctor = staffRepository.findById(dto.getAssignedDoctorId())
-                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+            com.hospital.card.entity.Staff doctor = staffService.getStaffEntity(dto.getAssignedDoctorId());
             p.setAssignedDoctor(doctor);
         }
 
@@ -91,8 +92,7 @@ public class PatientService {
         if (dto.getInsuranceNumber() != null)
             p.setInsuranceNumber(dto.getInsuranceNumber());
         if (dto.getAssignedDoctorId() != null) {
-            com.hospital.card.entity.Staff doctor = staffRepository.findById(dto.getAssignedDoctorId())
-                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+            com.hospital.card.entity.Staff doctor = staffService.getStaffEntity(dto.getAssignedDoctorId());
             p.setAssignedDoctor(doctor);
         }
 
@@ -108,7 +108,10 @@ public class PatientService {
         patientRepository.deleteById(id);
     }
 
+
+
     private PatientDTO toDto(Patient p) {
+        if (p == null) return null;
         PatientDTO dto = new PatientDTO();
         dto.setId(p.getId());
         if (p.getUser() != null) {
@@ -123,6 +126,8 @@ public class PatientService {
             userDto.setAddress(p.getUser().getAddress());
             userDto.setGender(p.getUser().getGender());
             userDto.setDateOfBirth(p.getUser().getDateOfBirth());
+            userDto.setRole(p.getUser().getRole());
+            userDto.setIsActive(p.getUser().getIsActive());
             dto.setUser(userDto);
         }
         dto.setMedicalRecordNumber(p.getMedicalRecordNumber());
@@ -133,8 +138,10 @@ public class PatientService {
         dto.setChronicConditions(p.getChronicConditions());
         dto.setInsuranceProvider(p.getInsuranceProvider());
         dto.setInsuranceNumber(p.getInsuranceNumber());
-        if (p.getAssignedDoctor() != null)
+        if (p.getAssignedDoctor() != null) {
             dto.setAssignedDoctorId(p.getAssignedDoctor().getId());
+            dto.setAssignedDoctor(staffService.toDto(p.getAssignedDoctor()));
+        }
         return dto;
     }
 }
