@@ -29,12 +29,14 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // Cleanup all data
+        // Cleanup all data (Disabled for persistence)
+        /*
         medicalVisitRepository.deleteAll();
         appointmentRepository.deleteAll();
         staffRepository.deleteAll();
         patientRepository.deleteAll();
         userRepository.deleteAll();
+        */
 
         // Create Default Admin
         createAdminUser();
