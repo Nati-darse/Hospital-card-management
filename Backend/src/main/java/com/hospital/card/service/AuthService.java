@@ -1,16 +1,18 @@
 package com.hospital.card.service;
 
-import com.hospital.card.dto.AuthResponse;
-import com.hospital.card.dto.LoginRequest;
-import com.hospital.card.dto.RegisterRequest;
-import com.hospital.card.entity.User;
-import com.hospital.card.entity.UserRole;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.hospital.card.dto.AuthResponse;
+import com.hospital.card.dto.LoginRequest;
+import com.hospital.card.dto.RegisterRequest;
+import com.hospital.card.entity.User;
+import com.hospital.card.entity.UserRole;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -78,12 +80,17 @@ public class AuthService {
         User savedUser = userService.registerUser(user);
 
         // If role is USER (Doctor/Nurse), create Staff record
-        if (savedUser.getRole() == UserRole.USER) { // Assuming USER = Staff
+        if (savedUser.getRole() == com.hospital.card.entity.UserRole.USER) { 
             com.hospital.card.entity.Staff staff = new com.hospital.card.entity.Staff();
             staff.setUser(savedUser);
             staff.setDepartment(request.getDepartment());
             staff.setStaffId("STF-" + savedUser.getId());
             staffRepository.save(staff);
+        } else if (savedUser.getRole() == com.hospital.card.entity.UserRole.PATIENT) {
+            com.hospital.card.entity.Patient patient = new com.hospital.card.entity.Patient();
+            patient.setUser(savedUser);
+            patient.setMedicalRecordNumber("MRN-" + System.currentTimeMillis() + "-" + savedUser.getId());
+            patientRepository.save(patient);
         }
 
         return savedUser;
