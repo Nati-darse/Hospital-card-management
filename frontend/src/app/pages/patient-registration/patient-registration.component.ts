@@ -131,6 +131,9 @@ export class PatientRegistrationComponent implements OnInit {
             return;
         }
 
+        // Helper to convert empty strings to null
+        const clean = (val: any) => val === '' ? null : val;
+
         // Step 1: Register User
         const userData = {
             username: val.username,
@@ -139,10 +142,10 @@ export class PatientRegistrationComponent implements OnInit {
             role: 'PATIENT' as const,
             firstName: val.firstName,
             lastName: val.lastName,
-            phoneNumber: val.phoneNumber,
-            gender: val.gender,
-            dateOfBirth: val.dateOfBirth,
-            address: val.address
+            phoneNumber: clean(val.phoneNumber),
+            gender: clean(val.gender),
+            dateOfBirth: clean(val.dateOfBirth),
+            address: clean(val.address)
         };
 
         this.authService.adminRegister(userData).subscribe({

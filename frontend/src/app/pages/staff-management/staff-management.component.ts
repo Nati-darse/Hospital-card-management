@@ -141,8 +141,13 @@ export class StaffManagementComponent implements OnInit {
     this.error = '';
     this.success = '';
 
+    // Clean empty strings to null for backend
+    const clean = (val: any) => val === '' ? null : val;
+    const body = { ...this.staffForm.value };
+    Object.keys(body).forEach(key => body[key] = clean(body[key]));
+
     // Use adminRegister to avoid auto-login
-    this.authService.adminRegister(this.staffForm.value).subscribe({
+    this.authService.adminRegister(body).subscribe({
       next: (res) => {
         this.loading = false;
         this.success = `Successfully created staff member: ${res.username}`;
