@@ -1,21 +1,22 @@
 package com.hospital.card.repository;
 
-import com.hospital.card.entity.User;
-import com.hospital.card.entity.UserRole;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import com.hospital.card.entity.User;
+import com.hospital.card.entity.UserRole;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsernameIgnoreCase(String username);
     
     Optional<User> findByEmail(String email);
     
-    Boolean existsByUsername(String username);
+    Boolean existsByUsernameIgnoreCase(String username);
     
     Boolean existsByEmail(String email);
     

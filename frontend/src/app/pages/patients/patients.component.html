@@ -19,47 +19,43 @@
         <nav class="mt-10 flex-1 px-6 space-y-3">
             <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Overview</span>
+                <span class="font-bold tracking-tight">Overview</span>
             </a>
 
             <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Patients</span>
+                <span class="font-bold tracking-tight">Patients</span>
             </a>
 
             <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Access Cards</span>
+                <span class="font-bold tracking-tight">Access Cards</span>
             </a>
 
             <a *ngIf="isAdmin" routerLink="/staff-management"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Staffing</span>
+                <span class="font-bold tracking-tight">Staffing</span>
             </a>
         </nav>
 
@@ -115,266 +111,234 @@
             </div>
         </header>
 
-        <!-- Content -->
-        <div class="p-10 space-y-8">
-            <!-- Search & Utils -->
-            <div class="flex flex-col md:flex-row gap-6 items-center">
-                <div class="relative flex-1 w-full bg-white rounded-[30px] shadow-sm border border-slate-100 group">
-                    <span
-                        class="absolute inset-y-0 left-0 pl-6 flex items-center text-slate-400 group-focus-within:text-primary transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </span>
-                    <input type="text" placeholder="Search by name, ID, or clinical parameter..."
-                        class="block w-full pl-14 pr-8 py-5 rounded-[30px] outline-none text-secondary font-medium transition-all focus:ring-4 focus:ring-primary/5">
+        <!-- Content Grid -->
+        <div class="p-10 flex flex-col xl:flex-row gap-8 flex-1 overflow-hidden">
+            <!-- Left Side: Table -->
+            <div class="flex-1 min-w-0 flex flex-col space-y-8">
+                <!-- Search & Utils -->
+                <div class="flex flex-col md:flex-row gap-6 items-center">
+                    <div class="relative flex-1 w-full bg-white rounded-[30px] shadow-sm border border-slate-100 group">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-6 flex items-center text-slate-400 group-focus-within:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </span>
+                        <input type="text" placeholder="Search by name, ID, or clinical parameter..."
+                            class="block w-full pl-14 pr-8 py-5 rounded-[30px] outline-none text-secondary font-medium transition-all focus:ring-4 focus:ring-primary/5">
+                    </div>
+                    <div class="flex gap-4">
+                        <button
+                            class="p-5 bg-white rounded-[24px] border border-slate-100 shadow-sm text-slate-500 hover:text-primary transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <div class="flex gap-4">
-                    <button
-                        class="p-5 bg-white rounded-[24px] border border-slate-100 shadow-sm text-slate-500 hover:text-primary transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                        </svg>
-                    </button>
-                    <button
-                        class="p-5 bg-white rounded-[24px] border border-slate-100 shadow-sm text-slate-500 hover:text-primary transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Advanced Patients Table -->
-            <div class="bg-white rounded-[40px] shadow-sm border border-slate-100 overflow-hidden">
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 text-left border-b border-slate-100">
-                            <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Clinical
-                                Identity</th>
-                            <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Personal
-                                Info</th>
-                            <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">MD
-                                Assignment</th>
-                            <th
-                                class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">
-                                Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-50">
-                        <tr *ngFor="let p of patients" class="group hover:bg-slate-50/50 transition-colors">
-                            <td class="px-10 py-10">
-                                <div class="flex items-center gap-6">
-                                    <div
-                                        class="w-14 h-14 bg-blue-50 text-primary font-black rounded-2xl flex items-center justify-center ring-4 ring-transparent group-hover:ring-blue-100 transition-all">
-                                        {{ p.user?.firstName?.charAt(0) }}{{ p.user?.lastName?.charAt(0) }}
-                                    </div>
-                                    <div>
-                                        <p class="font-black text-secondary text-lg">{{ p.user?.firstName }} {{
-                                            p.user?.lastName }}</p>
-                                        <div class="flex items-center gap-2 mt-1">
-                                            <span
-                                                [class]="p.user?.isActive ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'"
-                                                class="px-2 py-0.5 text-[10px] font-black uppercase rounded-md border">
-                                                {{ p.user?.isActive ? 'Active' : 'Deactivated' }}
-                                            </span>
-                                            <span
-                                                class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">MRN:
-                                                #{{ p.medicalRecordNumber }}</span>
+                <!-- Advanced Patients Table -->
+                <div
+                    class="bg-white rounded-[40px] shadow-sm border border-slate-100 overflow-hidden flex-1 flex flex-col">
+                    <div class="flex-1 overflow-y-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-left border-b border-slate-100 sticky top-0 z-10">
+                                    <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                        Clinical Identity</th>
+                                    <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                        Personal Info</th>
+                                    <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                        MD Assignment</th>
+                                    <th
+                                        class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-50">
+                                <tr *ngFor="let p of patients" (click)="viewPatient(p)"
+                                    [class.bg-blue-50]="detailPatient?.id === p.id"
+                                    class="group hover:bg-slate-50/50 transition-colors cursor-pointer">
+                                    <td class="px-10 py-8">
+                                        <div class="flex items-center gap-6">
+                                            <div [class]="detailPatient?.id === p.id ? 'bg-primary text-white' : 'bg-blue-50 text-primary'"
+                                                class="w-14 h-14 font-black rounded-2xl flex items-center justify-center ring-4 ring-transparent group-hover:ring-blue-100 transition-all">
+                                                {{ p.user?.firstName?.charAt(0) }}{{ p.user?.lastName?.charAt(0) }}
+                                            </div>
+                                            <div>
+                                                <p class="font-black text-secondary text-lg">{{ p.user?.firstName }} {{
+                                                    p.user?.lastName }}</p>
+                                                <div class="flex items-center gap-2 mt-1">
+                                                    <span
+                                                        [class]="p.user?.isActive ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'"
+                                                        class="px-2 py-0.5 text-[10px] font-black uppercase rounded-md border">
+                                                        {{ p.user?.isActive ? 'Active' : 'Deactivated' }}
+                                                    </span>
+                                                    <span
+                                                        class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">#{{
+                                                        p.medicalRecordNumber }}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-10 py-10">
-                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">{{
-                                    p.user?.gender || '---' }} | {{ p.user?.phoneNumber || 'No phone' }}</p>
-                                <p class="text-xs font-bold text-secondary truncate max-w-[200px]"
-                                    [title]="p.user?.address || ''">{{ p.user?.address || 'No address provided' }}</p>
-                                <p class="text-[9px] text-slate-400 mt-1 uppercase">{{ p.user?.email || 'No email' }}
-                                </p>
-                            </td>
-                            <td class="px-10 py-10">
-                                <div class="flex items-center gap-4">
-                                    <div class="flex-1">
+                                    </td>
+                                    <td class="px-10 py-8">
+                                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">
+                                            {{ p.user?.gender || '---' }} | {{ p.user?.phoneNumber || 'No phone' }}</p>
+                                        <p class="text-xs font-bold text-secondary truncate max-w-[150px]">{{
+                                            p.user?.email || 'No email' }}</p>
+                                    </td>
+                                    <td class="px-10 py-8">
                                         <p class="text-[10px] text-primary font-black uppercase tracking-widest mb-1">
                                             Current Doctor</p>
                                         <p class="text-xs font-black text-secondary uppercase">{{
                                             p.assignedDoctor?.user?.lastName ? 'Dr. ' + p.assignedDoctor.user.lastName :
                                             'Unassigned' }}</p>
-                                    </div>
-                                    <div class="relative">
-                                        <button (click)="assigningId = assigningId === p.id ? null : p.id"
-                                            class="p-2 bg-slate-50 border border-slate-100 rounded-lg text-slate-400 hover:text-primary transition-all">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </button>
-
-                                        <!-- Doctor Selector Overlay -->
-                                        <div *ngIf="assigningId === p.id"
-                                            class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 p-4 animate-in fade-in slide-in-from-top-2 duration-200">
-                                            <p
-                                                class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">
-                                                Appoint Specialist</p>
-                                            <div class="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                                                <button *ngFor="let doc of doctors" (click)="appointDoctor(p, doc.id)"
-                                                    class="w-full text-left p-3 hover:bg-slate-50 rounded-xl transition-all group flex items-center justify-between">
-                                                    <div>
-                                                        <p class="text-[11px] font-black text-secondary leading-none">
-                                                            Dr. {{ doc.user?.firstName || 'Unknown' }} {{
-                                                            doc.user?.lastName || '' }}</p>
-                                                        <p
-                                                            class="text-[8px] text-primary font-bold uppercase tracking-widest mt-1">
-                                                            {{ doc.specialization || (doc.department + ' Dept') ||
-                                                            'General' }}</p>
-                                                    </div>
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-opacity"
-                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                </button>
-                                                <div *ngIf="doctors.length === 0"
-                                                    class="p-4 text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                                    No Active Doctors
-                                                </div>
-                                            </div>
+                                    </td>
+                                    <td class="px-10 py-8 text-right">
+                                        <div class="flex justify-end gap-2 outline-none">
+                                            <button *ngIf="isAdmin" (click)="$event.stopPropagation(); editPatient(p)"
+                                                title="Edit"
+                                                class="p-3 bg-white border border-slate-100 rounded-xl text-secondary hover:bg-secondary hover:text-white shadow-sm transition-all">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
                                         </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-10 py-10 text-right">
-                                <div
-                                    class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button (click)="viewPatient(p)" title="View Details"
-                                        class="p-3 bg-white border border-slate-100 rounded-xl text-primary hover:bg-primary hover:text-white hover:border-primary shadow-sm transition-all">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                    </button>
-                                    <button *ngIf="isAdmin" (click)="editPatient(p)" title="Edit Record"
-                                        class="p-3 bg-white border border-slate-100 rounded-xl text-secondary hover:bg-secondary hover:text-white shadow-sm transition-all">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                    </button>
-                                    <button *ngIf="isAdmin" (click)="deletePatient(p)" title="Delete Record"
-                                        class="p-3 bg-white border border-slate-100 rounded-xl text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 shadow-sm transition-all">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr *ngIf="patients.length === 0 && !loading">
-                            <td colspan="4"
-                                class="px-10 py-20 text-center text-slate-400 font-bold uppercase tracking-widest">
-                                No patient records found.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Desktop Pagination -->
-                <div class="p-8 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                    <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Displaying 1 - 25 of 1,280
-                        Clinically Enrolled Patients</p>
-                    <div class="flex gap-2">
-                        <button
-                            class="px-6 py-3 bg-white border border-slate-200 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-500 hover:text-primary transition-all">Prev</button>
-                        <button
-                            class="px-6 py-3 bg-primary rounded-2xl text-xs font-black uppercase tracking-widest text-white shadow-lg shadow-primary/20">Next</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Detail Card (Replaces Modal) -->
+            <div *ngIf="detailPatient"
+                class="w-full xl:w-[400px] bg-white rounded-[40px] shadow-sm border border-slate-100 flex flex-col overflow-hidden animate-in slide-in-from-right-4 duration-300">
+                <div class="p-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/50">
+                    <h3 class="text-xl font-black text-secondary uppercase tracking-tight">Clinical Profile</h3>
+                    <button (click)="closeDetail()"
+                        class="p-2 rounded-xl bg-white text-slate-400 hover:text-secondary transition-all shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-8 space-y-8">
+                    <!-- Patient Summary -->
+                    <div class="flex flex-col items-center text-center space-y-4 pb-8 border-b border-slate-100">
+                        <div
+                            class="w-24 h-24 bg-primary text-white font-black text-3xl rounded-[32px] flex items-center justify-center shadow-2xl shadow-primary/20 ring-8 ring-primary/5">
+                            {{ detailPatient.user?.firstName?.charAt(0) }}{{ detailPatient.user?.lastName?.charAt(0) }}
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-black text-secondary">{{ detailPatient.user?.firstName }} {{
+                                detailPatient.user?.lastName }}</h4>
+                            <p class="text-[10px] text-primary font-black uppercase tracking-[0.2em] mt-1">Patient MRN
+                                #{{ detailPatient.medicalRecordNumber }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Personal Details -->
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="space-y-1">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Birth Date</p>
+                            <p class="text-sm font-bold text-secondary">{{ detailPatient.user?.dateOfBirth || '---' }}
+                            </p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Gender</p>
+                            <p class="text-sm font-bold text-secondary">{{ detailPatient.user?.gender || '---' }}</p>
+                        </div>
+                        <div class="space-y-1 col-span-2">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Contact Number</p>
+                            <p class="text-sm font-bold text-secondary">{{ detailPatient.user?.phoneNumber || 'No phone'
+                                }}</p>
+                        </div>
+                        <div class="space-y-1 col-span-2">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Email Address</p>
+                            <p class="text-sm font-bold text-secondary">{{ detailPatient.user?.email || 'No email' }}
+                            </p>
+                        </div>
+                        <div class="space-y-1 col-span-2">
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Medical Address
+                            </p>
+                            <p class="text-sm font-bold text-secondary leading-relaxed">{{ detailPatient.user?.address
+                                || 'No address record found' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Assignment Info -->
+                    <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
+                        <p class="text-[9px] font-black text-primary uppercase tracking-widest mb-4">Assigned Medical
+                            Specialist</p>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-black text-secondary uppercase">{{
+                                    detailPatient.assignedDoctor?.user?.lastName ? 'Dr. ' +
+                                    detailPatient.assignedDoctor.user.lastName : 'Unassigned' }}</p>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">{{
+                                    detailPatient.assignedDoctor?.department || 'Awaiting Assignment' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="p-8 bg-slate-50/50 border-t border-slate-100 flex gap-4">
+                    <button *ngIf="isAdmin" (click)="editPatient(detailPatient)"
+                        class="flex-1 py-4 bg-secondary text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all">Edit
+                        Record</button>
+                    <button (click)="closeDetail()"
+                        class="flex-1 py-4 bg-white border border-slate-200 text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all">Close</button>
+                </div>
+            </div>
+
+            <!-- Empty State Detail -->
+            <div *ngIf="!detailPatient"
+                class="hidden xl:flex w-[400px] bg-slate-100/30 rounded-[40px] border-2 border-dashed border-slate-200 items-center justify-center p-12 text-center">
+                <div class="space-y-4">
+                    <div
+                        class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-slate-300 mx-auto shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <p class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Select a patient<br>to view
+                        clinical record</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Patient Detail Modal -->
-    <div *ngIf="showDetailModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-[30px] p-8 w-full max-w-xl shadow-2xl animate-float">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-black text-secondary">Patient Details</h3>
-                <button (click)="closeDetail()"
-                    class="p-2 rounded-xl bg-slate-100 text-secondary hover:bg-slate-200 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="space-y-4">
-                <div class="flex items-center gap-4">
-                    <div
-                        class="w-12 h-12 bg-blue-50 text-primary font-black rounded-2xl flex items-center justify-center">
-                        {{ detailPatient?.user?.firstName?.charAt(0) }}{{ detailPatient?.user?.lastName?.charAt(0) }}
-                    </div>
-                    <div>
-                        <p class="text-lg font-black text-secondary">{{ detailPatient?.user?.firstName }} {{
-                            detailPatient?.user?.lastName }}</p>
-                        <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest">MRN #{{
-                            detailPatient?.medicalRecordNumber }}</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <p class="text-[10px] font-black text-secondary uppercase tracking-widest">Phone</p>
-                        <p class="text-sm font-bold">{{ detailPatient?.user?.phoneNumber || 'No phone' }}</p>
-                    </div>
-                    <div class="space-y-2">
-                        <p class="text-[10px] font-black text-secondary uppercase tracking-widest">Email</p>
-                        <p class="text-sm font-bold">{{ detailPatient?.user?.email || 'No email' }}</p>
-                    </div>
-                    <div class="space-y-2">
-                        <p class="text-[10px] font-black text-secondary uppercase tracking-widest">Gender</p>
-                        <p class="text-sm font-bold">{{ detailPatient?.user?.gender || '---' }}</p>
-                    </div>
-                    <div class="space-y-2">
-                        <p class="text-[10px] font-black text-secondary uppercase tracking-widest">DOB</p>
-                        <p class="text-sm font-bold">{{ detailPatient?.user?.dateOfBirth || '---' }}</p>
-                    </div>
-                    <div class="space-y-2 md:col-span-2">
-                        <p class="text-[10px] font-black text-secondary uppercase tracking-widest">Address</p>
-                        <p class="text-sm font-bold">{{ detailPatient?.user?.address || 'No address provided' }}</p>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <p class="text-[10px] font-black text-secondary uppercase tracking-widest">Assigned Doctor</p>
-                    <p class="text-sm font-bold">{{ detailPatient?.assignedDoctor?.user?.lastName ? ('Dr. ' +
-                        detailPatient?.assignedDoctor?.user?.lastName) : 'Unassigned' }}</p>
-                </div>
-                <div class="flex justify-end gap-3 pt-4">
-                    <button (click)="closeDetail()"
-                        class="px-5 py-3 bg-slate-100 text-secondary rounded-2xl font-black text-xs uppercase tracking-widest">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Password Change Modal -->
     <div *ngIf="showPasswordModal"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-[30px] p-8 w-full max-w-md shadow-2xl animate-float">
+        <div class="bg-white rounded-[30px] p-8 w-full max-w-md shadow-2xl">
             <h3 class="text-xl font-black text-secondary mb-6">Change Security Credentials</h3>
             <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-6">
                 <div class="space-y-2">

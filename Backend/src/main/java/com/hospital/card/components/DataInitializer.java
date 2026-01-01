@@ -26,7 +26,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createAdminUser() {
-        if (userRepository.findByUsername("Nati").isEmpty()) {
+        if (userRepository.findByUsernameIgnoreCase("Nati").isEmpty()) {
             User admin = new User();
             admin.setUsername("Nati");
             admin.setEmail("nati@atlashospital.com"); // Dummy email

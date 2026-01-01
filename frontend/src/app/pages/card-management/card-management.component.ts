@@ -16,6 +16,7 @@ export class CardManagementComponent implements OnInit {
   currentUser: User | null = null;
   isAdmin = false;
   cards: any[] = [];
+  selectedCard: any = null;
 
   constructor(
     private authService: AuthService,
@@ -42,7 +43,11 @@ export class CardManagementComponent implements OnInit {
   }
 
   viewCardDetails(card: any): void {
-    alert(`Card Details:\nNumber: ${card.cardNumber}\nStatus: ${card.status}\nIssue Date: ${card.issueDate}\nExpiry: ${card.expiryDate}`);
+    this.selectedCard = card;
+  }
+
+  closeDetail(): void {
+    this.selectedCard = null;
   }
 
   deleteCard(card: any): void {

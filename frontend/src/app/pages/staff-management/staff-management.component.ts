@@ -20,11 +20,10 @@ export class StaffManagementComponent implements OnInit {
 
   // Data
   staffList: any[] = []; // Admins and Doctors
-
-  // Creation Form
+  selectedStaff: any = null;
+  loading = false;
   showCreateForm = false;
   staffForm: FormGroup;
-  loading = false;
   error = '';
   success = '';
 
@@ -100,7 +99,11 @@ export class StaffManagementComponent implements OnInit {
   }
 
   viewStaffDetails(staff: any): void {
-    alert(`Staff Details:\nName: ${staff.firstName} ${staff.lastName}\nUsername: ${staff.username}\nEmail: ${staff.email}\nRole: ${staff.role}\nStatus: ${staff.isActive ? 'Active' : 'Deactivated'}`);
+    this.selectedStaff = staff;
+  }
+
+  closeDetail(): void {
+    this.selectedStaff = null;
   }
 
   deactivateStaff(staff: any): void {

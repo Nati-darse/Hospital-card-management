@@ -1,15 +1,17 @@
 package com.hospital.card.service;
 
-import com.hospital.card.entity.User;
-import com.hospital.card.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.Collections;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import com.hospital.card.entity.User;
+import com.hospital.card.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsernameIgnoreCase(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         
         return new org.springframework.security.core.userdetails.User(

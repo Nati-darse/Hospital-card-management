@@ -19,47 +19,43 @@
         <nav class="mt-10 flex-1 px-6 space-y-3">
             <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Overview</span>
+                <span class="font-bold tracking-tight">Overview</span>
             </a>
 
             <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Patients</span>
+                <span class="font-bold tracking-tight">Patients</span>
             </a>
 
             <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Access Cards</span>
+                <span class="font-bold tracking-tight">Access Cards</span>
             </a>
 
             <a *ngIf="isAdmin" routerLink="/staff-management"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 opacity-60 group-hover:opacity-100 pointer-events-none" fill="none"
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span class="font-bold tracking-tight pointer-events-none">Staffing</span>
+                <span class="font-bold tracking-tight">Staffing</span>
             </a>
         </nav>
     </aside>

@@ -22,7 +22,7 @@ public class UserService {
 
     public User registerUser(User user) {
         // Check if username exists
-        if (userRepository.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByUsernameIgnoreCase(user.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
 
@@ -47,7 +47,7 @@ public class UserService {
     }
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 
     public Optional<User> findByEmail(String email) {
@@ -59,7 +59,7 @@ public class UserService {
     }
 
     public User updateLastLogin(String username) {
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setLastLogin(LocalDateTime.now());
@@ -119,7 +119,7 @@ public class UserService {
     }
 
     public void changePassword(String username, String currentPassword, String newPassword) {
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
