@@ -39,6 +39,11 @@ export class DoctorPatientsComponent implements OnInit {
     showUpdateForm = false;
     updateForm: FormGroup;
 
+    // Prescription
+    showPrescriptionForm = false;
+    prescriptionForm: FormGroup;
+    patientPrescriptions: any[] = [];
+
     constructor(
         private authService: AuthService,
         private apiService: ApiService,
@@ -56,6 +61,12 @@ export class DoctorPatientsComponent implements OnInit {
             newPassword: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', [Validators.required]]
         }, { validator: this.passwordMatchValidator });
+
+        this.prescriptionForm = this.fb.group({
+            medication: ['', [Validators.required]],
+            dosage: [''],
+            instructions: ['']
+        });
     }
 
     passwordMatchValidator(g: FormGroup) {
@@ -66,29 +77,30 @@ export class DoctorPatientsComponent implements OnInit {
     ngOnInit(): void {
         this.currentUser = this.authService.getCurrentUser();
         if (this.currentUser) {
-            this.loadDoctorData();
+            this.loadDoctorProfile();
         }
     }
 
-    loadDoctorData(): void {
-        if (!this.currentUser) return;
-
-        this.apiService.get('staff').subscribe({
-            next: (staffList: any[]) => {
-                this.staffProfile = staffList.find(s => s.user?.id === this.currentUser?.id);
-                if (this.staffProfile) {
-                    this.loadPatients();
-                }
-            }
+    loadDoctorProfile(): void {
+        this.loading = true;
+        this.apiService.get('staff/me').subscribe({
+            next: (profile: any) => {
+                this.staffProfile = profile;
+                this.loadPatients();
+            },
+            error: () => this.loading = false
         });
     }
 
     loadPatients(): void {
+        if (!this.staffProfile) return;
         this.apiService.get(`patients?doctorId=${this.staffProfile.id}`).subscribe({
             next: (assignedPatients: any[]) => {
                 this.patients = assignedPatients;
                 this.allPatients = assignedPatients;
-            }
+                this.loading = false;
+            },
+            error: () => this.loading = false
         });
     }
 
@@ -99,17 +111,19 @@ export class DoctorPatientsComponent implements OnInit {
         }
 
         const query = this.searchQuery.toLowerCase().trim();
-        this.patients = this.allPatients.filter(p =>
-            p.medicalRecordNumber.toLowerCase().includes(query) ||
-            p.user?.firstName.toLowerCase().includes(query) ||
-            p.user?.lastName.toLowerCase().includes(query)
-        );
+        this.patients = this.allPatients.filter(p => {
+            const mrnMatch = p.medicalRecordNumber?.toLowerCase().includes(query) || false;
+            const firstNameMatch = p.user?.firstName?.toLowerCase().includes(query) || false;
+            const lastNameMatch = p.user?.lastName?.toLowerCase().includes(query) || false;
+            return mrnMatch || firstNameMatch || lastNameMatch;
+        });
     }
 
     selectPatient(patient: any): void {
         this.selectedPatient = patient;
         this.showUpdateForm = false;
         this.showReferralForm = false;
+        this.showPrescriptionForm = false;
 
         if (patient.user) {
             this.updateForm.patchValue({
@@ -118,6 +132,42 @@ export class DoctorPatientsComponent implements OnInit {
                 emergencyContact: patient.emergencyContactPhone
             });
         }
+        this.loadPatientPrescriptions(patient.id);
+    }
+
+    loadPatientPrescriptions(patientId: number): void {
+        this.apiService.get(`prescriptions/patient/${patientId}`).subscribe({
+            next: (list: any[]) => this.patientPrescriptions = list
+        });
+    }
+
+    togglePrescriptionForm(): void {
+        this.showPrescriptionForm = !this.showPrescriptionForm;
+        this.showUpdateForm = false;
+        this.showReferralForm = false;
+        if (this.showPrescriptionForm) {
+            this.prescriptionForm.reset();
+        }
+    }
+
+    addPrescription(): void {
+        if (this.prescriptionForm.invalid || !this.selectedPatient || !this.staffProfile) return;
+        this.loading = true;
+        const payload = {
+            ...this.prescriptionForm.value,
+            patientId: this.selectedPatient.id,
+            doctorId: this.staffProfile.id
+        };
+
+        this.apiService.post('prescriptions', payload).subscribe({
+            next: () => {
+                alert('Prescription added successfully!');
+                this.showPrescriptionForm = false;
+                this.loadPatientPrescriptions(this.selectedPatient.id);
+                this.loading = false;
+            },
+            error: () => this.loading = false
+        });
     }
 
     toggleUpdateForm(): void {

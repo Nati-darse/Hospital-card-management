@@ -22,9 +22,12 @@ export class PatientPortalComponent implements OnInit {
 
     // Password Update
     showPasswordForm = false;
-    passwordForm: FormGroup;
+    passwordForm!: FormGroup;
     passwordError = '';
     passwordSuccess = '';
+
+    // Prescriptions
+    prescriptions: any[] = [];
 
     constructor(
         private authService: AuthService,
@@ -47,25 +50,32 @@ export class PatientPortalComponent implements OnInit {
     ngOnInit(): void {
         this.currentUser = this.authService.getCurrentUser();
         if (this.currentUser) {
-            this.loadPatientData();
+            this.loadPatientProfile();
         }
     }
 
-    loadPatientData(): void {
-        if (!this.currentUser) return;
-
-        // Get patient profile by user ID
-        this.apiService.get(`patients/user/${this.currentUser.id}`).subscribe({
+    loadPatientProfile(): void {
+        this.loading = true;
+        this.apiService.get('patients/me').subscribe({
             next: (profile: any) => {
                 this.patientProfile = profile;
                 if (profile) {
+                    this.assignedDoctor = profile.assignedDoctor;
                     this.loadClinicalHistory(profile.id);
-                    if (profile.assignedDoctorId) {
-                        this.loadDoctorInfo(profile.assignedDoctorId);
-                    }
+                    this.loadPrescriptions(profile.id);
                 }
+                this.loading = false;
             },
-            error: (err) => console.error('Failed to load patient profile', err)
+            error: (err) => {
+                console.error('Failed to load patient profile', err);
+                this.loading = false;
+            }
+        });
+    }
+
+    loadPrescriptions(patientId: number): void {
+        this.apiService.get(`prescriptions/patient/${patientId}`).subscribe({
+            next: (list: any[]) => this.prescriptions = list
         });
     }
 
@@ -76,12 +86,6 @@ export class PatientPortalComponent implements OnInit {
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 );
             }
-        });
-    }
-
-    loadDoctorInfo(doctorId: number): void {
-        this.apiService.get(`staff/${doctorId}`).subscribe({
-            next: (doc: any) => this.assignedDoctor = doc
         });
     }
 

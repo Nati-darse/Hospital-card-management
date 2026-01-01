@@ -48,34 +48,42 @@ export class DoctorPortalComponent implements OnInit {
     ngOnInit(): void {
         this.currentUser = this.authService.getCurrentUser();
         if (this.currentUser) {
-            this.loadDashboardData();
+            this.loadDoctorProfile();
         }
     }
 
-    loadDashboardData(): void {
-        if (!this.currentUser) return;
-
-        this.apiService.get('staff').subscribe({
-            next: (staffList: any[]) => {
-                this.staffProfile = staffList.find(s => s.user?.id === this.currentUser?.id);
+    loadDoctorProfile(): void {
+        this.loading = true;
+        this.apiService.get('staff/me').subscribe({
+            next: (profile: any) => {
+                this.staffProfile = profile;
                 if (this.staffProfile) {
-                    // Load assigned patients count and list
-                    this.apiService.get(`patients?doctorId=${this.staffProfile.id}`).subscribe({
-                        next: (assignedPatients: any[]) => {
-                            this.patientsCount = assignedPatients.length;
-                            this.recentPatients = assignedPatients.slice(0, 5);
-                        }
-                    });
-
-                    // Load today's visits count
-                    this.apiService.get(`visits/doctor/${this.staffProfile.id}`).subscribe({
-                        next: (visits: any[]) => {
-                            const today = new Date().toISOString().split('T')[0];
-                            this.todaysVisitsCount = visits.filter(v => v.visitDate === today).length;
-                        }
-                    });
+                    this.loadDashboardData();
                 }
+            },
+            error: () => this.loading = false
+        });
+    }
+
+    loadDashboardData(): void {
+        if (!this.staffProfile) return;
+
+        // Load assigned patients count and list
+        this.apiService.get(`patients?doctorId=${this.staffProfile.id}`).subscribe({
+            next: (assignedPatients: any[]) => {
+                this.patientsCount = assignedPatients.length;
+                this.recentPatients = assignedPatients.slice(0, 5);
             }
+        });
+
+        // Load today's visits count
+        this.apiService.get(`visits/doctor/${this.staffProfile.id}`).subscribe({
+            next: (visits: any[]) => {
+                const today = new Date().toISOString().split('T')[0];
+                this.todaysVisitsCount = visits.filter(v => v.visitDate === today).length;
+                this.loading = false;
+            },
+            error: () => this.loading = false
         });
     }
 

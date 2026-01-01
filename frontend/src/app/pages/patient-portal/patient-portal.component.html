@@ -253,8 +253,66 @@
                     </div>
                 </div>
 
-                <!-- Right: Clinical Timeline -->
-                <div class="lg:col-span-2 space-y-8">
+                <!-- Right: Clinical Timeline & Prescriptions -->
+                <div class="lg:col-span-2 space-y-10">
+                    <!-- Active Prescriptions -->
+                    <div
+                        class="bg-white rounded-[50px] shadow-sm border border-slate-100 overflow-hidden flex flex-col animate-in slide-in-from-top duration-500">
+                        <div class="p-10 border-b border-slate-50 flex items-center justify-between bg-emerald-50/30">
+                            <div>
+                                <h3 class="text-2xl font-black text-secondary">Active Prescriptions</h3>
+                                <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Current
+                                    Medication Plan</p>
+                            </div>
+                            <div class="p-3 bg-emerald-100 rounded-2xl text-emerald-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.638.319a4 4 0 01-1.833.458 4 4 0 01-1.832-.458l-.638-.319a6 6 0 00-3.86-.517l-2.387.477a2 2 0 00-1.022.547l-.372.372a2 2 0 00-.547 1.022l-.477 2.387a6 6 0 00.517 3.86l.319.638a4 4 0 01.458 1.833 4 4 0 01-.458 1.832l-.319.638a6 6 0 00-.517 3.86l.477 2.387a2 2 0 00.547 1.022l.372.372a2 2 0 001.022.547l2.387.477a6 6 0 003.86-.517l.638-.319a4 4 0 011.833-.458 4 4 0 011.832.458l.638.319a6 6 0 003.86.517l2.387-.477a2 2 0 001.022-.547l.372-.372a2 2 0 00.547-1.022l.477-2.387a6 6 0 00-.517-3.86l-.319-.638a4 4 0 01-.458-1.833 4 4 0 01.458-1.832l.319-.638a6 6 0 00.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-.372-.372z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="p-10">
+                            <div *ngIf="prescriptions.length === 0"
+                                class="text-center py-10 text-slate-400 font-bold text-sm italic">
+                                No active prescriptions at this time.
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div *ngFor="let pr of prescriptions"
+                                    class="p-8 bg-slate-50 border border-slate-100 rounded-[40px] hover:border-emerald-200 transition-all group">
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div
+                                            class="px-4 py-1.5 bg-emerald-100 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                            Medication
+                                        </div>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{{
+                                            pr.prescribedDate | date:'mediumDate' }}</p>
+                                    </div>
+                                    <h4
+                                        class="text-xl font-black text-secondary group-hover:text-emerald-600 transition-colors">
+                                        {{ pr.medication }}</h4>
+                                    <p class="text-sm font-bold text-slate-500 mt-2">{{ pr.dosage }}</p>
+
+                                    <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <p
+                                                class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                                                Prescribed By</p>
+                                            <p class="text-[11px] font-black text-secondary">Dr. {{ pr.doctorName }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p
+                                                class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                                                Instructions</p>
+                                            <p class="text-[11px] font-black text-primary">{{ pr.instructions || 'As
+                                                directed' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div
                         class="bg-white rounded-[50px] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
                         <div class="p-10 border-b border-slate-50 flex items-center justify-between">

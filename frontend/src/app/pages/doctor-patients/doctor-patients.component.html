@@ -152,6 +152,9 @@
                                     Overview</p>
                             </div>
                             <div class="flex gap-4">
+                                <button (click)="togglePrescriptionForm()"
+                                    class="px-6 py-2 bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">Write
+                                    Prescription</button>
                                 <button (click)="toggleReferralForm()"
                                     class="px-6 py-2 bg-orange-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">Refer
                                     Case</button>
@@ -191,44 +194,78 @@
                                         Changes</button></div>
                             </form>
 
-                            <!-- Referral Form -->
-                            <div *ngIf="showReferralForm"
-                                class="space-y-8 p-8 bg-orange-50/50 rounded-[40px] border border-orange-100">
-                                <div class="flex gap-4">
-                                    <select [(ngModel)]="referralSearchDepartment"
-                                        class="flex-1 bg-white border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
-                                        <option value="">Select Department</option>
-                                        <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
-                                    </select>
-                                    <button (click)="searchDoctors()" [disabled]="referralLoading"
-                                        class="px-8 py-3 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-primary/90 transition-all">
-                                        {{ referralLoading ? 'Searching...' : 'Search Specialists' }}
-                                    </button>
+                            <!-- Prescription Form -->
+                            <form *ngIf="showPrescriptionForm" [formGroup]="prescriptionForm"
+                                (ngSubmit)="addPrescription()" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="space-y-2 col-span-2">
+                                        <label
+                                            class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Medication
+                                            Name</label>
+                                        <input type="text" formControlName="medication"
+                                            placeholder="e.g. Amoxicillin 500mg"
+                                            class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label
+                                            class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Dosage</label>
+                                        <input type="text" formControlName="dosage"
+                                            placeholder="e.g. 1 tablet 3 times daily"
+                                            class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label
+                                            class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Instructions</label>
+                                        <input type="text" formControlName="instructions"
+                                            placeholder="e.g. Take after meals"
+                                            class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                                    </div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div *ngFor="let doc of referralDoctors"
-                                        class="p-6 bg-white rounded-3xl border border-slate-100 flex items-center justify-between group hover:border-primary transition-all">
-                                        <div class="flex items-center gap-4">
-                                            <div
-                                                class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center font-black text-secondary text-xs">
-                                                {{ doc.user.firstName.charAt(0) }}{{ doc.user.lastName.charAt(0) }}
-                                            </div>
-                                            <div>
-                                                <p class="font-black text-secondary text-sm">Dr. {{ doc.user.firstName
-                                                    }} {{ doc.user.lastName }}</p>
-                                                <p
-                                                    class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">
-                                                    {{ doc.department }}</p>
-                                            </div>
+                                <div class="flex justify-end gap-4">
+                                    <button type="submit" [disabled]="loading || prescriptionForm.invalid"
+                                        class="px-8 py-3 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all">Issue
+                                        Prescription</button>
+                                </div>
+                            </form>
+
+                            <!-- Prescription History (Visible when no form is open) -->
+                            <div *ngIf="!showUpdateForm && !showReferralForm && !showPrescriptionForm"
+                                class="mt-10 space-y-6">
+                                <h4
+                                    class="text-sm font-black text-secondary uppercase tracking-widest flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                    Medication History
+                                </h4>
+                                <div
+                                    class="overflow-hidden rounded-3xl border border-slate-100 divide-y divide-slate-100">
+                                    <div *ngFor="let pr of patientPrescriptions"
+                                        class="p-6 bg-slate-50/30 flex items-center justify-between">
+                                        <div>
+                                            <p class="font-black text-secondary">{{ pr.medication }}</p>
+                                            <p
+                                                class="text-[10px] text-slate-500 font-bold uppercase tracking-tight mt-1">
+                                                {{ pr.dosage }} • {{ pr.instructions }}</p>
                                         </div>
-                                        <button (click)="referPatient(doc)"
-                                            class="px-4 py-2 bg-slate-50 text-primary rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all">Refer</button>
+                                        <div class="text-right">
+                                            <p class="text-[10px] text-primary font-black uppercase tracking-widest">{{
+                                                pr.prescribedDate | date:'mediumDate' }}</p>
+                                            <p class="text-[9px] text-slate-400 font-bold uppercase mt-1">Dr. {{
+                                                pr.doctorName }}</p>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="patientPrescriptions.length === 0"
+                                        class="p-10 text-center text-slate-400 font-bold text-xs">
+                                        No active prescriptions for this patient.
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Basic Info Display -->
-                            <div *ngIf="!showUpdateForm && !showReferralForm"
+                            <div *ngIf="!showUpdateForm && !showReferralForm && !showPrescriptionForm"
                                 class="grid grid-cols-2 lg:grid-cols-3 gap-8">
                                 <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
                                     <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">
