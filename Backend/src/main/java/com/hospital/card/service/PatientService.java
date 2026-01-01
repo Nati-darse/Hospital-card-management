@@ -100,6 +100,11 @@ public class PatientService {
         return toDto(saved);
     }
 
+    public Patient getPatientEntity(Long id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+    }
+
     public void deletePatient(Long id) {
         billRepository.deleteByPatientId(id);
         medicalVisitRepository.deleteAll(medicalVisitRepository.findByPatientId(id));

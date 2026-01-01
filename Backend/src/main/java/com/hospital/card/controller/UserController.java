@@ -1,18 +1,28 @@
 package com.hospital.card.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.hospital.card.dto.ChangePasswordRequest;
 import com.hospital.card.dto.UserDTO;
 import com.hospital.card.entity.User;
 import com.hospital.card.service.UserService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -62,21 +72,21 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> changeMyPassword(java.security.Principal principal,
+            @Valid @RequestBody ChangePasswordRequest request) {
+        userService.changePassword(principal.getName(), request.getCurrentPassword(), request.getNewPassword());
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{id}/password")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> changePassword(@PathVariable Long id,
             @Valid @RequestBody ChangePasswordRequest request) {
-        User user = userService.getUserById(id);
-        user.setPassword(request.getNewPassword()); // UserService handles encoding in updateUser? No, need to encode
-                                                    // here or use Service method
-        // Actually UserService.updateUser handles encoding if password is present.
-        // Let's reuse updateUser logic but we need to map the DTO to User entity or
-        // just call update.
-
         User updatePayload = new User();
         updatePayload.setPassword(request.getNewPassword());
         userService.updateUser(id, updatePayload);
-
         return ResponseEntity.ok().build();
     }
 
