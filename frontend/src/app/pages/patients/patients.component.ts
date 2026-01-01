@@ -27,6 +27,8 @@ export class PatientsComponent implements OnInit {
   showPasswordModal = false;
   passwordForm: FormGroup;
   passwordLoading = false;
+  passwordError = '';
+  passwordSuccess = '';
 
   constructor(
     private authService: AuthService,
@@ -35,8 +37,15 @@ export class PatientsComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.passwordForm = this.fb.group({
-      newPassword: ['', [Validators.required, Validators.minLength(6)]]
-    });
+      currentPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validator: this.passwordMatchValidator });
+  }
+
+  passwordMatchValidator(g: FormGroup) {
+    return g.get('newPassword')?.value === g.get('confirmPassword')?.value
+      ? null : { 'mismatch': true };
   }
 
   ngOnInit(): void {
@@ -72,6 +81,8 @@ export class PatientsComponent implements OnInit {
 
   togglePasswordModal(): void {
     this.showPasswordModal = !this.showPasswordModal;
+    this.passwordError = '';
+    this.passwordSuccess = '';
     if (!this.showPasswordModal) this.passwordForm.reset();
   }
 
@@ -79,17 +90,24 @@ export class PatientsComponent implements OnInit {
     if (this.passwordForm.invalid || !this.currentUser) return;
 
     this.passwordLoading = true;
-    this.apiService.put(`users/${this.currentUser.id}/password`, this.passwordForm.value).subscribe({
+    this.passwordError = '';
+    this.passwordSuccess = '';
+
+    this.apiService.post('users/change-password', {
+      currentPassword: this.passwordForm.value.currentPassword,
+      newPassword: this.passwordForm.value.newPassword
+    }).subscribe({
       next: () => {
         this.passwordLoading = false;
-        alert('Password changed successfully. Please login again.');
-        this.authService.logout();
-        this.router.navigate(['/login']);
+        this.passwordSuccess = 'Password updated successfully! Redirecting to login...';
+        setTimeout(() => {
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       error: (err) => {
         this.passwordLoading = false;
-        console.error('Password change failed', err);
-        alert('Failed to change password.');
+        this.passwordError = err.error?.message || 'Failed to change password. Please ensure your current password is correct.';
       }
     });
   }

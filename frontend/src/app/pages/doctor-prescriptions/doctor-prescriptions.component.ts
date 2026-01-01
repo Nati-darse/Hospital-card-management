@@ -65,15 +65,15 @@ export class DoctorPrescriptionsComponent implements OnInit {
     }
 
     loadDoctorData(): void {
-        if (!this.currentUser) return;
-
-        this.apiService.get('staff').subscribe({
-            next: (staffList: any[]) => {
-                this.staffProfile = staffList.find(s => s.user?.id === this.currentUser?.id);
+        this.loading = true;
+        this.apiService.get('staff/me').subscribe({
+            next: (profile: any) => {
+                this.staffProfile = profile;
                 if (this.staffProfile) {
                     this.loadPatients();
                 }
-            }
+            },
+            error: () => this.loading = false
         });
     }
 
