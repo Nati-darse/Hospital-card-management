@@ -1,6 +1,6 @@
 # Atlas Hospital Management System
 
-Atlas Hospital is a state-of-the-art medical management platform designed for high-precision healthcare coordination. Built with a secure Spring Boot backend and a premium Angular frontend, it provides a centralized hub for patient records, secure NFC access cards, and staff management.
+Atlas Hospital is a state-of-art medical management platform designed for high-precision healthcare coordination. Built with a secure Spring Boot backend and a premium Angular frontend, it provides a centralized hub for patient records, secure NFC access cards, and staff management.
 
 ## 🏛️ System Architecture
 
