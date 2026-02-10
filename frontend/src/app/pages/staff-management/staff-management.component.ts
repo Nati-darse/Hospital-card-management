@@ -96,9 +96,18 @@ export class StaffManagementComponent implements OnInit {
     const newPass = prompt(`Enter new password for ${user.username}:`);
     if (!newPass) return;
 
+    console.log('Resetting password for user:', user);
+    console.log('New password:', newPass);
+
     this.apiService.put(`users/${user.id}/password`, { newPassword: newPass }).subscribe({
-      next: () => alert(`Password for ${user.username} updated successfully.`),
-      error: (err) => alert('Failed to reset password.')
+      next: (response) => {
+        console.log('Password reset response:', response);
+        alert(`Password for ${user.username} updated successfully.`);
+      },
+      error: (err) => {
+        console.error('Password reset error details:', err);
+        alert('Failed to reset password. Error: ' + (err.error?.message || err.message || 'Unknown error'));
+      }
     });
   }
 
@@ -182,16 +191,20 @@ export class StaffManagementComponent implements OnInit {
     if (this.passwordForm.invalid || !this.selectedStaffForPassword) return;
 
     this.passwordLoading = true;
+    console.log('Changing password for staff:', this.selectedStaffForPassword);
+    console.log('Form data:', this.passwordForm.value);
+    
     this.apiService.put(`users/${this.selectedStaffForPassword.id}/password`, this.passwordForm.value).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Password change response:', response);
         this.passwordLoading = false;
         alert('Password changed successfully for ' + this.selectedStaffForPassword.username);
         this.togglePasswordModal();
       },
       error: (err) => {
         this.passwordLoading = false;
-        console.error('Password change failed', err);
-        alert('Failed to change password.');
+        console.error('Password change failed:', err);
+        alert('Failed to change password. Error: ' + (err.error?.message || err.message || 'Unknown error'));
       }
     });
   }

@@ -199,7 +199,7 @@
                                             <p class="text-xs font-black text-secondary uppercase">{{ staff.role }}</p>
                                         </td>
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
-                                            <span [class]="staff.user?.isActive ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'" class="px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase rounded-lg border">{{ staff.user?.isActive ? 'Active' : 'Deactivated' }}</span>
+                                            <span [class]="staff.isActive ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'" class="px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase rounded-lg border">{{ staff.isActive ? 'Active' : 'Deactivated' }}</span>
                                         </td>
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-right">
                                             <div class="flex justify-end gap-2">
