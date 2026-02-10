@@ -99,7 +99,10 @@ export class StaffManagementComponent implements OnInit {
     console.log('Resetting password for user:', user);
     console.log('New password:', newPass);
 
-    this.apiService.put(`users/${user.id}/password`, { newPassword: newPass }).subscribe({
+    // Send only newPassword for admin reset (using AdminPasswordResetRequest)
+    this.apiService.put(`users/${user.id}/password`, { 
+        newPassword: newPass 
+    }).subscribe({
       next: (response) => {
         console.log('Password reset response:', response);
         alert(`Password for ${user.username} updated successfully.`);
@@ -194,7 +197,12 @@ export class StaffManagementComponent implements OnInit {
     console.log('Changing password for staff:', this.selectedStaffForPassword);
     console.log('Form data:', this.passwordForm.value);
     
-    this.apiService.put(`users/${this.selectedStaffForPassword.id}/password`, this.passwordForm.value).subscribe({
+    // Send only newPassword for admin reset (using AdminPasswordResetRequest)
+    const payload = {
+        newPassword: this.passwordForm.value.newPassword
+    };
+    
+    this.apiService.put(`users/${this.selectedStaffForPassword.id}/password`, payload).subscribe({
       next: (response) => {
         console.log('Password change response:', response);
         this.passwordLoading = false;

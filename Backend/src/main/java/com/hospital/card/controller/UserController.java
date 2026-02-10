@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hospital.card.dto.AdminPasswordResetRequest;
 import com.hospital.card.dto.ChangePasswordRequest;
 import com.hospital.card.dto.UserDTO;
 import com.hospital.card.entity.User;
@@ -83,7 +84,7 @@ public class UserController {
     @PutMapping("/{id}/password")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> changePassword(@PathVariable Long id,
-            @Valid @RequestBody ChangePasswordRequest request) {
+            @Valid @RequestBody AdminPasswordResetRequest request) {
         User updatePayload = new User();
         updatePayload.setPassword(request.getNewPassword());
         userService.updateUser(id, updatePayload);
