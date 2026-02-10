@@ -266,6 +266,8 @@ export class DoctorPatientsComponent implements OnInit {
         });
     }
 
+    }
+
     // Case Management Methods
     toggleCaseForm(): void {
         this.showCaseForm = !this.showCaseForm;
@@ -317,6 +319,17 @@ export class DoctorPatientsComponent implements OnInit {
     }
 
     // Referral Methods
+    toggleReferralForm(): void {
+        this.showReferralForm = !this.showReferralForm;
+        this.showUpdateForm = false;
+        this.showPrescriptionForm = false;
+        this.showCaseForm = false;
+        if (!this.showReferralForm) {
+            this.referralForm.reset();
+            this.referralDoctors = [];
+        }
+    }
+
     onDepartmentChange(): void {
         const department = this.referralForm.value.department;
         if (department) {

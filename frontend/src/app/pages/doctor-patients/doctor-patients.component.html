@@ -288,6 +288,47 @@
                                 </div>
                             </form>
 
+                            <!-- Referral Form -->
+                            <form *ngIf="showReferralForm" [formGroup]="referralForm" (ngSubmit)="referPatient()"
+                                class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Department</label>
+                                        <select formControlName="department" (change)="onDepartmentChange()"
+                                            class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                                            <option value="">Select Department</option>
+                                            <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Specialized Doctor</label>
+                                        <select formControlName="referredDoctorId" [disabled]="!referralForm.value.department"
+                                            class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                                            <option value="">Select Doctor</option>
+                                            <option *ngFor="let doctor of referralDoctors" [value]="doctor.id">
+                                                Dr. {{ doctor.user?.firstName }} {{ doctor.user?.lastName }} - {{ doctor.specialization || doctor.department }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="space-y-2 col-span-2">
+                                        <label class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Reason for Referral</label>
+                                        <textarea formControlName="referralReason" rows="3"
+                                            class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                            placeholder="Enter reason for referral..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end gap-4">
+                                    <button type="button" (click)="toggleReferralForm()"
+                                        class="px-6 py-2 bg-slate-200 text-slate-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-300 transition-all">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" [disabled]="referralForm.invalid || referralLoading"
+                                        class="px-8 py-3 bg-orange-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-600 transition-all">
+                                        {{ referralLoading ? 'Sending...' : 'Send Referral' }}
+                                    </button>
+                                </div>
+                            </form>
+
                             <!-- Prescription History (Visible when no form is open) -->
                             <div *ngIf="!showUpdateForm && !showReferralForm && !showPrescriptionForm"
                                 class="mt-10 space-y-6">
@@ -324,26 +365,181 @@
                                 </div>
                             </div>
 
+                            <!-- Case History -->
+                            <div class="mt-8">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h4 class="text-sm font-black text-secondary uppercase tracking-widest flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Case History
+                                    </h4>
+                                    <button (click)="toggleCaseForm()" 
+                                        class="px-4 py-2 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
+                                        Add Current Case
+                                    </button>
+                                </div>
+                                
+                                <!-- Case Form -->
+                                <div *ngIf="showCaseForm" class="mb-6 p-6 bg-primary/5 rounded-2xl border border-primary/20">
+                                    <h5 class="text-sm font-black text-secondary uppercase tracking-widest mb-4">New Medical Case</h5>
+                                    <form [formGroup]="caseForm" (ngSubmit)="addCase()" class="space-y-4">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="space-y-2">
+                                                <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Diagnosis</label>
+                                                <textarea formControlName="diagnosis" rows="3"
+                                                    class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                                    placeholder="Enter diagnosis..."></textarea>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Lab Tests</label>
+                                                <textarea formControlName="labTests" rows="3"
+                                                    class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                                    placeholder="Enter lab tests..."></textarea>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Prescription</label>
+                                                <textarea formControlName="prescription" rows="2"
+                                                    class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                                    placeholder="Enter prescription..."></textarea>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Follow-up Date</label>
+                                                <input type="date" formControlName="followUpDate"
+                                                    class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20">
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Additional Comments</label>
+                                            <textarea formControlName="additionalComments" rows="2"
+                                                class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                                placeholder="Enter additional comments..."></textarea>
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <button type="submit" [disabled]="caseForm.invalid || loading"
+                                                class="px-6 py-2 bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
+                                                Save Case
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Cases List -->
+                                <div class="overflow-hidden rounded-3xl border border-slate-100 divide-y divide-slate-100">
+                                    <div *ngFor="let case of patientCases" 
+                                        class="p-6 bg-slate-50/30">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <div>
+                                                <p class="font-black text-secondary font-semibold">{{ case.diagnosis }}</p>
+                                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-tight mt-1">
+                                                    {{ case.visitDate | date:'mediumDate' }}
+                                                </p>
+                                            </div>
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-600 text-[8px] font-black rounded-full uppercase">
+                                                {{ case.status || 'Completed' }}
+                                            </span>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                            <div *ngIf="case.labTests">
+                                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Lab Tests</p>
+                                                <p class="text-slate-600">{{ case.labTests }}</p>
+                                            </div>
+                                            <div *ngIf="case.prescription">
+                                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Prescription</p>
+                                                <p class="text-slate-600">{{ case.prescription }}</p>
+                                            </div>
+                                            <div *ngIf="case.followUpDate">
+                                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Follow-up</p>
+                                                <p class="text-slate-600">{{ case.followUpDate | date:'mediumDate' }}</p>
+                                            </div>
+                                            <div *ngIf="case.additionalComments">
+                                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Comments</p>
+                                                <p class="text-slate-600">{{ case.additionalComments }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right mt-3">
+                                            <p class="text-[9px] text-primary font-black uppercase tracking-widest">Dr. {{ case.doctorName }}</p>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="patientCases.length === 0"
+                                        class="p-10 text-center text-slate-400 font-bold text-xs">
+                                        No case history for this patient.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Prescription History -->
+                            <div *ngIf="!showCaseForm && !showUpdateForm && !showReferralForm && !showPrescriptionForm"
+                                class="mt-10 space-y-6">
+                                <h4 class="text-sm font-black text-secondary uppercase tracking-widest flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                    Medication History
+                                </h4>
+                                <div class="overflow-hidden rounded-3xl border border-slate-100 divide-y divide-slate-100">
+                                    <div *ngFor="let pr of patientPrescriptions"
+                                        class="p-6 bg-slate-50/30 flex items-center justify-between">
+                                        <div>
+                                            <p class="font-black text-secondary">{{ pr.medication }}</p>
+                                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-tight mt-1">
+                                                {{ pr.dosage }} • {{ pr.instructions }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-[10px] text-primary font-black uppercase tracking-widest">{{
+                                                pr.prescribedDate | date:'mediumDate' }}</p>
+                                            <p class="text-[9px] text-slate-400 font-bold uppercase mt-1">Dr. {{
+                                                pr.doctorName }}</p>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="patientPrescriptions.length === 0"
+                                        class="p-10 text-center text-slate-400 font-bold text-xs">
+                                        No active prescriptions for this patient.
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Basic Info Display -->
-                            <div *ngIf="!showUpdateForm && !showReferralForm && !showPrescriptionForm"
-                                class="grid grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div *ngIf="!showCaseForm && !showUpdateForm && !showReferralForm && !showPrescriptionForm"
+                                class="space-y-6">
+                                <!-- Contact Information -->
                                 <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">
-                                        Blood Group</p>
-                                    <p class="text-xl font-black text-secondary">{{ selectedPatient.bloodGroup || 'Not
-                                        set' }}</p>
+                                    <h4 class="text-sm font-black text-secondary uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                        </svg>
+                                        Contact Information
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Phone</p>
+                                            <p class="text-sm font-black text-secondary">{{ selectedPatient.user?.phoneNumber || '+251897563545' }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Emergency Contact</p>
+                                            <p class="text-sm font-black text-secondary">{{ selectedPatient.emergencyContactName || 'Not provided' }}</p>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Address</p>
+                                            <p class="text-sm font-black text-secondary">{{ selectedPatient.user?.address || 'Not provided' }}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">
-                                        Allergies</p>
-                                    <p class="text-sm font-black text-red-500">{{ selectedPatient.allergies || 'None' }}
-                                    </p>
-                                </div>
-                                <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">MRN
-                                    </p>
-                                    <p class="text-xl font-black text-primary">{{ selectedPatient.medicalRecordNumber }}
-                                    </p>
+
+                                <!-- Medical Information -->
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                                    <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
+                                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Blood Group</p>
+                                        <p class="text-xl font-black text-secondary">{{ selectedPatient.bloodGroup || 'Not set' }}</p>
+                                    </div>
+                                    <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
+                                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">Allergies</p>
+                                        <p class="text-sm font-black text-red-500">{{ selectedPatient.allergies || 'None' }}</p>
+                                    </div>
+                                    <div class="p-6 bg-slate-50 rounded-[30px] border border-slate-100">
+                                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">MRN</p>
+                                        <p class="text-xl font-black text-primary">{{ selectedPatient.medicalRecordNumber }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
