@@ -319,16 +319,31 @@ export class DoctorPatientsComponent implements OnInit {
     // Referral Methods
     onDepartmentChange(): void {
         const department = this.referralForm.value.department;
+        console.log('Department changed to:', department);
         if (department) {
             this.referralLoading = true;
+            // Try different endpoint patterns
             this.apiService.get(`staff/department/${department}`).subscribe({
                 next: (doctors) => {
+                    console.log('Doctors loaded:', doctors);
                     this.referralDoctors = doctors;
                     this.referralLoading = false;
                 },
-                error: () => {
-                    this.referralLoading = false;
-                    this.referralDoctors = [];
+                error: (err) => {
+                    console.error('Failed to load doctors by department, trying search endpoint:', err);
+                    // Fallback to search endpoint
+                    this.apiService.get(`staff/search?department=${department}`).subscribe({
+                        next: (doctors: any[]) => {
+                            console.log('Doctors loaded via search:', doctors);
+                            this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
+                            this.referralLoading = false;
+                        },
+                        error: (err2) => {
+                            console.error('Both endpoints failed:', err2);
+                            this.referralLoading = false;
+                            this.referralDoctors = [];
+                        }
+                    });
                 }
             });
         } else {

@@ -195,8 +195,8 @@
                                             </div>
                                         </td>
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
-                                            <p class="text-[8px] sm:text-[10px] text-primary font-black uppercase tracking-widest mb-1">{{ staff.department || 'General' }}</p>
-                                            <p class="text-xs font-black text-secondary uppercase">{{ staff.role }}</p>
+                                            <p class="text-[8px] sm:text-[10px] text-primary font-black uppercase tracking-widest mb-1">{{ staff.department || (staff.role === 'ADMIN' ? 'Administration' : 'General') }}</p>
+                                            <p class="text-xs font-black text-secondary uppercase">{{ staff.role === 'ADMIN' ? (staff.username?.toLowerCase() === 'nati' ? 'Super Admin' : 'Administrator') : 'Doctor' }}</p>
                                         </td>
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
                                             <span [class]="staff.isActive ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'" class="px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase rounded-lg border">{{ staff.isActive ? 'Active' : 'Deactivated' }}</span>
@@ -261,8 +261,7 @@
                             class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
                             <span
                                 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Department</span>
-                            <span class="text-sm font-bold text-secondary">{{ selectedStaff.department || 'General
-                                Admin' }}</span>
+                            <span class="text-sm font-bold text-secondary">{{ selectedStaff.department || (selectedStaff.role === 'ADMIN' ? 'Administration' : 'General Practice') }}</span>
                         </div>
                         <div
                             class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
