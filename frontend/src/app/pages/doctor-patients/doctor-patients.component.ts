@@ -305,13 +305,23 @@ export class DoctorPatientsComponent implements OnInit {
     loadPatientCases(): void {
         if (!this.selectedPatient) return;
         
+        // Try different endpoint patterns for medical visits
         this.apiService.get(`medical-visits/patient/${this.selectedPatient.id}`).subscribe({
             next: (cases) => {
                 this.patientCases = cases;
             },
             error: (err) => {
-                console.error('Failed to load patient cases:', err);
-                this.patientCases = [];
+                console.error('Failed to load patient cases, trying alternative endpoint:', err);
+                // Fallback to different endpoint pattern
+                this.apiService.get(`api/medical-visits/patient/${this.selectedPatient.id}`).subscribe({
+                    next: (cases) => {
+                        this.patientCases = cases;
+                    },
+                    error: (err2) => {
+                        console.error('Both endpoints failed for patient cases:', err2);
+                        this.patientCases = [];
+                    }
+                });
             }
         });
     }
@@ -324,9 +334,10 @@ export class DoctorPatientsComponent implements OnInit {
             this.referralLoading = true;
             // Try different endpoint patterns
             this.apiService.get(`staff/department/${department}`).subscribe({
-                next: (doctors) => {
+                next: (doctors: any[]) => {
                     console.log('Doctors loaded:', doctors);
-                    this.referralDoctors = doctors;
+                    // Filter out current doctor
+                    this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
                     this.referralLoading = false;
                 },
                 error: (err) => {
@@ -335,13 +346,26 @@ export class DoctorPatientsComponent implements OnInit {
                     this.apiService.get(`staff/search?department=${department}`).subscribe({
                         next: (doctors: any[]) => {
                             console.log('Doctors loaded via search:', doctors);
+                            // Filter out current doctor
                             this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
                             this.referralLoading = false;
                         },
                         error: (err2) => {
-                            console.error('Both endpoints failed:', err2);
-                            this.referralLoading = false;
-                            this.referralDoctors = [];
+                            console.error('Search endpoint failed, trying with /api prefix:', err2);
+                            // Try with /api prefix
+                            this.apiService.get(`api/staff/search?department=${department}`).subscribe({
+                                next: (doctors: any[]) => {
+                                    console.log('Doctors loaded via api/search:', doctors);
+                                    // Filter out current doctor
+                                    this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
+                                    this.referralLoading = false;
+                                },
+                                error: (err3) => {
+                                    console.error('All staff endpoints failed:', err3);
+                                    this.referralLoading = false;
+                                    this.referralDoctors = [];
+                                }
+                            });
                         }
                     });
                 }
@@ -365,6 +389,8 @@ export class DoctorPatientsComponent implements OnInit {
             referralDate: new Date().toISOString().split('T')[0]
         };
 
+        console.log('Sending referral data:', referralData);
+
         this.apiService.post('referrals', referralData).subscribe({
             next: (response) => {
                 this.referralLoading = false;
@@ -374,9 +400,22 @@ export class DoctorPatientsComponent implements OnInit {
                 this.createNotificationForReferredDoctor(referralData);
             },
             error: (err) => {
-                this.referralLoading = false;
-                alert('Failed to send referral.');
-                console.error('Referral error:', err);
+                console.error('Referral error, trying alternative endpoint:', err);
+                // Try alternative endpoint
+                this.apiService.post('api/referrals', referralData).subscribe({
+                    next: (response) => {
+                        this.referralLoading = false;
+                        alert('Referral sent successfully! The doctor will be notified.');
+                        this.referralForm.reset();
+                        this.showReferralForm = false;
+                        this.createNotificationForReferredDoctor(referralData);
+                    },
+                    error: (err2) => {
+                        this.referralLoading = false;
+                        alert('Failed to send referral. Please check your network connection and try again.');
+                        console.error('Both referral endpoints failed:', err2);
+                    }
+                });
             }
         });
     }
@@ -391,12 +430,23 @@ export class DoctorPatientsComponent implements OnInit {
             createdAt: new Date().toISOString()
         };
 
+        console.log('Creating notification:', notification);
+
         this.apiService.post('notifications', notification).subscribe({
             next: () => {
                 console.log('Notification sent to referred doctor');
             },
             error: (err) => {
-                console.error('Failed to send notification:', err);
+                console.error('Failed to send notification, trying alternative endpoint:', err);
+                // Try alternative endpoint
+                this.apiService.post('api/notifications', notification).subscribe({
+                    next: () => {
+                        console.log('Notification sent via alternative endpoint');
+                    },
+                    error: (err2) => {
+                        console.error('Both notification endpoints failed:', err2);
+                    }
+                });
             }
         });
     }
