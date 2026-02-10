@@ -1,6 +1,13 @@
 <div class="min-h-screen bg-slate-50 flex font-sans">
+    <!-- Mobile Menu Toggle -->
+    <button (click)="toggleMobileMenu()" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-secondary text-white rounded-xl shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
     <!-- Sidebar -->
-    <aside class="w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20 overflow-hidden">
+    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:relative lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:relative lg:translate-x-0'">
         <div class="p-8 flex items-center gap-4 bg-primary/10">
             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
@@ -84,97 +91,100 @@
     <main class="flex-1 overflow-y-auto relative flex flex-col">
         <!-- Header -->
         <header
-            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-10 py-6 border-b border-slate-100 flex items-center justify-between">
+            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 border-b border-slate-100 flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-black text-secondary tracking-tight">Access Control Cards</h1>
+                <h1 class="text-xl sm:text-2xl font-black text-secondary tracking-tight">Access Control Cards</h1>
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Digital ID Identity
                     Management</p>
             </div>
 
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-3 sm:gap-6">
                 <button routerLink="/patient-registration"
-                    class="btn-primary py-2 px-6 rounded-2xl text-xs uppercase tracking-widest shadow-none">
+                    class="btn-primary py-2 px-4 sm:px-6 rounded-2xl text-xs uppercase tracking-widest shadow-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Issue New Card
+                    <span class="hidden sm:inline">Issue New Card</span>
+                    <span class="sm:hidden">New</span>
                 </button>
             </div>
         </header>
 
         <!-- Content Grid -->
-        <div class="p-10 flex flex-col xl:flex-row gap-8 flex-1 overflow-hidden">
+        <div class="p-4 sm:p-6 lg:p-10 flex flex-col xl:flex-row gap-6 sm:gap-8 flex-1 overflow-hidden">
             <!-- Left Side: Cards List -->
-            <div class="flex-1 min-w-0 flex flex-col space-y-8">
+            <div class="flex-1 min-w-0 flex flex-col space-y-6 sm:space-y-8">
                 <!-- Cards Table -->
                 <div
-                    class="bg-white rounded-[40px] shadow-sm border border-slate-100 overflow-hidden flex-1 flex flex-col">
+                    class="bg-white rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100 overflow-hidden flex-1 flex flex-col">
                     <div class="flex-1 overflow-y-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 text-left border-b border-slate-100 sticky top-0 z-10">
-                                    <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
-                                        Card Identity</th>
-                                    <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
-                                        Ownership</th>
-                                    <th class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
-                                        Validation</th>
-                                    <th
-                                        class="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">
-                                        Settings</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-50">
-                                <tr *ngFor="let card of cards" (click)="viewCardDetails(card)"
-                                    [class.bg-blue-50]="selectedCard?.id === card.id"
-                                    class="group hover:bg-slate-50/50 transition-all cursor-pointer">
-                                    <td class="px-10 py-8">
-                                        <div class="flex items-center gap-6">
-                                            <div [class]="selectedCard?.id === card.id ? 'bg-primary text-white' : 'bg-slate-100 text-secondary'"
-                                                class="w-14 h-14 font-black rounded-2xl flex items-center justify-center transition-all">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse min-w-[600px]">
+                                <thead>
+                                    <tr class="bg-slate-50 text-left border-b border-slate-100 sticky top-0 z-10">
+                                        <th class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                            Card Identity</th>
+                                        <th class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                            Ownership</th>
+                                        <th class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                            Validation</th>
+                                        <th
+                                            class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">
+                                            Settings</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-50">
+                                    <tr *ngFor="let card of cards" (click)="viewCardDetails(card)"
+                                        [class.bg-blue-50]="selectedCard?.id === card.id"
+                                        class="group hover:bg-slate-50/50 transition-all cursor-pointer">
+                                        <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
+                                            <div class="flex items-center gap-3 sm:gap-4 lg:gap-6">
+                                                <div [class]="selectedCard?.id === card.id ? 'bg-primary text-white' : 'bg-slate-100 text-secondary'"
+                                                    class="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 font-black rounded-xl sm:rounded-2xl flex items-center justify-center transition-all flex-shrink-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
+                                                    </svg>
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <p class="font-black text-secondary text-sm sm:text-base lg:text-lg truncate">ID #{{ card.cardNumber }}
+                                                    </p>
+                                                    <p
+                                                        class="text-[8px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                                                        Digital Access Badge</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
+                                            <p class="text-xs font-black text-secondary uppercase truncate">{{
+                                                card.patient?.user?.firstName }} {{ card.patient?.user?.lastName }}</p>
+                                            <p class="text-[8px] sm:text-[10px] text-primary font-black uppercase tracking-widest">
+                                                Assigned Patient</p>
+                                        </td>
+                                        <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
+                                            <span
+                                                [class]="card.status === 'ACTIVE' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'"
+                                                class="px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase rounded-lg border">
+                                                {{ card.status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-right">
+                                            <button (click)="$event.stopPropagation(); deleteCard(card)"
+                                                class="p-2 sm:p-3 bg-white border border-slate-100 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none"
                                                     viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-4 0h4" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
-                                            </div>
-                                            <div>
-                                                <p class="font-black text-secondary text-lg">ID #{{ card.cardNumber }}
-                                                </p>
-                                                <p
-                                                    class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                                    Digital Access Badge</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-10 py-8">
-                                        <p class="text-xs font-black text-secondary uppercase">{{
-                                            card.patient?.user?.firstName }} {{ card.patient?.user?.lastName }}</p>
-                                        <p class="text-[10px] text-primary font-black uppercase tracking-widest">
-                                            Assigned Patient</p>
-                                    </td>
-                                    <td class="px-10 py-8">
-                                        <span
-                                            [class]="card.status === 'ACTIVE' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'"
-                                            class="px-3 py-1 text-[10px] font-black uppercase rounded-lg border">
-                                            {{ card.status }}
-                                        </span>
-                                    </td>
-                                    <td class="px-10 py-8 text-right">
-                                        <button (click)="$event.stopPropagation(); deleteCard(card)"
-                                            class="p-3 bg-white border border-slate-100 rounded-xl text-red-400 hover:bg-red-500 hover:text-white transition-all">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

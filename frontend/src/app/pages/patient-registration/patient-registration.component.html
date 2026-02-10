@@ -1,6 +1,13 @@
 <div class="min-h-screen bg-slate-50 flex font-sans">
+    <!-- Mobile Menu Toggle -->
+    <button (click)="toggleMobileMenu()" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-secondary text-white rounded-xl shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
     <!-- Sidebar -->
-    <aside class="w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20 overflow-hidden">
+    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:relative lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:relative lg:translate-x-0'">
         <div class="p-8 flex items-center gap-4 bg-primary/10">
             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
@@ -61,31 +68,31 @@
     </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1 overflow-y-auto relative flex flex-col p-10">
+    <main class="flex-1 overflow-y-auto relative flex flex-col p-4 sm:p-6 lg:p-10">
         <div class="max-w-4xl mx-auto w-full">
-            <header class="mb-12">
-                <h1 class="text-4xl font-black text-secondary tracking-tight">{{ isEdit ? 'Update Patient Profile' :
+            <header class="mb-8 sm:mb-12">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black text-secondary tracking-tight">{{ isEdit ? 'Update Patient Profile' :
                     'Enroll New Patient' }}</h1>
                 <p class="text-slate-500 font-bold uppercase tracking-widest mt-2 text-xs">{{ isEdit ? 'Updating
                     Clinical & Personal Identity' : 'Patient Identity & Clinical Setup' }}</p>
             </header>
 
-            <div *ngIf="error" class="mb-8 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl font-bold">
+            <div *ngIf="error" class="mb-6 sm:mb-8 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl font-bold">
                 {{ error }}
             </div>
 
             <div *ngIf="success"
-                class="mb-8 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-xl font-bold">
+                class="mb-6 sm:mb-8 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-xl font-bold">
                 {{ success }}
             </div>
 
-            <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-10">
+            <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-6 sm:space-y-8 lg:space-y-10">
                 <!-- Account Info -->
-                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                <section class="bg-white p-6 sm:p-8 lg:p-10 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100">
                     <h3
-                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6 sm:mb-8 border-b border-slate-50 pb-4">
                         Account & Contact Information</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                         <div class="space-y-2">
                             <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">First
                                 Name</label>
@@ -132,11 +139,11 @@
                 </section>
 
                 <!-- Personal Bio -->
-                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                <section class="bg-white p-6 sm:p-8 lg:p-10 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100">
                     <h3
-                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6 sm:mb-8 border-b border-slate-50 pb-4">
                         Personal Bio & Demographics</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                         <div class="space-y-2">
                             <label
                                 class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Gender</label>
@@ -165,11 +172,11 @@
                 </section>
 
                 <!-- Clinical Info -->
-                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                <section class="bg-white p-6 sm:p-8 lg:p-10 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100">
                     <h3
-                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6 sm:mb-8 border-b border-slate-50 pb-4">
                         Clinical Parameters</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                         <div class="space-y-2">
                             <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Blood
                                 Group</label>
@@ -197,9 +204,9 @@
                 </section>
 
                 <!-- Assignment -->
-                <section class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100">
+                <section class="bg-white p-6 sm:p-8 lg:p-10 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100">
                     <h3
-                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-8 border-b border-slate-50 pb-4">
+                        class="text-xs font-black text-primary uppercase tracking-[0.2em] mb-6 sm:mb-8 border-b border-slate-50 pb-4">
                         Staff Assignment</h3>
                     <div class="space-y-2">
                         <label class="text-xs font-black text-secondary uppercase tracking-widest ml-1">Primary
@@ -213,11 +220,11 @@
                     </div>
                 </section>
 
-                <div class="flex gap-6 pb-10">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 pb-8 sm:pb-10">
                     <button type="button" routerLink="/patients"
-                        class="flex-1 bg-slate-200 text-secondary py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em]">Cancel</button>
+                        class="flex-1 bg-slate-200 text-secondary py-4 sm:py-5 rounded-[20px] sm:rounded-[24px] font-black text-xs uppercase tracking-[0.2em]">Cancel</button>
                     <button type="submit" [disabled]="registrationForm.invalid || loading"
-                        class="flex-[2] bg-primary text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
+                        class="flex-[2] bg-primary text-white py-4 sm:py-5 rounded-[20px] sm:rounded-[24px] font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
                         {{ loading ? (isEdit ? 'UPDATING...' : 'ENROLLING...') : (isEdit ? 'SAVE CHANGES' : 'CONFIRM
                         ENROLLMENT') }}
                     </button>

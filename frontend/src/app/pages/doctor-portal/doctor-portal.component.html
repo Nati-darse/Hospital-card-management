@@ -1,6 +1,13 @@
 <div class="min-h-screen bg-slate-50 flex font-sans">
+    <!-- Mobile Menu Toggle -->
+    <button (click)="toggleMobileMenu()" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-secondary text-white rounded-xl shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
     <!-- Sidebar -->
-    <aside class="w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl z-20 overflow-hidden">
+    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:relative lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:relative lg:translate-x-0'">
         <div class="p-8 flex items-center gap-4 bg-primary/10">
             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
@@ -74,15 +81,15 @@
     <main class="flex-1 overflow-y-auto relative flex flex-col">
         <!-- Header -->
         <header
-            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-10 py-8 border-b border-slate-100 flex items-center justify-between">
+            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 border-b border-slate-100 flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-black text-secondary tracking-tight">Staff Dashboard</h1>
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-secondary tracking-tight">Staff Dashboard</h1>
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Welcome back, Dr. {{
                     currentUser?.lastName }}</p>
             </div>
             <button (click)="togglePasswordForm()"
-                class="w-12 h-12 flex items-center justify-center bg-slate-100 text-secondary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
+                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-slate-100 text-secondary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -90,13 +97,13 @@
             </button>
         </header>
 
-        <div class="p-10 space-y-10">
+        <div class="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 lg:space-y-10">
             <!-- Password Update Modal Overflow -->
-            <div *ngIf="showPasswordForm" class="bg-white rounded-[40px] shadow-2xl border border-primary/20 p-10">
-                <div class="flex items-center justify-between mb-8">
-                    <h3 class="text-xl font-black text-secondary">Update Password</h3>
+            <div *ngIf="showPasswordForm" class="bg-white rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-2xl border border-primary/20 p-4 sm:p-6 lg:p-10">
+                <div class="flex items-center justify-between mb-6 sm:mb-8">
+                    <h3 class="text-lg sm:text-xl font-black text-secondary">Update Password</h3>
                     <button (click)="togglePasswordForm()" class="text-slate-400 hover:text-red-500 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12" />
@@ -104,31 +111,31 @@
                     </button>
                 </div>
 
-                <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()" class="space-y-4 sm:space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Current
                                 Password</label>
                             <input type="password" formControlName="currentPassword"
-                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner">
+                                class="w-full bg-slate-50 border-none rounded-2xl py-3 sm:py-4 px-4 sm:px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">New
                                 Password</label>
                             <input type="password" formControlName="newPassword"
-                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner">
+                                class="w-full bg-slate-50 border-none rounded-2xl py-3 sm:py-4 px-4 sm:px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner">
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-secondary uppercase tracking-widest ml-1">Confirm
                                 New Password</label>
                             <input type="password" formControlName="confirmPassword"
-                                class="w-full bg-slate-50 border-none rounded-2xl py-4 px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner">
+                                class="w-full bg-slate-50 border-none rounded-2xl py-3 sm:py-4 px-4 sm:px-6 text-sm font-bold focus:ring-2 focus:ring-primary/20 shadow-inner">
                         </div>
                     </div>
 
                     <div *ngIf="passwordError"
-                        class="p-4 bg-red-50 text-red-500 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-red-100 flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        class="p-3 sm:p-4 bg-red-50 text-red-500 rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest border border-red-100 flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.466 16c-.77 1.333.192 3 1.732 3z" />
@@ -137,17 +144,17 @@
                     </div>
 
                     <div *ngIf="passwordSuccess"
-                        class="p-4 bg-green-50 text-green-500 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-green-100 flex items-center gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        class="p-3 sm:p-4 bg-green-50 text-green-500 rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest border border-green-100 flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
                         {{ passwordSuccess }}
                     </div>
 
-                    <div class="flex justify-end gap-4 pt-4">
+                    <div class="flex justify-end gap-3 sm:gap-4 pt-4">
                         <button type="submit" [disabled]="passwordForm.invalid || loading"
-                            class="px-10 py-4 bg-primary text-white rounded-[20px] font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20">
+                            class="px-6 sm:px-8 sm:px-10 py-3 sm:py-4 bg-primary text-white rounded-[16px] sm:rounded-[20px] font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20">
                             {{ loading ? 'Updating...' : 'Change Password' }}
                         </button>
                     </div>
@@ -155,51 +162,51 @@
             </div>
 
             <!-- Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                 <div
-                    class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100 relative overflow-hidden group">
+                    class="bg-white p-4 sm:p-6 lg:p-8 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100 relative overflow-hidden group">
                     <div
-                        class="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-700">
+                        class="absolute -right-2 sm:-right-4 -bottom-2 sm:-bottom-4 w-16 h-16 sm:w-24 sm:h-24 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-700">
                     </div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Assigned Patients
+                    <p class="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 sm:mb-4">Assigned Patients
                     </p>
-                    <h3 class="text-5xl font-black text-primary">{{ patientsCount }}</h3>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl font-black text-primary">{{ patientsCount }}</h3>
                 </div>
                 <div
-                    class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100 relative overflow-hidden group">
+                    class="bg-white p-4 sm:p-6 lg:p-8 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100 relative overflow-hidden group">
                     <div
-                        class="absolute -right-4 -bottom-4 w-24 h-24 bg-orange-500/5 rounded-full group-hover:scale-150 transition-transform duration-700">
+                        class="absolute -right-2 sm:-right-4 -bottom-2 sm:-bottom-4 w-16 h-16 sm:w-24 sm:h-24 bg-orange-500/5 rounded-full group-hover:scale-150 transition-transform duration-700">
                     </div>
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Today's Visits</p>
-                    <h3 class="text-5xl font-black text-orange-500">{{ todaysVisitsCount }}</h3>
+                    <p class="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 sm:mb-4">Today's Visits</p>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl font-black text-orange-500">{{ todaysVisitsCount }}</h3>
                 </div>
                 <div
-                    class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100 flex items-center justify-center border-dashed border-slate-200">
+                    class="bg-white p-4 sm:p-6 lg:p-8 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-sm border border-slate-100 flex items-center justify-center border-dashed border-slate-200">
                     <div class="text-center">
-                        <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-2">Hospital Status
+                        <p class="text-[8px] sm:text-[9px] font-black text-slate-300 uppercase tracking-widest mb-2">Hospital Status
                         </p>
                         <span
-                            class="px-4 py-1.5 bg-green-50 text-green-500 rounded-full text-[10px] font-black uppercase tracking-widest">System
+                            class="px-3 sm:px-4 py-1 sm:py-1.5 bg-green-50 text-green-500 rounded-full text-[8px] sm:text-[10px] font-black uppercase tracking-widest">System
                             Active</span>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
                 <div
-                    class="bg-white rounded-[50px] shadow-sm border border-slate-100 p-10 flex flex-col justify-between min-h-[300px] relative overflow-hidden">
-                    <div class="space-y-4 relative z-10 text-white-dashboard">
-                        <h3 class="text-2xl font-black text-secondary">Patient Directory</h3>
+                    class="bg-white rounded-[30px] sm:rounded-[40px] lg:rounded-[50px] shadow-sm border border-slate-100 p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-[250px] sm:min-h-[300px] relative overflow-hidden">
+                    <div class="space-y-3 sm:space-y-4 relative z-10 text-white-dashboard">
+                        <h3 class="text-xl sm:text-2xl font-black text-secondary">Patient Directory</h3>
                         <p class="text-slate-400 font-bold text-sm max-w-xs leading-relaxed">View and manage your
                             assigned patients, search for specialized referrals, and update patient contact information.
                         </p>
                         <button routerLink="/doctor-patients"
-                            class="mt-4 px-8 py-3 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-primary/20">Access
+                            class="mt-3 sm:mt-4 px-6 sm:px-8 py-2 sm:py-3 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-primary/20">Access
                             Directory</button>
                     </div>
                     <div class="absolute right-[-10%] top-[20%] opacity-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-64 w-64 text-secondary" fill="none"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-48 w-48 sm:h-56 sm:w-56 lg:h-64 lg:w-64 text-secondary" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -208,9 +215,9 @@
                 </div>
 
                 <div
-                    class="bg-white rounded-[50px] shadow-sm border border-slate-100 p-10 flex flex-col justify-between min-h-[300px] relative overflow-hidden">
-                    <div class="space-y-4 relative z-10 text-white-dashboard">
-                        <h3 class="text-2xl font-black text-secondary">Clinical Records</h3>
+                    class="bg-white rounded-[30px] sm:rounded-[40px] lg:rounded-[50px] shadow-sm border border-slate-100 p-6 sm:p-8 lg:p-10 flex flex-col justify-between min-h-[250px] sm:min-h-[300px] relative overflow-hidden">
+                    <div class="space-y-3 sm:space-y-4 relative z-10 text-white-dashboard">
+                        <h3 class="text-xl sm:text-2xl font-black text-secondary">Clinical Records</h3>
                         <p class="text-slate-400 font-bold text-sm max-w-xs leading-relaxed">Record visit notes,
                             prescribe medications, and track clinical history timelines for your patients.</p>
                         <button routerLink="/doctor-prescriptions"

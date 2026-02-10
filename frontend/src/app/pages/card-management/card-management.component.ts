@@ -18,6 +18,9 @@ export class CardManagementComponent implements OnInit {
   cards: any[] = [];
   selectedCard: any = null;
 
+  // Mobile Menu
+  mobileMenuOpen = false;
+
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -59,5 +62,9 @@ export class CardManagementComponent implements OnInit {
       },
       error: (err) => alert('Failed to delete card.')
     });
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 }

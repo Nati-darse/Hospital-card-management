@@ -29,8 +29,8 @@ public class PatientController {
     private final PatientService patientService;
     private final com.hospital.card.service.UserService userService;
 
-    @GetMapping("/me")
-    @PreAuthorize("hasAnyRole('ADMIN','USER','PATIENT')")
+    @GetMapping("/me") //api/patient/me
+    @PreAuthorize("hasAnyRole('ADMIN','USER','PATIENT')") // who can access 
     public ResponseEntity<PatientDTO> getMyProfile(java.security.Principal principal) {
         String username = principal.getName();
         com.hospital.card.entity.User user = userService.findByUsername(username)
@@ -59,7 +59,7 @@ public class PatientController {
         return ResponseEntity.ok(patientService.getPatientByUserId(userId));
     }
 
-    @PostMapping
+    @PostMapping 
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PatientDTO> create(@Valid @RequestBody PatientDTO dto) {
         PatientDTO created = patientService.createPatient(dto);

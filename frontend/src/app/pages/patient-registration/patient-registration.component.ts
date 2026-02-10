@@ -25,6 +25,9 @@ export class PatientRegistrationComponent implements OnInit {
     isEdit = false;
     patientToEdit: any;
 
+    // Mobile Menu
+    mobileMenuOpen = false;
+
     constructor(
         private fb: FormBuilder,
         private apiService: ApiService,
@@ -236,5 +239,9 @@ export class PatientRegistrationComponent implements OnInit {
     private handleError(err: any): void {
         this.loading = false;
         this.error = err.error?.message || 'An error occurred during registration.';
+    }
+
+    toggleMobileMenu(): void {
+        this.mobileMenuOpen = !this.mobileMenuOpen;
     }
 }
