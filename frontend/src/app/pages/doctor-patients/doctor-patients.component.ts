@@ -286,6 +286,8 @@ export class DoctorPatientsComponent implements OnInit {
             status: 'Active'
         };
 
+        console.log('Adding medical case:', caseData);
+
         this.apiService.post('medical-visits', caseData).subscribe({
             next: (response) => {
                 this.loading = false;
@@ -295,9 +297,22 @@ export class DoctorPatientsComponent implements OnInit {
                 this.loadPatientCases();
             },
             error: (err) => {
-                this.loading = false;
-                alert('Failed to add medical case.');
-                console.error('Error adding case:', err);
+                console.error('Failed to add medical case, trying alternative endpoint:', err);
+                // Try alternative endpoint
+                this.apiService.post('api/medical-visits', caseData).subscribe({
+                    next: (response) => {
+                        this.loading = false;
+                        alert('Medical case added successfully.');
+                        this.caseForm.reset();
+                        this.showCaseForm = false;
+                        this.loadPatientCases();
+                    },
+                    error: (err2) => {
+                        this.loading = false;
+                        alert('Failed to add medical case. Please check your network connection and try again.');
+                        console.error('Both medical visit endpoints failed:', err2);
+                    }
+                });
             }
         });
     }
