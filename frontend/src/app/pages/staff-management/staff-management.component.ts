@@ -32,6 +32,9 @@ export class StaffManagementComponent implements OnInit {
   passwordForm: FormGroup;
   passwordLoading = false;
 
+  // Mobile Menu
+  mobileMenuOpen = false;
+
   constructor(
     private authService: AuthService,
     private apiService: ApiService, // Inject ApiService
@@ -191,5 +194,9 @@ export class StaffManagementComponent implements OnInit {
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 }

@@ -30,6 +30,9 @@ export class PatientsComponent implements OnInit {
   passwordError = '';
   passwordSuccess = '';
 
+  // Mobile Menu
+  mobileMenuOpen = false;
+
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -159,5 +162,9 @@ export class PatientsComponent implements OnInit {
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 }
