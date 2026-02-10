@@ -31,6 +31,7 @@ export class StaffManagementComponent implements OnInit {
   showPasswordModal = false;
   passwordForm: FormGroup;
   passwordLoading = false;
+  selectedStaffForPassword: any = null;
 
   // Mobile Menu
   mobileMenuOpen = false;
@@ -167,21 +168,25 @@ export class StaffManagementComponent implements OnInit {
     });
   }
 
-  togglePasswordModal(): void {
+  togglePasswordModal(staff?: any): void {
     this.showPasswordModal = !this.showPasswordModal;
-    if (!this.showPasswordModal) this.passwordForm.reset();
+    if (!this.showPasswordModal) {
+      this.passwordForm.reset();
+      this.selectedStaffForPassword = null;
+    } else if (staff) {
+      this.selectedStaffForPassword = staff;
+    }
   }
 
   changePassword(): void {
-    if (this.passwordForm.invalid || !this.currentUser) return;
+    if (this.passwordForm.invalid || !this.selectedStaffForPassword) return;
 
     this.passwordLoading = true;
-    this.apiService.put(`users/${this.currentUser.id}/password`, this.passwordForm.value).subscribe({
+    this.apiService.put(`users/${this.selectedStaffForPassword.id}/password`, this.passwordForm.value).subscribe({
       next: () => {
         this.passwordLoading = false;
-        alert('Password changed successfully. Please login again.');
-        this.authService.logout();
-        this.router.navigate(['/login']);
+        alert('Password changed successfully for ' + this.selectedStaffForPassword.username);
+        this.togglePasswordModal();
       },
       error: (err) => {
         this.passwordLoading = false;
