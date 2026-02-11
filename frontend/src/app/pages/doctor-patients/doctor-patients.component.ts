@@ -278,10 +278,11 @@ export class DoctorPatientsComponent implements OnInit {
         if (this.caseForm.invalid || !this.selectedPatient) return;
 
         this.loading = true;
+        // Backend expects patientId and doctorId as Long values, not objects
         const caseData = {
             ...this.caseForm.value,
-            patient: { id: this.selectedPatient.id },
-            doctor: { id: this.currentUser?.id },
+            patientId: this.selectedPatient.id,
+            doctorId: this.currentUser?.id,
             visitDate: new Date().toISOString().split('T')[0],
             status: 'Active'
         };
