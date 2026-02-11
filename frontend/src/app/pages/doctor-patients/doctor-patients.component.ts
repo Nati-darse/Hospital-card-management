@@ -278,13 +278,18 @@ export class DoctorPatientsComponent implements OnInit {
         if (this.caseForm.invalid || !this.selectedPatient) return;
 
         this.loading = true;
-        // Backend expects patientId and doctorId as Long values, not objects
+        // Backend expects exact MedicalVisitDTO structure
         const caseData = {
-            ...this.caseForm.value,
             patientId: this.selectedPatient.id,
             doctorId: this.currentUser?.id,
             visitDate: new Date().toISOString().split('T')[0],
-            status: 'Active'
+            diagnosis: this.caseForm.value.diagnosis,
+            prescription: this.caseForm.value.prescription,
+            labTests: this.caseForm.value.labTests,
+            followUpDate: this.caseForm.value.followUpDate,
+            status: 'Active',
+            content: this.caseForm.value.diagnosis, // Use diagnosis as content
+            additionalComments: this.caseForm.value.additionalComments
         };
 
         console.log('Adding medical case:', caseData);
