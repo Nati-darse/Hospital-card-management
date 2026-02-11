@@ -60,8 +60,14 @@ public class ReferralService {
         referral.setPatient(patient);
         referral.setReferringDoctor(referringDoctor);
         referral.setReferredDoctor(referredDoctor);
-        referral.setStatus("Pending");
-        referral.setReferralDate(java.time.LocalDate.now());
+        
+        // Set default values
+        if (referral.getStatus() == null) {
+            referral.setStatus("Pending");
+        }
+        if (referral.getReferralDate() == null) {
+            referral.setReferralDate(java.time.LocalDate.now());
+        }
         
         Referral savedReferral = referralRepository.save(referral);
         

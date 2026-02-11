@@ -43,9 +43,4 @@ public class Referral {
     
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    
-    public Referral() {
-        this.status = "Pending";
-        this.referralDate = LocalDate.now();
-    }
 }
