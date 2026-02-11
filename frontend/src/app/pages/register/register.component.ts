@@ -22,9 +22,7 @@ export class RegisterComponent {
         private router: Router
     ) {
         this.registerForm = this.fb.group({
-            username: ['', [Validators.required, Validators.minLength(3)]],
             email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(6)]],
             firstName: ['', [Validators.required]],
             lastName: ['', [Validators.required]],
             role: ['PATIENT', [Validators.required]],
@@ -47,13 +45,15 @@ export class RegisterComponent {
             next: (response) => {
                 console.log('Register component: Success', response);
                 this.loading = false;
-                alert('Registration successful! Please wait for admin approval.');
+                
+                // Show the generated credentials in the alert
+                alert(`Registration successful!\n\nYour credentials:\nUsername: ${response.username}\nPassword: Atlas@123\n\nPlease wait for admin approval before logging in.`);
                 this.router.navigate(['/login']);
             },
             error: (err) => {
                 console.error('Register component: Error', err);
                 this.loading = false;
-                this.error = err.error?.message || 'Registration failed. The username or email might already be in use.';
+                this.error = err.error?.message || 'Registration failed. The email might already be in use.';
             }
         });
     }

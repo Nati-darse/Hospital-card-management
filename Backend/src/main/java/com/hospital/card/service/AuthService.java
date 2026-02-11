@@ -25,11 +25,18 @@ public class AuthService {
     private final com.hospital.card.repository.PatientRepository patientRepository;
 
     public AuthResponse registerPatient(RegisterRequest request) {
+        // Generate automatic username and password
+        String generatedUsername = generateUsername(request.getFirstName(), request.getLastName());
+        String generatedPassword = "Atlas@123";
+        
+        System.out.println("Generated username for patient: " + generatedUsername);
+        System.out.println("Generated password for patient: " + generatedPassword);
+        
         // Create new user
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setUsername(generatedUsername);
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(generatedPassword);
         user.setRole(UserRole.PATIENT); // Force Patient role
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -58,7 +65,23 @@ public class AuthService {
                 savedUser.getRole(),
                 savedUser.getFirstName(),
                 savedUser.getLastName(),
-                "Registration successful. Please wait for admin approval.");
+                "Registration successful. Please wait for admin approval. Username: " + generatedUsername + ", Password: " + generatedPassword);
+    }
+
+    private String generateUsername(String firstName, String lastName) {
+        // Base username: firstName + "_" + first 3 letters of lastName
+        String baseUsername = firstName.toLowerCase() + "_" + lastName.toLowerCase().substring(0, Math.min(3, lastName.length()));
+        
+        // Check if base username exists
+        String finalUsername = baseUsername;
+        int counter = 1;
+        
+        while (userService.findByUsername(finalUsername).isPresent()) {
+            finalUsername = baseUsername + counter;
+            counter++;
+        }
+        
+        return finalUsername;
     }
 
     // Admin uses this to create staff/other admins
@@ -97,6 +120,8 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
+        System.out.println("Login attempt for username: " + request.getUsername());
+        
         // Authenticate user
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -109,6 +134,11 @@ public class AuthService {
         User user = userService.findByUsername(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        System.out.println("Found user: " + user.getUsername());
+        System.out.println("User ID: " + user.getId());
+        System.out.println("User role: " + user.getRole());
+        System.out.println("User email: " + user.getEmail());
+
         if (!user.getIsActive()) {
             throw new RuntimeException("Account is not active. Please contact administrator.");
         }
@@ -119,7 +149,7 @@ public class AuthService {
         // Generate token
         String jwtToken = jwtService.generateToken(user);
 
-        return new AuthResponse(
+        AuthResponse response = new AuthResponse(
                 jwtToken,
                 user.getId(),
                 user.getUsername(),
@@ -128,5 +158,8 @@ public class AuthService {
                 user.getFirstName(),
                 user.getLastName(),
                 "Login successful");
+
+        System.out.println("AuthResponse created with ID: " + response.getId());
+        return response;
     }
 }
