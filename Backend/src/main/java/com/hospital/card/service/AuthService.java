@@ -159,7 +159,7 @@ public class AuthService {
                 user.getLastName(),
                 "Login successful");
 
-        System.out.println("AuthResponse created with ID: " + response.getId());
+        System.out.println("AuthResponse created with ID: " + response.getUserId());
         return response;
     }
 }
