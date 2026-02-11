@@ -26,9 +26,15 @@ public class UserService {
             throw new RuntimeException("Username already exists");
         }
 
-        // Check if the email exists
+        // Check if email exists
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
+        }
+
+        // Set default password if none provided
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            user.setPassword("Atlas@123");
+            System.out.println("Setting default password 'Atlas@123' for new user: " + user.getUsername());
         }
 
         // Encode password with .encode func
@@ -39,7 +45,10 @@ public class UserService {
             user.setIsActive(true);
         }
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        System.out.println("Successfully registered user: " + user.getUsername() + " with default password: Atlas@123");
+        
+        return savedUser;
     }
 
     public List<User> getPendingUsers() {
