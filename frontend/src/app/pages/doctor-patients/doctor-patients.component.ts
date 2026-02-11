@@ -383,21 +383,13 @@ export class DoctorPatientsComponent implements OnInit {
     }
 
     referPatient(): void {
-        // Referral functionality is not yet implemented in the backend
-        alert('Referral feature is currently under development. Please contact the administration directly for patient referrals.');
-        this.referralForm.reset();
-        this.showReferralForm = false;
-        this.referralLoading = false;
-        
-        // Future implementation when backend is ready:
-        /*
         if (this.referralForm.invalid || !this.selectedPatient) return;
 
         this.referralLoading = true;
         const referralData = {
-            patient: { id: this.selectedPatient.id },
-            referringDoctor: { id: this.currentUser?.id },
-            referredDoctor: { id: this.referralForm.value.referredDoctorId },
+            patientId: this.selectedPatient.id,
+            referringDoctorId: this.currentUser?.id,
+            referredDoctorId: this.referralForm.value.referredDoctorId,
             department: this.referralForm.value.department,
             reason: this.referralForm.value.referralReason,
             status: 'Pending',
@@ -412,7 +404,6 @@ export class DoctorPatientsComponent implements OnInit {
                 alert('Referral sent successfully! The doctor will be notified.');
                 this.referralForm.reset();
                 this.showReferralForm = false;
-                this.createNotificationForReferredDoctor(referralData);
             },
             error: (err) => {
                 console.error('Referral error, trying alternative endpoint:', err);
@@ -423,7 +414,6 @@ export class DoctorPatientsComponent implements OnInit {
                         alert('Referral sent successfully! The doctor will be notified.');
                         this.referralForm.reset();
                         this.showReferralForm = false;
-                        this.createNotificationForReferredDoctor(referralData);
                     },
                     error: (err2) => {
                         this.referralLoading = false;
@@ -433,7 +423,6 @@ export class DoctorPatientsComponent implements OnInit {
                 });
             }
         });
-        */
     }
 
     createNotificationForReferredDoctor(referralData: any): void {
