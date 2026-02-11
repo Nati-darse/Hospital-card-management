@@ -58,6 +58,10 @@ export class AuthService {
     }
 
     private handleAuthResponse(response: AuthResponse): void {
+        console.log('Raw auth response from backend:', response);
+        console.log('Response ID:', response.id);
+        console.log('Response username:', response.username);
+
         // Store token
         localStorage.setItem(this.TOKEN_KEY, response.token);
 
@@ -71,12 +75,32 @@ export class AuthService {
             lastName: response.lastName
         };
 
+        console.log('Created user object:', user);
+        console.log('User ID check:', user.id, 'Type:', typeof user.id);
+
         localStorage.setItem(this.USER_KEY, JSON.stringify(user));
         this.currentUserSubject.next(user);
+
+        console.log('User stored in localStorage and BehaviorSubject');
     }
 
     private getUserFromStorage(): User | null {
         const userJson = localStorage.getItem(this.USER_KEY);
-        return userJson ? JSON.parse(userJson) : null;
+        console.log('Raw user JSON from localStorage:', userJson);
+        
+        if (userJson) {
+            try {
+                const user = JSON.parse(userJson);
+                console.log('Parsed user from localStorage:', user);
+                console.log('User ID from localStorage:', user.id, 'Type:', typeof user.id);
+                return user;
+            } catch (e) {
+                console.error('Failed to parse user from localStorage:', e);
+                return null;
+            }
+        }
+        
+        console.log('No user found in localStorage');
+        return null;
     }
 }
