@@ -277,6 +277,10 @@ export class DoctorPatientsComponent implements OnInit {
     addCase(): void {
         if (this.caseForm.invalid || !this.selectedPatient) return;
 
+        // Debug logging to check current user
+        console.log('Current user for case creation:', this.currentUser);
+        console.log('Current user ID for case creation:', this.currentUser?.id);
+
         this.loading = true;
         // Backend expects exact MedicalVisitDTO structure
         const caseData = {
@@ -293,6 +297,13 @@ export class DoctorPatientsComponent implements OnInit {
         };
 
         console.log('Adding medical case:', caseData);
+
+        // Ensure doctorId is not undefined
+        if (!caseData.doctorId) {
+            this.loading = false;
+            alert('Error: Current doctor ID not found. Please log in again.');
+            return;
+        }
 
         // Use correct backend endpoint: /api/visits (not /api/medical-visits)
         this.apiService.post('visits', caseData).subscribe({
@@ -390,11 +401,15 @@ export class DoctorPatientsComponent implements OnInit {
     referPatient(): void {
         if (this.referralForm.invalid || !this.selectedPatient) return;
 
+        // Debug logging to check current user
+        console.log('Current user:', this.currentUser);
+        console.log('Current user ID:', this.currentUser?.id);
+
         this.referralLoading = true;
         const referralData = {
             patientId: this.selectedPatient.id,
             referringDoctorId: this.currentUser?.id,
-            referredDoctorId: this.referralForm.value.referredDoctorId,
+            referredDoctorId: Number(this.referralForm.value.referredDoctorId), // Convert to number
             department: this.referralForm.value.department,
             reason: this.referralForm.value.referralReason,
             status: 'Pending',
@@ -402,6 +417,13 @@ export class DoctorPatientsComponent implements OnInit {
         };
 
         console.log('Sending referral data:', referralData);
+
+        // Ensure referringDoctorId is not undefined
+        if (!referralData.referringDoctorId) {
+            this.referralLoading = false;
+            alert('Error: Current doctor ID not found. Please log in again.');
+            return;
+        }
 
         this.apiService.post('referrals', referralData).subscribe({
             next: (response) => {
