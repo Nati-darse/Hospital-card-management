@@ -113,9 +113,40 @@ export class DoctorPatientsComponent implements OnInit {
         
         console.log('Final current user in ngOnInit:', this.currentUser);
         
-        if (this.currentUser) {
+        // If user exists but ID is undefined, fetch user details from backend
+        if (this.currentUser && !this.currentUser.id) {
+            console.log('User ID is undefined, fetching from backend...');
+            this.fetchUserDetails();
+        } else if (this.currentUser) {
             this.loadDoctorProfile();
         }
+    }
+
+    fetchUserDetails(): void {
+        this.apiService.get('auth/me').subscribe({
+            next: (userDetails: any) => {
+                console.log('Fetched user details from backend:', userDetails);
+                this.currentUser = {
+                    id: userDetails.id,
+                    username: userDetails.username,
+                    email: userDetails.email,
+                    role: userDetails.role,
+                    firstName: userDetails.firstName,
+                    lastName: userDetails.lastName
+                };
+                
+                // Update localStorage and AuthService
+                localStorage.setItem('current_user', JSON.stringify(this.currentUser));
+                console.log('Updated user with ID:', this.currentUser);
+                
+                this.loadDoctorProfile();
+            },
+            error: (err) => {
+                console.error('Failed to fetch user details:', err);
+                alert('Failed to load user details. Please log in again.');
+                this.router.navigate(['/login']);
+            }
+        });
     }
 
     loadDoctorProfile(): void {
