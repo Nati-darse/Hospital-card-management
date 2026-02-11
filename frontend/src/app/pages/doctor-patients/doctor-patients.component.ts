@@ -348,8 +348,8 @@ export class DoctorPatientsComponent implements OnInit {
         console.log('Department changed to:', department);
         if (department) {
             this.referralLoading = true;
-            // Try different endpoint patterns
-            this.apiService.get(`staff/department/${department}`).subscribe({
+            // Use correct backend endpoint: /api/staff/search?department={dept} (not /api/staff/department/{dept})
+            this.apiService.get(`staff/search?department=${department}`).subscribe({
                 next: (doctors: any[]) => {
                     console.log('Doctors loaded:', doctors);
                     // Filter out current doctor
@@ -357,31 +357,21 @@ export class DoctorPatientsComponent implements OnInit {
                     this.referralLoading = false;
                 },
                 error: (err) => {
-                    console.error('Failed to load doctors by department, trying search endpoint:', err);
-                    // Fallback to search endpoint
-                    this.apiService.get(`staff/search?department=${department}`).subscribe({
-                        next: (doctors: any[]) => {
-                            console.log('Doctors loaded via search:', doctors);
-                            // Filter out current doctor
-                            this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
+                    console.error('Failed to load doctors by department, trying fallback:', err);
+                    // Fallback: load all staff and filter client-side
+                    this.apiService.get('staff').subscribe({
+                        next: (allStaff: any[]) => {
+                            console.log('All staff loaded, filtering by department:', department);
+                            // Filter by department and exclude current doctor
+                            this.referralDoctors = allStaff.filter((d: any) => 
+                                d.department === department && d.id !== this.currentUser?.id
+                            );
                             this.referralLoading = false;
                         },
                         error: (err2) => {
-                            console.error('Search endpoint failed, trying direct staff endpoint:', err2);
-                            // Try with direct staff endpoint (without api prefix since ApiService already adds it)
-                            this.apiService.get(`staff/search?department=${department}`).subscribe({
-                                next: (doctors: any[]) => {
-                                    console.log('Doctors loaded via direct search:', doctors);
-                                    // Filter out current doctor
-                                    this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
-                                    this.referralLoading = false;
-                                },
-                                error: (err3) => {
-                                    console.error('All staff endpoints failed:', err3);
-                                    this.referralLoading = false;
-                                    this.referralDoctors = [];
-                                }
-                            });
+                            console.error('All staff endpoints failed:', err2);
+                            this.referralLoading = false;
+                            this.referralDoctors = [];
                         }
                     });
                 }
