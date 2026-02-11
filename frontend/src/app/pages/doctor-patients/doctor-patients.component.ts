@@ -298,8 +298,8 @@ export class DoctorPatientsComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Failed to add medical case, trying alternative endpoint:', err);
-                // Try alternative endpoint
-                this.apiService.post('api/medical-visits', caseData).subscribe({
+                // Try alternative endpoint (without api prefix since ApiService already adds it)
+                this.apiService.post('medical-visits', caseData).subscribe({
                     next: (response) => {
                         this.loading = false;
                         alert('Medical case added successfully.');
@@ -309,8 +309,8 @@ export class DoctorPatientsComponent implements OnInit {
                     },
                     error: (err2) => {
                         this.loading = false;
-                        alert('Failed to add medical case. Please check your network connection and try again.');
-                        console.error('Both medical visit endpoints failed:', err2);
+                        alert('Failed to add medical case. The backend service may be temporarily unavailable. Please try again later.');
+                        console.error('Medical case creation failed:', err2);
                     }
                 });
             }
@@ -327,13 +327,13 @@ export class DoctorPatientsComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Failed to load patient cases, trying alternative endpoint:', err);
-                // Fallback to different endpoint pattern
-                this.apiService.get(`api/medical-visits/patient/${this.selectedPatient.id}`).subscribe({
+                // Fallback to different endpoint pattern (without api prefix since ApiService already adds it)
+                this.apiService.get(`medical-visits/patient/${this.selectedPatient.id}`).subscribe({
                     next: (cases) => {
                         this.patientCases = cases;
                     },
                     error: (err2) => {
-                        console.error('Both endpoints failed for patient cases:', err2);
+                        console.error('Patient cases loading failed:', err2);
                         this.patientCases = [];
                     }
                 });
@@ -366,11 +366,11 @@ export class DoctorPatientsComponent implements OnInit {
                             this.referralLoading = false;
                         },
                         error: (err2) => {
-                            console.error('Search endpoint failed, trying with /api prefix:', err2);
-                            // Try with /api prefix
-                            this.apiService.get(`api/staff/search?department=${department}`).subscribe({
+                            console.error('Search endpoint failed, trying direct staff endpoint:', err2);
+                            // Try with direct staff endpoint (without api prefix since ApiService already adds it)
+                            this.apiService.get(`staff/search?department=${department}`).subscribe({
                                 next: (doctors: any[]) => {
-                                    console.log('Doctors loaded via api/search:', doctors);
+                                    console.log('Doctors loaded via direct search:', doctors);
                                     // Filter out current doctor
                                     this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
                                     this.referralLoading = false;
@@ -416,8 +416,8 @@ export class DoctorPatientsComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Referral error, trying alternative endpoint:', err);
-                // Try alternative endpoint
-                this.apiService.post('api/referrals', referralData).subscribe({
+                // Try alternative endpoint (without api prefix since ApiService already adds it)
+                this.apiService.post('referrals', referralData).subscribe({
                     next: (response) => {
                         this.referralLoading = false;
                         alert('Referral sent successfully! The doctor will be notified.');
@@ -427,8 +427,8 @@ export class DoctorPatientsComponent implements OnInit {
                     },
                     error: (err2) => {
                         this.referralLoading = false;
-                        alert('Failed to send referral. Please check your network connection and try again.');
-                        console.error('Both referral endpoints failed:', err2);
+                        alert('Failed to send referral. The backend service may be temporarily unavailable. Please try again later.');
+                        console.error('Referral failed:', err2);
                     }
                 });
             }
@@ -453,13 +453,13 @@ export class DoctorPatientsComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Failed to send notification, trying alternative endpoint:', err);
-                // Try alternative endpoint
-                this.apiService.post('api/notifications', notification).subscribe({
+                // Try alternative endpoint (without api prefix since ApiService already adds it)
+                this.apiService.post('notifications', notification).subscribe({
                     next: () => {
                         console.log('Notification sent via alternative endpoint');
                     },
                     error: (err2) => {
-                        console.error('Both notification endpoints failed:', err2);
+                        console.error('Notification creation failed:', err2);
                     }
                 });
             }
