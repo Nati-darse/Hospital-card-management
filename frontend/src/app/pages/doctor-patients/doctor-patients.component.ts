@@ -95,7 +95,24 @@ export class DoctorPatientsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // Initialize current user from storage
         this.currentUser = this.authService.getCurrentUser();
+        
+        // Additional fallback: try to get user from localStorage directly
+        if (!this.currentUser) {
+            const userJson = localStorage.getItem('current_user');
+            if (userJson) {
+                try {
+                    this.currentUser = JSON.parse(userJson);
+                    console.log('Fallback: Retrieved user from localStorage:', this.currentUser);
+                } catch (e) {
+                    console.error('Failed to parse user from localStorage:', e);
+                }
+            }
+        }
+        
+        console.log('Final current user in ngOnInit:', this.currentUser);
+        
         if (this.currentUser) {
             this.loadDoctorProfile();
         }
@@ -277,6 +294,9 @@ export class DoctorPatientsComponent implements OnInit {
     addCase(): void {
         if (this.caseForm.invalid || !this.selectedPatient) return;
 
+        // Check authentication first
+        this.checkUserAuthentication();
+
         // Debug logging to check current user
         console.log('Current user for case creation:', this.currentUser);
         console.log('Current user ID for case creation:', this.currentUser?.id);
@@ -398,8 +418,22 @@ export class DoctorPatientsComponent implements OnInit {
         }
     }
 
+    checkUserAuthentication(): void {
+        if (!this.currentUser || !this.currentUser.id) {
+            console.error('User not authenticated or missing ID');
+            alert('You are not properly logged in. Please log in again.');
+            this.router.navigate(['/login']);
+            return;
+        }
+        
+        console.log('User authenticated successfully:', this.currentUser);
+    }
+
     referPatient(): void {
         if (this.referralForm.invalid || !this.selectedPatient) return;
+
+        // Check authentication first
+        this.checkUserAuthentication();
 
         // Debug logging to check current user
         console.log('Current user:', this.currentUser);
