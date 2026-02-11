@@ -288,7 +288,8 @@ export class DoctorPatientsComponent implements OnInit {
 
         console.log('Adding medical case:', caseData);
 
-        this.apiService.post('medical-visits', caseData).subscribe({
+        // Use correct backend endpoint: /api/visits (not /api/medical-visits)
+        this.apiService.post('visits', caseData).subscribe({
             next: (response) => {
                 this.loading = false;
                 alert('Medical case added successfully.');
@@ -299,7 +300,7 @@ export class DoctorPatientsComponent implements OnInit {
             error: (err) => {
                 console.error('Failed to add medical case, trying alternative endpoint:', err);
                 // Try alternative endpoint (without api prefix since ApiService already adds it)
-                this.apiService.post('medical-visits', caseData).subscribe({
+                this.apiService.post('visits', caseData).subscribe({
                     next: (response) => {
                         this.loading = false;
                         alert('Medical case added successfully.');
@@ -320,15 +321,15 @@ export class DoctorPatientsComponent implements OnInit {
     loadPatientCases(): void {
         if (!this.selectedPatient) return;
         
-        // Try different endpoint patterns for medical visits
-        this.apiService.get(`medical-visits/patient/${this.selectedPatient.id}`).subscribe({
+        // Use correct backend endpoint: /api/visits/patient/{id} (not /api/medical-visits/patient/{id})
+        this.apiService.get(`visits/patient/${this.selectedPatient.id}`).subscribe({
             next: (cases) => {
                 this.patientCases = cases;
             },
             error: (err) => {
                 console.error('Failed to load patient cases, trying alternative endpoint:', err);
                 // Fallback to different endpoint pattern (without api prefix since ApiService already adds it)
-                this.apiService.get(`medical-visits/patient/${this.selectedPatient.id}`).subscribe({
+                this.apiService.get(`visits/patient/${this.selectedPatient.id}`).subscribe({
                     next: (cases) => {
                         this.patientCases = cases;
                     },
@@ -391,6 +392,14 @@ export class DoctorPatientsComponent implements OnInit {
     }
 
     referPatient(): void {
+        // Referral functionality is not yet implemented in the backend
+        alert('Referral feature is currently under development. Please contact the administration directly for patient referrals.');
+        this.referralForm.reset();
+        this.showReferralForm = false;
+        this.referralLoading = false;
+        
+        // Future implementation when backend is ready:
+        /*
         if (this.referralForm.invalid || !this.selectedPatient) return;
 
         this.referralLoading = true;
@@ -433,6 +442,7 @@ export class DoctorPatientsComponent implements OnInit {
                 });
             }
         });
+        */
     }
 
     createNotificationForReferredDoctor(referralData: any): void {
