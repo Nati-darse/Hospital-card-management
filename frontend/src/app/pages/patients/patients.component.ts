@@ -154,6 +154,25 @@ export class PatientsComponent implements OnInit {
     });
   }
 
+  resetPasswordToDefault(patient: any): void {
+    if (!patient?.user?.id) return;
+    
+    if (confirm(`Are you sure you want to reset password for "${patient.user.username}" to default password "Atlas@123"?`)) {
+      console.log('Resetting password to default for patient:', patient.user.username);
+      
+      this.apiService.post(`users/${patient.user.id}/reset-password`, {}).subscribe({
+        next: (response: any) => {
+          console.log('Password reset response:', response);
+          alert(response.message || `Password for "${patient.user.username}" has been reset to: Atlas@123`);
+        },
+        error: (err) => {
+          console.error('Password reset failed:', err);
+          alert('Failed to reset password. Error: ' + (err.error?.message || err.message || 'Unknown error'));
+        }
+      });
+    }
+  }
+
   closeDetail(): void {
     this.showDetailModal = false;
     this.detailPatient = null;

@@ -34,9 +34,13 @@ export class CardManagementComponent implements OnInit {
   }
 
   loadCards(): void {
-    this.apiService.get('cards').subscribe({
-      next: (data: any) => this.cards = data,
-      error: (err) => console.error('Error loading cards', err)
+    // Load all users with their card information
+    this.apiService.get('cards/users-with-cards').subscribe({
+      next: (data: any) => {
+        this.cards = data;
+        console.log('Users with cards loaded:', data);
+      },
+      error: (err) => console.error('Error loading users with cards', err)
     });
   }
 
