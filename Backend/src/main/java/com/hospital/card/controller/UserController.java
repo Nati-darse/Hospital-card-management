@@ -91,6 +91,22 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{id}/reset-password")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> resetPasswordToDefault(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        
+        // Reset to default password
+        User updatePayload = new User();
+        updatePayload.setPassword("Atlas@123");
+        userService.updateUser(id, updatePayload);
+        
+        String message = String.format("Password for user '%s' has been reset to default: Atlas@123", user.getUsername());
+        System.out.println("Admin reset password for user: " + user.getUsername());
+        
+        return ResponseEntity.ok(message);
+    }
+
     private UserDTO toDto(User u) {
         UserDTO dto = new UserDTO();
         dto.setId(u.getId());

@@ -121,45 +121,54 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         System.out.println("Login attempt for username: " + request.getUsername());
+        System.out.println("Password provided: " + (request.getPassword() != null && !request.getPassword().isEmpty() ? "[PRESENT]" : "[MISSING]"));
         
-        // Authenticate user
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()));
+        try {
+            // Authenticate user
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Get user details
-        User user = userService.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+            // Get user details
+            User user = userService.findByUsername(request.getUsername())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-        System.out.println("Found user: " + user.getUsername());
-        System.out.println("User ID: " + user.getId());
-        System.out.println("User role: " + user.getRole());
-        System.out.println("User email: " + user.getEmail());
+            System.out.println("Found user: " + user.getUsername());
+            System.out.println("User ID: " + user.getId());
+            System.out.println("User role: " + user.getRole());
+            System.out.println("User email: " + user.getEmail());
+            System.out.println("User active: " + user.getIsActive());
 
-        if (!user.getIsActive()) {
-            throw new RuntimeException("Account is not active. Please contact administrator.");
+            if (!user.getIsActive()) {
+                throw new RuntimeException("Account is not active. Please contact administrator.");
+            }
+
+            // Update last login
+            userService.updateLastLogin(user.getUsername());
+
+            // Generate token
+            String jwtToken = jwtService.generateToken(user);
+
+            AuthResponse response = new AuthResponse(
+                    jwtToken,
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getRole(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    "Login successful");
+
+            System.out.println("AuthResponse created with ID: " + response.getUserId());
+            return response;
+        } catch (Exception e) {
+            System.err.println("Login failed for username: " + request.getUsername());
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
-
-        // Update last login
-        userService.updateLastLogin(user.getUsername());
-
-        // Generate token
-        String jwtToken = jwtService.generateToken(user);
-
-        AuthResponse response = new AuthResponse(
-                jwtToken,
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole(),
-                user.getFirstName(),
-                user.getLastName(),
-                "Login successful");
-
-        System.out.println("AuthResponse created with ID: " + response.getUserId());
-        return response;
     }
 }
