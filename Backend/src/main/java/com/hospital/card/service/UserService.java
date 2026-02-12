@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.hospital.card.entity.User;
 import com.hospital.card.entity.UserRole;
+import com.hospital.card.entity.Patient;
 import com.hospital.card.repository.UserRepository;
+import com.hospital.card.repository.PatientRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PatientRepository patientRepository;
 
     public User registerUser(User user) {
         // Check if username exists
@@ -137,5 +140,16 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    public Optional<Patient> findPatientByUserId(Long userId) {
+        return patientRepository.findByUserId(userId);
+    }
+
+    public boolean hasCaseHistoryForPatient(Long patientId) {
+        // Check if patient has any medical cases (indicating they've been seen)
+        return patientRepository.findById(patientId)
+                .map(patient -> !patient.getMedicalCases().isEmpty())
+                .orElse(false);
     }
 }
