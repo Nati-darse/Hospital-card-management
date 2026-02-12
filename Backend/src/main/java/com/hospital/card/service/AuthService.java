@@ -45,7 +45,7 @@ public class AuthService {
         user.setGender(request.getGender());
         user.setAddress(request.getAddress());
         user.setDepartment(request.getDepartment());
-        user.setIsActive(false); // Inactive by default
+        user.setIsActive(true); // Active by default for patients
 
         // Save user
         User savedUser = userService.registerUser(user);
