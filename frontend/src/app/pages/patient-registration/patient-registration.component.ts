@@ -229,16 +229,10 @@ export class PatientRegistrationComponent implements OnInit {
         forkJoin([userUpdate$, patientUpdate$]).subscribe({
             next: () => {
                 this.loading = false;
-                this.success = 'Patient profile updated successfully!';
-                this.router.navigate(['/patients']);
+                this.success = 'Patient updated successfully!';
             },
             error: (err: any) => this.handleError(err)
         });
-    }
-
-    private handleError(err: any): void {
-        this.loading = false;
-        this.error = err.error?.message || 'An error occurred during registration.';
     }
 
     toggleMobileMenu(): void {

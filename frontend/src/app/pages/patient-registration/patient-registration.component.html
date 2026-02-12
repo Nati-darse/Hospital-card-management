@@ -223,10 +223,16 @@
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 pb-8 sm:pb-10">
                     <button type="button" routerLink="/patients"
                         class="flex-1 bg-slate-200 text-secondary py-4 sm:py-5 rounded-[20px] sm:rounded-[24px] font-black text-xs uppercase tracking-[0.2em]">Cancel</button>
+                    
+                    <!-- Reset Password Button - Only show in edit mode for admins -->
+                    <button *ngIf="isEdit && isAdmin" type="button" (click)="resetPasswordToDefault()"
+                        class="flex-1 bg-blue-50 text-blue-600 border border-blue-100 py-4 sm:py-5 rounded-[20px] sm:rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:bg-blue-100 hover:text-blue-700 transition-all">
+                        🔄 Reset Password
+                    </button>
+                    
                     <button type="submit" [disabled]="registrationForm.invalid || loading"
                         class="flex-[2] bg-primary text-white py-4 sm:py-5 rounded-[20px] sm:rounded-[24px] font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform">
-                        {{ loading ? (isEdit ? 'UPDATING...' : 'ENROLLING...') : (isEdit ? 'SAVE CHANGES' : 'CONFIRM
-                        ENROLLMENT') }}
+                        {{ loading ? (isEdit ? 'UPDATING...' : 'ENROLLING...') : (isEdit ? 'SAVE CHANGES' : 'CONFIRM ENROLLMENT') }}
                     </button>
                 </div>
             </form>
