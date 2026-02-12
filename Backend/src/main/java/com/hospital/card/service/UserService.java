@@ -147,9 +147,8 @@ public class UserService {
     }
 
     public boolean hasCaseHistoryForPatient(Long patientId) {
-        // Check if patient has any medical cases (indicating they've been seen)
-        return patientRepository.findById(patientId)
-                .map(patient -> !patient.getMedicalCases().isEmpty())
-                .orElse(false);
+        // For now, return false since we don't have medical cases entity
+        // This should be implemented when medical cases are added
+        return false;
     }
 }

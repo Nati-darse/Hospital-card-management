@@ -4,6 +4,8 @@ import com.hospital.card.dto.HospitalCardDTO;
 import com.hospital.card.service.HospitalCardService;
 import com.hospital.card.service.UserService;
 import com.hospital.card.entity.Patient;
+import com.hospital.card.entity.User;
+import com.hospital.card.entity.UserRole;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,7 +60,7 @@ public class HospitalCardController {
             patientInfo.put("assignedDoctor", patient.getAssignedDoctor().getUser().getFirstName() + " " + patient.getAssignedDoctor().getUser().getLastName());
             patientInfo.put("assignedDoctorId", patient.getAssignedDoctor().getId());
             patientInfo.put("department", patient.getAssignedDoctor().getDepartment());
-            patientInfo.put("assignedDate", patient.getCreatedAt());
+            patientInfo.put("assignedDate", ""); // No createdAt field in Patient entity
             patientInfo.put("hasCaseHistory", hasCaseHistory);
             patientInfo.put("status", hasCaseHistory ? "Completed" : "Pending Check-in");
             return patientInfo;
