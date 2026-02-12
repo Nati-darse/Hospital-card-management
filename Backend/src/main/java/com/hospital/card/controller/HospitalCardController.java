@@ -77,7 +77,7 @@ public class HospitalCardController {
   @PreAuthorize("hasAnyRole('ADMIN','USER')")
   public ResponseEntity<List<Map<String, Object>>> getAvailableDoctors() {
     List<Map<String, Object>> doctors = userService.getAllUsers().stream()
-        .filter(user -> user.getRole() == UserRole.DOCTOR && user.getIsActive())
+        .filter(user -> user.getRole() == UserRole.USER && user.getIsActive())
         .map(doctor -> {
           Map<String, Object> doctorInfo = new HashMap<>();
           doctorInfo.put("id", doctor.getId());
@@ -113,7 +113,7 @@ public class HospitalCardController {
       
       // Find doctor
       User doctor = userService.getUserById(doctorId);
-      if (doctor.getRole() != UserRole.DOCTOR) {
+      if (doctor.getRole() != UserRole.USER) {
         return ResponseEntity.badRequest().body(Map.of("error", "Selected user is not a doctor"));
       }
       
