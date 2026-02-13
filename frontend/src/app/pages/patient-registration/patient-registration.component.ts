@@ -245,4 +245,23 @@ export class PatientRegistrationComponent implements OnInit {
         this.error = errorMessage;
         console.error('Error:', err);
     }
+
+    resetPasswordToDefault(): void {
+        if (!this.patientToEdit?.user?.id) return;
+        
+        if (confirm(`Are you sure you want to reset password for "${this.patientToEdit.user.username}" to default password "Atlas@123"?`)) {
+            console.log('Resetting password to default for patient:', this.patientToEdit.user.username);
+            
+            this.apiService.post(`users/${this.patientToEdit.user.id}/reset-password`, {}).subscribe({
+                next: (response: any) => {
+                    console.log('Password reset response:', response);
+                    alert(response.message || `Password for "${this.patientToEdit.user.username}" has been reset to: Atlas@123`);
+                },
+                error: (err) => {
+                    console.error('Password reset failed:', err);
+                    alert('Failed to reset password. Error: ' + (err.error?.message || err.message || 'Unknown error'));
+                }
+            });
+        }
+    }
 }
