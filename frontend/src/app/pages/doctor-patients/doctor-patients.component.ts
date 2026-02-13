@@ -21,6 +21,8 @@ export class DoctorPatientsComponent implements OnInit {
     searchQuery = '';
     selectedPatient: any = null;
     loading = false;
+    actionSuccess = '';
+    private actionMessageTimer: any = null;
 
     // Password Update
     showPasswordForm = false;
@@ -166,6 +168,15 @@ export class DoctorPatientsComponent implements OnInit {
             next: (assignedPatients: any[]) => {
                 this.patients = assignedPatients;
                 this.allPatients = assignedPatients;
+                const previousSelectedId = this.selectedPatient?.id;
+                const nextSelected = assignedPatients.find(p => p.id === previousSelectedId) || assignedPatients[0] || null;
+                if (nextSelected) {
+                    this.selectPatient(nextSelected);
+                } else {
+                    this.selectedPatient = null;
+                    this.patientPrescriptions = [];
+                    this.patientCases = [];
+                }
                 this.loading = false;
             },
             error: () => this.loading = false
@@ -263,7 +274,7 @@ export class DoctorPatientsComponent implements OnInit {
         this.apiService.put(`patients/${this.selectedPatient.id}`, payload).subscribe({
             next: () => {
                 this.loading = false;
-                alert('Patient information updated successfully.');
+                this.showSuccess('Patient profile updated successfully.');
                 this.showUpdateForm = false;
                 this.loadPatients();
             },
@@ -559,6 +570,16 @@ export class DoctorPatientsComponent implements OnInit {
                 });
             }
         });
+    }
+
+    private showSuccess(message: string): void {
+        this.actionSuccess = message;
+        if (this.actionMessageTimer) {
+            clearTimeout(this.actionMessageTimer);
+        }
+        this.actionMessageTimer = setTimeout(() => {
+            this.actionSuccess = '';
+        }, 3000);
     }
 
     onLogout(): void {

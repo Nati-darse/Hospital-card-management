@@ -24,7 +24,7 @@
         </div>
 
         <nav class="mt-10 flex-1 px-6 space-y-3">
-            <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/dashboard" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +34,7 @@
                 <span class="font-bold tracking-tight">Overview</span>
             </a>
 
-            <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/patients" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -44,7 +44,7 @@
                 <span class="font-bold tracking-tight">Patients</span>
             </a>
 
-            <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/card-management" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +54,7 @@
                 <span class="font-bold tracking-tight">Access Cards</span>
             </a>
 
-            <a *ngIf="isAdmin" routerLink="/staff-management"
+            <a *ngIf="isAdmin" routerLink="/staff-management" (click)="mobileMenuOpen = false"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
@@ -119,6 +119,15 @@
         <div class="p-4 sm:p-6 lg:p-10 flex flex-col xl:flex-row gap-6 sm:gap-8 flex-1 overflow-hidden">
             <!-- Left Side: Staff List -->
             <div class="flex-1 min-w-0 flex flex-col space-y-6 sm:space-y-8">
+                <div *ngIf="success"
+                    class="p-4 bg-green-50 text-green-600 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-green-100">
+                    {{ success }}
+                </div>
+                <div *ngIf="error"
+                    class="p-4 bg-red-50 text-red-600 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-red-100">
+                    {{ error }}
+                </div>
+
                 <!-- Creation Form Overlay? No, I'll keep it as a section above the table if needed, or better, as a dedicated card. -->
                 <div *ngIf="showCreateForm" class="p-4 sm:p-6 lg:p-8 bg-white border border-primary/10 shadow-xl shadow-primary/5 rounded-[20px] sm:rounded-[30px] lg:rounded-[40px]">
                     <div class="flex justify-between items-center mb-4 sm:mb-6">

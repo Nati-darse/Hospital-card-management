@@ -81,6 +81,14 @@ export class DoctorPrescriptionsComponent implements OnInit {
         this.apiService.get(`patients?doctorId=${this.staffProfile.id}`).subscribe({
             next: (assignedPatients: any[]) => {
                 this.patients = assignedPatients;
+                const previousSelectedId = this.selectedPatient?.id;
+                const nextSelected = assignedPatients.find(p => p.id === previousSelectedId) || assignedPatients[0] || null;
+                if (nextSelected) {
+                    this.selectPatient(nextSelected);
+                } else {
+                    this.selectedPatient = null;
+                    this.patientHistory = [];
+                }
             }
         });
     }

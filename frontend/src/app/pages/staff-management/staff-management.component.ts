@@ -26,6 +26,7 @@ export class StaffManagementComponent implements OnInit {
   staffForm: FormGroup;
   error = '';
   success = '';
+  private noticeTimer: any = null;
 
   // Password Change
   showPasswordModal = false;
@@ -129,9 +130,13 @@ export class StaffManagementComponent implements OnInit {
     this.apiService.put(`users/${staff.id}`, { isActive: newStatus }).subscribe({
       next: () => {
         staff.isActive = newStatus;
+        this.showNotice(`Staff ${newStatus ? 'activated' : 'deactivated'} successfully.`, false);
         alert(`Staff ${newStatus ? 'activated' : 'deactivated'} successfully.`);
       },
-      error: (err) => alert('Failed to change status.')
+      error: (err) => {
+        this.showNotice('Failed to change status.', true);
+        alert('Failed to change status.');
+      }
     });
   }
 
@@ -141,9 +146,13 @@ export class StaffManagementComponent implements OnInit {
     this.apiService.delete(`users/${staff.id}`).subscribe({
       next: () => {
         this.staffList = this.staffList.filter(u => u.id !== staff.id);
+        this.showNotice('Staff member deleted successfully.', false);
         alert('Staff member deleted successfully.');
       },
-      error: (err) => alert('Failed to delete staff member.')
+      error: (err) => {
+        this.showNotice('Failed to delete staff member.', true);
+        alert('Failed to delete staff member.');
+      }
     });
   }
 
@@ -243,5 +252,15 @@ export class StaffManagementComponent implements OnInit {
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  private showNotice(message: string, isError: boolean): void {
+    if (this.noticeTimer) clearTimeout(this.noticeTimer);
+    this.success = isError ? '' : message;
+    this.error = isError ? message : '';
+    this.noticeTimer = setTimeout(() => {
+      this.success = '';
+      this.error = '';
+    }, 3000);
   }
 }

@@ -49,6 +49,9 @@ export class CardManagementComponent implements OnInit {
     this.apiService.get('cards/assigned-patients').subscribe({
       next: (data: any) => {
         this.cards = data;
+        const previousSelectedId = this.selectedCard?.id;
+        const nextSelected = data?.find((c: any) => c.id === previousSelectedId) || data?.[0] || null;
+        this.selectedCard = nextSelected;
         console.log('Assigned patients loaded:', data);
       },
       error: (err) => console.error('Error loading assigned patients', err)

@@ -105,6 +105,15 @@
         </header>
 
         <div class="p-10 space-y-10">
+            <div *ngIf="actionSuccess"
+                class="p-4 bg-green-50 text-green-600 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-green-100 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {{ actionSuccess }}
+            </div>
+
             <!-- Password Update Modal Overflow -->
             <div *ngIf="showPasswordForm" class="bg-white rounded-[40px] shadow-2xl border border-primary/20 p-10">
                 <div class="flex items-center justify-between mb-8">

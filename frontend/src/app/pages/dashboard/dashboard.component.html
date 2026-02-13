@@ -24,7 +24,7 @@
         </div>
 
         <nav class="mt-10 flex-1 px-6 space-y-3">
-            <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/dashboard" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +34,7 @@
                 <span class="font-bold tracking-tight">Overview</span>
             </a>
 
-            <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/patients" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -44,7 +44,7 @@
                 <span class="font-bold tracking-tight">Patients</span>
             </a>
 
-            <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/card-management" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +54,7 @@
                 <span class="font-bold tracking-tight">Access Cards</span>
             </a>
 
-            <a *ngIf="isAdmin" routerLink="/staff-management"
+            <a *ngIf="isAdmin" routerLink="/staff-management" (click)="mobileMenuOpen = false"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"

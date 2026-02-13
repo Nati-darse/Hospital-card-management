@@ -77,6 +77,8 @@ export class PatientsComponent implements OnInit {
         this.patients = data;
         this.filteredPatients = data;
         this.onSearch();
+        const previousSelectedId = this.detailPatient?.id;
+        this.detailPatient = this.filteredPatients.find((p: any) => p.id === previousSelectedId) || this.filteredPatients[0] || null;
         this.loading = false;
       },
       error: (err) => {
