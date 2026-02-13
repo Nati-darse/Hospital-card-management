@@ -40,13 +40,13 @@ export class AuthService {
     }
 
     logout(): void {
-        localStorage.removeItem(this.TOKEN_KEY);
-        localStorage.removeItem(this.USER_KEY);
+        sessionStorage.removeItem(this.TOKEN_KEY);
+        sessionStorage.removeItem(this.USER_KEY);
         this.currentUserSubject.next(null);
     }
 
     getToken(): string | null {
-        return localStorage.getItem(this.TOKEN_KEY);
+        return sessionStorage.getItem(this.TOKEN_KEY);
     }
 
     isAuthenticated(): boolean {
@@ -63,7 +63,7 @@ export class AuthService {
         console.log('Response username:', response.username);
 
         // Store token
-        localStorage.setItem(this.TOKEN_KEY, response.token);
+        sessionStorage.setItem(this.TOKEN_KEY, response.token);
 
         // Create user object and store
         const user: User = {
@@ -78,29 +78,28 @@ export class AuthService {
         console.log('Created user object:', user);
         console.log('User ID check:', user.id, 'Type:', typeof user.id);
 
-        localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        sessionStorage.setItem(this.USER_KEY, JSON.stringify(user));
         this.currentUserSubject.next(user);
-
-        console.log('User stored in localStorage and BehaviorSubject');
+        console.log('User stored in sessionStorage and BehaviorSubject');
     }
 
     private getUserFromStorage(): User | null {
-        const userJson = localStorage.getItem(this.USER_KEY);
-        console.log('Raw user JSON from localStorage:', userJson);
+        const userJson = sessionStorage.getItem(this.USER_KEY);
+        console.log('Raw user JSON from sessionStorage:', userJson);
         
         if (userJson) {
             try {
                 const user = JSON.parse(userJson);
-                console.log('Parsed user from localStorage:', user);
-                console.log('User ID from localStorage:', user.id, 'Type:', typeof user.id);
+                console.log('Parsed user from sessionStorage:', user);
+                console.log('User ID from sessionStorage:', user.id, 'Type:', typeof user.id);
                 return user;
             } catch (e) {
-                console.error('Failed to parse user from localStorage:', e);
+                console.error('Failed to parse user from sessionStorage:', e);
                 return null;
             }
         }
         
-        console.log('No user found in localStorage');
+        console.log('No user found in sessionStorage');
         return null;
     }
 }

@@ -51,6 +51,7 @@ export class DoctorPatientsComponent implements OnInit {
     showCaseForm = false;
     caseForm: FormGroup;
     patientCases: any[] = [];
+    selectedCaseId: number | null = null;
 
     constructor(
         private authService: AuthService,
@@ -101,19 +102,6 @@ export class DoctorPatientsComponent implements OnInit {
         // Initialize current user from storage
         this.currentUser = this.authService.getCurrentUser();
         
-        // Additional fallback: try to get user from localStorage directly
-        if (!this.currentUser) {
-            const userJson = localStorage.getItem('current_user');
-            if (userJson) {
-                try {
-                    this.currentUser = JSON.parse(userJson);
-                    console.log('Fallback: Retrieved user from localStorage:', this.currentUser);
-                } catch (e) {
-                    console.error('Failed to parse user from localStorage:', e);
-                }
-            }
-        }
-        
         console.log('Final current user in ngOnInit:', this.currentUser);
         
         // If user exists but ID is undefined, fetch user details from backend
@@ -137,9 +125,7 @@ export class DoctorPatientsComponent implements OnInit {
                     firstName: userDetails.firstName,
                     lastName: userDetails.lastName
                 };
-                
-                // Update localStorage and AuthService
-                localStorage.setItem('current_user', JSON.stringify(this.currentUser));
+                sessionStorage.setItem('current_user', JSON.stringify(this.currentUser));
                 console.log('Updated user with ID:', this.currentUser);
                 
                 this.loadDoctorProfile();
@@ -177,6 +163,7 @@ export class DoctorPatientsComponent implements OnInit {
                     this.selectedPatient = null;
                     this.patientPrescriptions = [];
                     this.patientCases = [];
+                    this.selectedCaseId = null;
                 }
                 this.loading = false;
             },
@@ -246,6 +233,7 @@ export class DoctorPatientsComponent implements OnInit {
                 alert('Prescription added successfully!');
                 this.showPrescriptionForm = false;
                 this.loadPatientPrescriptions(this.selectedPatient.id);
+                this.loadPatientCases();
                 this.loading = false;
             },
             error: () => this.loading = false
@@ -427,22 +415,33 @@ export class DoctorPatientsComponent implements OnInit {
         // Use correct backend endpoint: /api/visits/patient/{id} (not /api/medical-visits/patient/{id})
         this.apiService.get(`visits/patient/${this.selectedPatient.id}`).subscribe({
             next: (cases) => {
-                this.patientCases = cases;
+                this.patientCases = (cases || []).sort((a: any, b: any) =>
+                    new Date(b.createdAt || b.visitDate || 0).getTime() - new Date(a.createdAt || a.visitDate || 0).getTime()
+                );
+                this.selectedCaseId = this.patientCases.length ? this.patientCases[0].id : null;
             },
             error: (err) => {
                 console.error('Failed to load patient cases, trying alternative endpoint:', err);
                 // Fallback to different endpoint pattern (without api prefix since ApiService already adds it)
                 this.apiService.get(`visits/patient/${this.selectedPatient.id}`).subscribe({
                     next: (cases) => {
-                        this.patientCases = cases;
+                        this.patientCases = (cases || []).sort((a: any, b: any) =>
+                            new Date(b.createdAt || b.visitDate || 0).getTime() - new Date(a.createdAt || a.visitDate || 0).getTime()
+                        );
+                        this.selectedCaseId = this.patientCases.length ? this.patientCases[0].id : null;
                     },
                     error: (err2) => {
                         console.error('Patient cases loading failed:', err2);
                         this.patientCases = [];
+                        this.selectedCaseId = null;
                     }
                 });
             }
         });
+    }
+
+    toggleCaseDetails(caseId: number): void {
+        this.selectedCaseId = this.selectedCaseId === caseId ? null : caseId;
     }
 
     // Referral Methods

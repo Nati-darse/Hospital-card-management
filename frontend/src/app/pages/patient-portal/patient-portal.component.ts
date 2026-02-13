@@ -17,6 +17,7 @@ export class PatientPortalComponent implements OnInit {
     currentUser: User | null = null;
     patientProfile: any = null;
     clinicalHistory: any[] = [];
+    selectedCaseId: number | null = null;
     assignedDoctor: any = null;
     loading = false;
     requestingAppointment = false;
@@ -90,8 +91,13 @@ export class PatientPortalComponent implements OnInit {
                 this.clinicalHistory = history.sort((a, b) =>
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 );
+                this.selectedCaseId = this.clinicalHistory.length ? this.clinicalHistory[0].id : null;
             }
         });
+    }
+
+    toggleCaseDetails(caseId: number): void {
+        this.selectedCaseId = this.selectedCaseId === caseId ? null : caseId;
     }
 
     togglePasswordForm(): void {

@@ -443,18 +443,19 @@
                                 <div class="overflow-hidden rounded-3xl border border-slate-100 divide-y divide-slate-100">
                                     <div *ngFor="let case of patientCases" 
                                         class="p-6 bg-slate-50/30">
-                                        <div class="flex justify-between items-start mb-4">
+                                        <button type="button" (click)="toggleCaseDetails(case.id)"
+                                            class="w-full flex justify-between items-start mb-2 text-left">
                                             <div>
                                                 <p class="font-black text-secondary font-semibold">{{ case.diagnosis }}</p>
                                                 <p class="text-[10px] text-slate-500 font-bold uppercase tracking-tight mt-1">
-                                                    {{ case.visitDate | date:'mediumDate' }}
+                                                    {{ case.createdAt || case.visitDate | date:'mediumDate' }}
                                                 </p>
                                             </div>
-                                            <span class="px-2 py-1 bg-blue-100 text-blue-600 text-[8px] font-black rounded-full uppercase">
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-600 text-[8px] font-black rounded-full uppercase mr-2">
                                                 {{ case.status || 'Completed' }}
                                             </span>
-                                        </div>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                        </button>
+                                        <div *ngIf="selectedCaseId === case.id" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mt-4">
                                             <div *ngIf="case.labTests">
                                                 <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Lab Tests</p>
                                                 <p class="text-slate-600">{{ case.labTests }}</p>
@@ -472,7 +473,7 @@
                                                 <p class="text-slate-600">{{ case.additionalComments }}</p>
                                             </div>
                                         </div>
-                                        <div class="text-right mt-3">
+                                        <div *ngIf="selectedCaseId === case.id" class="text-right mt-3">
                                             <p class="text-[9px] text-primary font-black uppercase tracking-widest">Dr. {{ case.doctorName }}</p>
                                         </div>
                                     </div>
