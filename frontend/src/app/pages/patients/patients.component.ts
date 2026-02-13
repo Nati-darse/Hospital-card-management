@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/auth.models';
 import { ApiService } from '../../services/api.service';
@@ -9,7 +9,7 @@ import { ApiService } from '../../services/api.service';
 @Component({
   selector: 'app-patients',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule],
   templateUrl: './patients.component.html',
   styleUrl: './patients.scss'
 })
@@ -17,6 +17,8 @@ export class PatientsComponent implements OnInit {
   currentUser: User | null = null;
   isAdmin = false;
   patients: any[] = [];
+  filteredPatients: any[] = [];
+  searchQuery = '';
   doctors: any[] = [];
   loading = false;
   assigningId: number | null = null;
@@ -73,6 +75,8 @@ export class PatientsComponent implements OnInit {
     this.apiService.get('patients').subscribe({
       next: (data: any) => {
         this.patients = data;
+        this.filteredPatients = data;
+        this.onSearch();
         this.loading = false;
       },
       error: (err) => {
@@ -118,6 +122,22 @@ export class PatientsComponent implements OnInit {
   viewPatient(patient: any): void {
     this.detailPatient = patient;
     this.showDetailModal = true;
+  }
+
+  onSearch(): void {
+    const query = (this.searchQuery || '').toLowerCase().trim();
+    if (!query) {
+      this.filteredPatients = [...this.patients];
+      return;
+    }
+
+    this.filteredPatients = this.patients.filter((p: any) => {
+      const fullName = `${p.user?.firstName || ''} ${p.user?.lastName || ''}`.toLowerCase();
+      const mrn = (p.medicalRecordNumber || '').toLowerCase();
+      const email = (p.user?.email || '').toLowerCase();
+      const phone = (p.user?.phoneNumber || '').toLowerCase();
+      return fullName.includes(query) || mrn.includes(query) || email.includes(query) || phone.includes(query);
+    });
   }
 
   appointDoctor(patient: any, doctorId: string): void {

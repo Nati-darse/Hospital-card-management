@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/auth.models';
 import { ApiService } from '../../services/api.service';
@@ -34,7 +34,7 @@ export class CardManagementComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.reassignForm = this.fb.group({
-      doctorId: ['', []]
+      doctorId: ['', [Validators.required]]
     });
   }
 
@@ -45,7 +45,7 @@ export class CardManagementComponent implements OnInit {
   }
 
   loadCards(): void {
-    // Load all assigned patients (with their status)
+    // Load all card-holding patients with assignment status
     this.apiService.get('cards/assigned-patients').subscribe({
       next: (data: any) => {
         this.cards = data;
@@ -101,6 +101,27 @@ export class CardManagementComponent implements OnInit {
     });
   }
 
+  unassignPatient(card: any): void {
+    if (!card?.id) return;
+    if (!confirm(`Detach patient from current doctor for card ${card.cardNumber}?`)) return;
+
+    this.loading = true;
+    this.apiService.post('cards/unassign-patient', { patientId: card.id }).subscribe({
+      next: (response: any) => {
+        this.loading = false;
+        alert(response.message || 'Patient detached successfully.');
+        if (this.selectedCard?.id === card.id) {
+          this.selectedCard = { ...this.selectedCard, assignedDoctor: 'Unassigned', assignedDoctorId: null, department: null, status: 'Awaiting Reassignment' };
+        }
+        this.loadCards();
+      },
+      error: (err) => {
+        this.loading = false;
+        alert('Failed to detach patient: ' + (err.error?.error || err.message || 'Unknown error'));
+      }
+    });
+  }
+
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
@@ -127,5 +148,9 @@ export class CardManagementComponent implements OnInit {
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
   }
 }

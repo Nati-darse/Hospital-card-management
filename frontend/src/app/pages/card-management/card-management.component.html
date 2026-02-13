@@ -7,7 +7,7 @@
     </button>
 
     <!-- Sidebar -->
-    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:relative lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:relative lg:translate-x-0'">
+    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:static lg:inset-auto lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:static lg:inset-auto lg:translate-x-0'">
         <div class="p-8 flex items-center gap-4 bg-primary/10">
             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
@@ -24,7 +24,7 @@
         </div>
 
         <nav class="mt-10 flex-1 px-6 space-y-3">
-            <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/dashboard" (click)="closeMobileMenu()" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +34,7 @@
                 <span class="font-bold tracking-tight">Overview</span>
             </a>
 
-            <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/patients" (click)="closeMobileMenu()" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -44,7 +44,7 @@
                 <span class="font-bold tracking-tight">Patients</span>
             </a>
 
-            <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/card-management" (click)="closeMobileMenu()" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +54,7 @@
                 <span class="font-bold tracking-tight">Access Cards</span>
             </a>
 
-            <a *ngIf="isAdmin" routerLink="/staff-management"
+            <a *ngIf="isAdmin" routerLink="/staff-management" (click)="closeMobileMenu()"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
@@ -123,7 +123,7 @@
                                 <thead>
                                     <tr class="bg-slate-50 text-left border-b border-slate-100 sticky top-0 z-10">
                                         <th class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
-                                            Patient Information</th>
+                                            Card Number</th>
                                         <th class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
                                             Assigned Doctor</th>
                                         <th class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 text-xs font-black text-slate-400 uppercase tracking-widest">
@@ -141,13 +141,13 @@
                                             <div class="flex items-center gap-3 sm:gap-4 lg:gap-6">
                                                 <div [class]="selectedCard?.id === card.id ? 'bg-primary text-white' : 'bg-slate-100 text-secondary'"
                                                     class="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 font-black rounded-xl sm:rounded-2xl flex items-center justify-center transition-all flex-shrink-0">
-                                                    {{ card.firstName?.charAt(0) }}{{ card.lastName?.charAt(0) }}
+                                                    {{ card.cardNumber?.slice(-4) || '--' }}
                                                 </div>
                                                 <div class="min-w-0">
-                                                    <p class="font-black text-secondary text-sm sm:text-base lg:text-lg truncate">{{ card.firstName }} {{ card.lastName }}
+                                                    <p class="font-black text-secondary text-sm sm:text-base lg:text-lg truncate">Card #{{ card.cardNumber }}
                                                     </p>
                                                     <p class="text-[8px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                                        @{{ card.username }}</p>
+                                                        {{ card.firstName }} {{ card.lastName }}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -163,14 +163,26 @@
                                         </td>
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-right">
                                             <div class="flex items-center justify-end gap-2">
-                                                <span [class]="card.status === 'Completed' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-orange-50 text-orange-600 border-orange-100'" class="px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase rounded-lg border">
+                                                <span [class]="
+                                                    card.status === 'Completed' ? 'bg-green-50 text-green-600 border-green-100' :
+                                                    card.status === 'Pending Check-in' ? 'bg-orange-50 text-orange-600 border-orange-100' :
+                                                    card.status === 'Awaiting Reassignment' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                                    'bg-slate-100 text-slate-600 border-slate-200'
+                                                " class="px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase rounded-lg border">
                                                     {{ card.status }}
                                                 </span>
-                                                <button *ngIf="isAdmin && card.status === 'Completed'" (click)="$event.stopPropagation(); openReassignModal(card)" 
+                                                <button *ngIf="isAdmin && card.assignedDoctorId && card.status !== 'Pending Check-in'" (click)="$event.stopPropagation(); unassignPatient(card)" 
+                                                    title="Detach from current doctor"
+                                                    class="p-2 sm:p-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-600 hover:bg-amber-100 hover:text-amber-700 shadow-sm transition-all">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                                    </svg>
+                                                </button>
+                                                <button *ngIf="isAdmin && (!card.assignedDoctorId || card.status === 'Awaiting Reassignment' || card.status === 'Unassigned')" (click)="$event.stopPropagation(); openReassignModal(card)" 
                                                     title="Reassign to new doctor" 
                                                     class="p-2 sm:p-3 bg-blue-50 border border-blue-100 rounded-xl text-blue-600 hover:bg-blue-100 hover:text-blue-700 shadow-sm transition-all">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0h6m2-2v6m0 0v6m0-6h6" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m-7-7h14" />
                                                     </svg>
                                                 </button>
                                             </div>
@@ -224,8 +236,13 @@
                         <div
                             class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
                             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Patient</span>
-                            <span class="text-sm font-bold text-secondary">{{ selectedCard.patient?.user?.firstName }}
-                                {{ selectedCard.patient?.user?.lastName }}</span>
+                            <span class="text-sm font-bold text-secondary">{{ selectedCard.firstName }}
+                                {{ selectedCard.lastName }}</span>
+                        </div>
+                        <div
+                            class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">MRN</span>
+                            <span class="text-sm font-bold text-secondary">{{ selectedCard.medicalRecordNumber || 'N/A' }}</span>
                         </div>
                         <div
                             class="flex justify-between items-center p-4 bg-slate-50 rounded-2xl border border-slate-100">

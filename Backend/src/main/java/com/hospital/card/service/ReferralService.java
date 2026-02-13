@@ -53,8 +53,10 @@ public class ReferralService {
         Patient patient = patientRepository.findById(referralDTO.getPatientId())
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
         Staff referringDoctor = staffRepository.findById(referralDTO.getReferringDoctorId())
+                .or(() -> staffRepository.findByUserId(referralDTO.getReferringDoctorId()))
                 .orElseThrow(() -> new RuntimeException("Referring doctor not found"));
         Staff referredDoctor = staffRepository.findById(referralDTO.getReferredDoctorId())
+                .or(() -> staffRepository.findByUserId(referralDTO.getReferredDoctorId()))
                 .orElseThrow(() -> new RuntimeException("Referred doctor not found"));
         
         referral.setPatient(patient);

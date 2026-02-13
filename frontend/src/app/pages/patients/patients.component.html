@@ -7,7 +7,7 @@
     </button>
 
     <!-- Sidebar (Same as Dashboard for consistency) -->
-    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:relative lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:relative lg:translate-x-0'">
+    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:static lg:inset-auto lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:static lg:inset-auto lg:translate-x-0'">
         <div class="p-8 flex items-center gap-4 bg-primary/10">
             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
@@ -24,7 +24,7 @@
         </div>
 
         <nav class="mt-10 flex-1 px-6 space-y-3">
-            <a routerLink="/dashboard" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/dashboard" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -34,7 +34,7 @@
                 <span class="font-bold tracking-tight">Overview</span>
             </a>
 
-            <a routerLink="/patients" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/patients" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -44,7 +44,7 @@
                 <span class="font-bold tracking-tight">Patients</span>
             </a>
 
-            <a routerLink="/card-management" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
+            <a routerLink="/card-management" (click)="mobileMenuOpen = false" routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
@@ -54,7 +54,7 @@
                 <span class="font-bold tracking-tight">Access Cards</span>
             </a>
 
-            <a *ngIf="isAdmin" routerLink="/staff-management"
+            <a *ngIf="isAdmin" routerLink="/staff-management" (click)="mobileMenuOpen = false"
                 routerLinkActive="bg-primary/20 text-primary border-l-4 border-primary"
                 class="flex items-center space-x-4 p-4 rounded-2xl hover:bg-white/5 transition-all group cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-60 group-hover:opacity-100" fill="none"
@@ -134,7 +134,7 @@
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </span>
-                        <input type="text" placeholder="Search by name, ID, or clinical parameter..."
+                        <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Search by name, MRN, email, or phone..."
                             class="block w-full pl-10 sm:pl-14 pr-6 sm:pr-8 py-3 sm:py-5 rounded-[20px] sm:rounded-[30px] outline-none text-secondary font-medium transition-all focus:ring-4 focus:ring-primary/5">
                     </div>
                     <div class="flex gap-3 sm:gap-4">
@@ -169,7 +169,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-50">
-                                    <tr *ngFor="let p of patients" (click)="viewPatient(p)"
+                                    <tr *ngFor="let p of filteredPatients" (click)="viewPatient(p)"
                                         [class.bg-blue-50]="detailPatient?.id === p.id"
                                         class="group hover:bg-slate-50/50 transition-colors cursor-pointer">
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">

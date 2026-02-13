@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.hospital.card.entity.User;
 import com.hospital.card.entity.UserRole;
 import com.hospital.card.entity.Patient;
+import com.hospital.card.repository.MedicalVisitRepository;
 import com.hospital.card.repository.UserRepository;
 import com.hospital.card.repository.PatientRepository;
 
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PatientRepository patientRepository;
+    private final MedicalVisitRepository medicalVisitRepository;
 
     public User registerUser(User user) {
         // Check if username exists
@@ -147,8 +149,6 @@ public class UserService {
     }
 
     public boolean hasCaseHistoryForPatient(Long patientId) {
-        // For now, return false since we don't have medical cases entity
-        // This should be implemented when medical cases are added
-        return false;
+        return !medicalVisitRepository.findByPatientId(patientId).isEmpty();
     }
 }

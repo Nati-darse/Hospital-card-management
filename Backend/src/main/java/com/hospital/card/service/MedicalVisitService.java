@@ -39,6 +39,7 @@ public class MedicalVisitService {
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
         Staff doctor = staffRepository.findById(dto.getDoctorId())
+                .or(() -> staffRepository.findByUserId(dto.getDoctorId()))
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
         MedicalVisit visit = new MedicalVisit();

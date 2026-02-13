@@ -1,14 +1,16 @@
 package com.hospital.card.controller;
 
 import com.hospital.card.dto.HospitalCardDTO;
+import com.hospital.card.entity.HospitalCard;
 import com.hospital.card.service.HospitalCardService;
 import com.hospital.card.service.UserService;
 import com.hospital.card.entity.Patient;
+import com.hospital.card.entity.Staff;
 import com.hospital.card.entity.User;
-import com.hospital.card.entity.UserRole;
-import jakarta.validation.Valid;
+import com.hospital.card.repository.HospitalCardRepository;
+import com.hospital.card.repository.PatientRepository;
+import com.hospital.card.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +28,9 @@ public class HospitalCardController {
 
   private final HospitalCardService hospitalCardService;
   private final UserService userService;
+  private final PatientRepository patientRepository;
+  private final StaffRepository staffRepository;
+  private final HospitalCardRepository hospitalCardRepository;
 
   @GetMapping
   @PreAuthorize("hasAnyRole('ADMIN','USER')")
@@ -36,36 +41,55 @@ public class HospitalCardController {
   @GetMapping("/assigned-patients")
   @PreAuthorize("hasAnyRole('ADMIN','USER')")
   public ResponseEntity<List<Map<String, Object>>> getAssignedPatients() {
-    List<Map<String, Object>> assignedPatients = userService.getAllUsers().stream()
-        .filter(user -> user.getRole() == UserRole.PATIENT && user.getIsActive())
-        .map(user -> {
-          // Check if patient has assigned doctor
-          Optional<Patient> patientOpt = userService.findPatientByUserId(user.getId());
-          boolean hasAssignedDoctor = patientOpt.isPresent() && patientOpt.get().getAssignedDoctor() != null;
-          
-          // Check if patient has been seen (has case history)
-          boolean hasCaseHistory = patientOpt.isPresent() && 
-              userService.hasCaseHistoryForPatient(patientOpt.get().getId());
-          
-          // Include all assigned patients with their status
-          if (hasAssignedDoctor) {
-            Patient patient = patientOpt.get();
-            Map<String, Object> patientInfo = new HashMap<>();
-            patientInfo.put("id", user.getId());
-            patientInfo.put("username", user.getUsername());
-            patientInfo.put("firstName", user.getFirstName());
-            patientInfo.put("lastName", user.getLastName());
-            patientInfo.put("email", user.getEmail());
-            patientInfo.put("phoneNumber", user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
-            patientInfo.put("assignedDoctor", patient.getAssignedDoctor().getUser().getFirstName() + " " + patient.getAssignedDoctor().getUser().getLastName());
-            patientInfo.put("assignedDoctorId", patient.getAssignedDoctor().getId());
-            patientInfo.put("department", patient.getAssignedDoctor().getDepartment());
-            patientInfo.put("assignedDate", ""); // No createdAt field in Patient entity
-            patientInfo.put("hasCaseHistory", hasCaseHistory);
-            patientInfo.put("status", hasCaseHistory ? "Completed" : "Pending Check-in");
-            return patientInfo;
+    List<Map<String, Object>> assignedPatients = patientRepository.findAll().stream()
+        .filter(patient -> patient.getUser() != null && Boolean.TRUE.equals(patient.getUser().getIsActive()))
+        .map(patient -> {
+          HospitalCard card = hospitalCardRepository.findByPatientId(patient.getId()).orElse(null);
+          if (card == null) {
+            return null;
           }
-          return null;
+
+          User user = patient.getUser();
+          Staff assignedDoctor = patient.getAssignedDoctor();
+          boolean hasCaseHistory = userService.hasCaseHistoryForPatient(patient.getId());
+          boolean hasAssignedDoctor = assignedDoctor != null;
+
+          Map<String, Object> patientInfo = new HashMap<>();
+          patientInfo.put("id", patient.getId());
+          patientInfo.put("userId", user.getId());
+          patientInfo.put("username", user.getUsername());
+          patientInfo.put("firstName", user.getFirstName());
+          patientInfo.put("lastName", user.getLastName());
+          patientInfo.put("email", user.getEmail());
+          patientInfo.put("phoneNumber", user.getPhoneNumber() != null ? user.getPhoneNumber() : "");
+          patientInfo.put("medicalRecordNumber", patient.getMedicalRecordNumber());
+          patientInfo.put("cardNumber", card.getCardNumber());
+          patientInfo.put("cardId", card.getId());
+          patientInfo.put("issueDate", card.getIssueDate());
+          patientInfo.put("expiryDate", card.getExpiryDate());
+
+          if (hasAssignedDoctor) {
+            patientInfo.put("assignedDoctor", assignedDoctor.getUser().getFirstName() + " " + assignedDoctor.getUser().getLastName());
+            patientInfo.put("assignedDoctorId", assignedDoctor.getId());
+            patientInfo.put("department", assignedDoctor.getDepartment());
+          } else {
+            patientInfo.put("assignedDoctor", "Unassigned");
+            patientInfo.put("assignedDoctorId", null);
+            patientInfo.put("department", null);
+          }
+
+          patientInfo.put("hasCaseHistory", hasCaseHistory);
+          if (hasAssignedDoctor && hasCaseHistory) {
+            patientInfo.put("status", "Completed");
+          } else if (hasAssignedDoctor) {
+            patientInfo.put("status", "Pending Check-in");
+          } else if (hasCaseHistory) {
+            patientInfo.put("status", "Awaiting Reassignment");
+          } else {
+            patientInfo.put("status", "Unassigned");
+          }
+
+          return patientInfo;
         })
         .filter(obj -> obj != null)
         .collect(Collectors.toList());
@@ -76,15 +100,17 @@ public class HospitalCardController {
   @GetMapping("/available-doctors")
   @PreAuthorize("hasAnyRole('ADMIN','USER')")
   public ResponseEntity<List<Map<String, Object>>> getAvailableDoctors() {
-    List<Map<String, Object>> doctors = userService.getAllUsers().stream()
-        .filter(user -> user.getRole() == UserRole.USER && user.getIsActive())
-        .map(doctor -> {
+    List<Map<String, Object>> doctors = staffRepository.findAll().stream()
+        .filter(staff -> staff.getUser() != null && Boolean.TRUE.equals(staff.getUser().getIsActive()))
+        .map(staff -> {
           Map<String, Object> doctorInfo = new HashMap<>();
-          doctorInfo.put("id", doctor.getId());
-          doctorInfo.put("firstName", doctor.getFirstName());
-          doctorInfo.put("lastName", doctor.getLastName());
-          doctorInfo.put("department", doctor.getDepartment() != null ? doctor.getDepartment() : "General");
-          doctorInfo.put("fullName", doctor.getFirstName() + " " + doctor.getLastName());
+          doctorInfo.put("id", staff.getUser().getId());
+          doctorInfo.put("staffId", staff.getId());
+          doctorInfo.put("userId", staff.getUser().getId());
+          doctorInfo.put("firstName", staff.getUser().getFirstName());
+          doctorInfo.put("lastName", staff.getUser().getLastName());
+          doctorInfo.put("department", staff.getDepartment() != null ? staff.getDepartment() : "General");
+          doctorInfo.put("fullName", staff.getUser().getFirstName() + " " + staff.getUser().getLastName());
           return doctorInfo;
         })
         .collect(Collectors.toList());
@@ -105,27 +131,46 @@ public class HospitalCardController {
       Long patientId = Long.valueOf(request.get("patientId").toString());
       Long doctorId = Long.valueOf(request.get("doctorId").toString());
       
-      // Find patient and update assignment
-      Optional<Patient> patientOpt = userService.findPatientByUserId(patientId);
+      Optional<Patient> patientOpt = patientRepository.findById(patientId);
       if (patientOpt.isEmpty()) {
         return ResponseEntity.badRequest().body(Map.of("error", "Patient not found"));
       }
       
-      // Find doctor
-      User doctor = userService.getUserById(doctorId);
-      if (doctor.getRole() != UserRole.USER) {
-        return ResponseEntity.badRequest().body(Map.of("error", "Selected user is not a doctor"));
+      Optional<Staff> doctorOpt = staffRepository.findById(doctorId);
+      if (doctorOpt.isEmpty()) {
+        doctorOpt = staffRepository.findByUserId(doctorId);
+      }
+      if (doctorOpt.isEmpty()) {
+        return ResponseEntity.badRequest().body(Map.of("error", "Doctor not found"));
       }
       
-      // Update patient assignment
       Patient patient = patientOpt.get();
-      patient.setAssignedDoctor(null); // Will be set by patient service
-      
-      // Call patient service to update assignment
-      // This would need a proper service method, for now return success
+      patient.setAssignedDoctor(doctorOpt.get());
+      patientRepository.save(patient);
+
       return ResponseEntity.ok(Map.of("message", "Patient reassigned successfully"));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(Map.of("error", "Failed to reassign patient: " + e.getMessage()));
+    }
+  }
+
+  @PostMapping("/unassign-patient")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<Map<String, String>> unassignPatient(@RequestBody Map<String, Object> request) {
+    try {
+      Long patientId = Long.valueOf(request.get("patientId").toString());
+      Optional<Patient> patientOpt = patientRepository.findById(patientId);
+      if (patientOpt.isEmpty()) {
+        return ResponseEntity.badRequest().body(Map.of("error", "Patient not found"));
+      }
+
+      Patient patient = patientOpt.get();
+      patient.setAssignedDoctor(null);
+      patientRepository.save(patient);
+
+      return ResponseEntity.ok(Map.of("message", "Patient detached from doctor successfully"));
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(Map.of("error", "Failed to unassign patient: " + e.getMessage()));
     }
   }
 
