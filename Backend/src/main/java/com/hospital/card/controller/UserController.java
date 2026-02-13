@@ -1,21 +1,5 @@
 package com.hospital.card.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.hospital.card.dto.AdminPasswordResetRequest;
 import com.hospital.card.dto.ChangePasswordRequest;
 import com.hospital.card.dto.UserDTO;
@@ -24,6 +8,15 @@ import com.hospital.card.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.preauthorize.PreAuthorize;
+
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/users")
@@ -93,7 +86,7 @@ public class UserController {
 
     @PostMapping("/{id}/reset-password")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> resetPasswordToDefault(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> resetPasswordToDefault(@PathVariable Long id) {
         User user = userService.getUserById(id);
         
         // Reset to default password
@@ -104,7 +97,9 @@ public class UserController {
         String message = String.format("Password for user '%s' has been reset to default: Atlas@123", user.getUsername());
         System.out.println("Admin reset password for user: " + user.getUsername());
         
-        return ResponseEntity.ok(message);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", message);
+        return ResponseEntity.ok(response);
     }
 
     private UserDTO toDto(User u) {
