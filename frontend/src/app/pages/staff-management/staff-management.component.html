@@ -191,6 +191,11 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-50">
+                                    <tr *ngIf="loading">
+                                        <td colspan="4" class="px-4 sm:px-6 lg:px-10 py-8 text-center text-slate-400 font-bold uppercase text-xs tracking-widest">
+                                            Loading staff records...
+                                        </td>
+                                    </tr>
                                     <tr *ngFor="let staff of staffList" (click)="viewStaffDetails(staff)" [class.bg-blue-50]="selectedStaff?.id === staff.id" class="group hover:bg-slate-50/50 transition-all cursor-pointer">
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
                                             <div class="flex items-center gap-3 sm:gap-4 lg:gap-6">
@@ -204,8 +209,8 @@
                                             </div>
                                         </td>
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
-                                            <p class="text-[8px] sm:text-[10px] text-primary font-black uppercase tracking-widest mb-1">{{ staff.department || (staff.role === 'ADMIN' ? 'Administration' : 'General') }}</p>
-                                            <p class="text-xs font-black text-secondary uppercase">{{ staff.role === 'ADMIN' ? (staff.username?.toLowerCase() === 'nati' ? 'Super Admin' : 'Administrator') : 'Doctor' }}</p>
+                                            <p class="text-[8px] sm:text-[10px] text-primary font-black uppercase tracking-widest mb-1">{{ staff.department || (staff.roleNormalized === 'ADMIN' ? 'Administration' : 'General') }}</p>
+                                            <p class="text-xs font-black text-secondary uppercase">{{ staff.roleNormalized === 'ADMIN' ? (staff.username?.toLowerCase() === 'nati' ? 'Super Admin' : 'Administrator') : 'Doctor' }}</p>
                                         </td>
                                         <td class="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
                                             <span [class]="staff.isActive ? 'bg-green-50 text-green-600 border-green-100' : 'bg-red-50 text-red-600 border-red-100'" class="px-2 sm:px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase rounded-lg border">{{ staff.isActive ? 'Active' : 'Deactivated' }}</span>
@@ -228,6 +233,11 @@
                                                     </svg>
                                                 </button>
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="!loading && staffList.length === 0">
+                                        <td colspan="4" class="px-4 sm:px-6 lg:px-10 py-8 text-center text-slate-400 font-bold uppercase text-xs tracking-widest">
+                                            No staff records loaded. Tap Staffing once to retry.
                                         </td>
                                     </tr>
                                 </tbody>
@@ -259,7 +269,7 @@
                             <h4 class="text-2xl font-black text-secondary">{{ selectedStaff.firstName }} {{
                                 selectedStaff.lastName }}</h4>
                             <p class="text-[10px] text-primary font-black uppercase tracking-[0.2em] mt-1">{{
-                                selectedStaff.role === 'USER' ? 'Clinical Doctor' : 'Health Administrator' }}</p>
+                                selectedStaff.roleNormalized === 'USER' ? 'Clinical Doctor' : 'Health Administrator' }}</p>
                         </div>
                     </div>
 

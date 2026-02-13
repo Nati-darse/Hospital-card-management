@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -13,7 +13,7 @@ import { User } from '../../models/auth.models';
   templateUrl: './staff-management.component.html',
   styleUrl: './staff-management.component.scss'
 })
-export class StaffManagementComponent implements OnInit {
+export class StaffManagementComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   isAdmin = false;
   isSuperAdmin = false; // "nati"
@@ -27,6 +27,8 @@ export class StaffManagementComponent implements OnInit {
   error = '';
   success = '';
   private noticeTimer: any = null;
+  private loadRetryTimer: any = null;
+  private loadAttempts = 0;
 
   // Password Change
   showPasswordModal = false;
@@ -80,16 +82,47 @@ export class StaffManagementComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.noticeTimer) clearTimeout(this.noticeTimer);
+    if (this.loadRetryTimer) clearTimeout(this.loadRetryTimer);
+  }
+
   loadStaff(): void {
+    this.loading = true;
     this.apiService.get('users').subscribe({
-      next: (users: any[]) => {
-        // Filter: Show Admins and Doctors (USER role), exclude Patients? 
-        // The prompt says "can create an account for both new users and patients".
-        // But this page defines "Staff". Usually Patients are separate. 
-        // I'll filter for ADMIN and USER (Doctor).
-        this.staffList = users.filter(u => u.role === 'ADMIN' || u.role === 'USER');
+      next: (users: any) => {
+        const sourceList = Array.isArray(users) ? users : (users?.content || users?.data || []);
+        this.staffList = sourceList
+          .map((u: any) => ({
+            ...u,
+            roleNormalized: (u?.role || '').toString().replace('ROLE_', '').toUpperCase()
+          }))
+          .filter((u: any) => u.roleNormalized === 'ADMIN' || u.roleNormalized === 'USER');
+
+        const previousSelectedId = this.selectedStaff?.id;
+        this.selectedStaff = this.staffList.find((u: any) => u.id === previousSelectedId) || this.staffList[0] || null;
+        this.loading = false;
+
+        if (this.staffList.length === 0 && this.loadAttempts < 2) {
+          this.loadAttempts += 1;
+          if (this.loadRetryTimer) clearTimeout(this.loadRetryTimer);
+          this.loadRetryTimer = setTimeout(() => this.loadStaff(), 600);
+        } else {
+          this.loadAttempts = 0;
+        }
       },
-      error: (err) => console.error('Failed to load staff', err)
+      error: (err) => {
+        this.loading = false;
+        console.error('Failed to load staff', err);
+        if (this.loadAttempts < 2) {
+          this.loadAttempts += 1;
+          if (this.loadRetryTimer) clearTimeout(this.loadRetryTimer);
+          this.loadRetryTimer = setTimeout(() => this.loadStaff(), 800);
+        } else {
+          this.showNotice('Failed to load staff list. Please try again.', true);
+          this.loadAttempts = 0;
+        }
+      }
     });
   }
 
