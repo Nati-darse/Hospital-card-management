@@ -8,12 +8,12 @@ import com.hospital.card.service.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.preauthorize.PreAuthorize;
 
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
