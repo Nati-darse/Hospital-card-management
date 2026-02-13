@@ -439,12 +439,15 @@ export class DoctorPatientsComponent implements OnInit {
         console.log('Department changed to:', department);
         if (department) {
             this.referralLoading = true;
+            const encodedDepartment = encodeURIComponent(department);
             // Use correct backend endpoint: /api/staff/search?department={dept} (not /api/staff/department/{dept})
-            this.apiService.get(`staff/search?department=${department}`).subscribe({
+            this.apiService.get(`staff/search?department=${encodedDepartment}`).subscribe({
                 next: (doctors: any[]) => {
                     console.log('Doctors loaded:', doctors);
                     // Filter out current doctor
-                    this.referralDoctors = doctors.filter((d: any) => d.id !== this.staffProfile?.id);
+                    this.referralDoctors = (doctors || []).filter((d: any) =>
+                        d.id !== this.staffProfile?.id && d.userId !== this.currentUser?.id
+                    );
                     this.referralLoading = false;
                 },
                 error: (err) => {
@@ -453,9 +456,17 @@ export class DoctorPatientsComponent implements OnInit {
                     this.apiService.get('staff').subscribe({
                         next: (allStaff: any[]) => {
                             console.log('All staff loaded, filtering by department:', department);
+                            const requested = (department || '').toString().trim().toLowerCase();
                             // Filter by department and exclude current doctor
                             this.referralDoctors = allStaff.filter((d: any) => 
-                                d.department === department && d.id !== this.staffProfile?.id
+                                d.department &&
+                                (
+                                    d.department.toString().trim().toLowerCase() === requested ||
+                                    d.department.toString().trim().toLowerCase().includes(requested) ||
+                                    requested.includes(d.department.toString().trim().toLowerCase())
+                                ) &&
+                                d.id !== this.staffProfile?.id &&
+                                d.userId !== this.currentUser?.id
                             );
                             this.referralLoading = false;
                         },
@@ -520,6 +531,7 @@ export class DoctorPatientsComponent implements OnInit {
                 alert('Referral sent successfully! The doctor will be notified.');
                 this.referralForm.reset();
                 this.showReferralForm = false;
+                this.loadPatients();
             },
             error: (err) => {
                 console.error('Referral error, trying alternative endpoint:', err);
@@ -530,6 +542,7 @@ export class DoctorPatientsComponent implements OnInit {
                         alert('Referral sent successfully! The doctor will be notified.');
                         this.referralForm.reset();
                         this.showReferralForm = false;
+                        this.loadPatients();
                     },
                     error: (err2) => {
                         this.referralLoading = false;

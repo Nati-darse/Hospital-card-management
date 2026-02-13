@@ -46,9 +46,20 @@ public class StaffController {
     @GetMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<List<com.hospital.card.dto.StaffDTO>> searchByDepartment(@RequestParam String department) {
-        // We could add this to Service too, but for now let's keep it simple
-        return ResponseEntity.ok(staffService.getAllStaff().stream()
-                .filter(s -> s.getDepartment().equalsIgnoreCase(department))
-                .collect(java.util.stream.Collectors.toList()));
+        String requested = department == null ? "" : department.trim();
+        String requestedNormalized = requested.toLowerCase().replaceAll("\\s+", " ");
+
+        List<com.hospital.card.dto.StaffDTO> matches = staffService.getAllStaff().stream()
+                .filter(s -> s.getDepartment() != null && s.getUser() != null && Boolean.TRUE.equals(s.getUser().getIsActive()))
+                .filter(s -> {
+                    String dep = s.getDepartment().trim();
+                    String depNormalized = dep.toLowerCase().replaceAll("\\s+", " ");
+                    return depNormalized.equals(requestedNormalized)
+                            || depNormalized.contains(requestedNormalized)
+                            || requestedNormalized.contains(depNormalized);
+                })
+                .collect(java.util.stream.Collectors.toList());
+
+        return ResponseEntity.ok(matches);
     }
 }

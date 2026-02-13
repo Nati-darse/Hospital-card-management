@@ -62,6 +62,10 @@ public class ReferralService {
         referral.setPatient(patient);
         referral.setReferringDoctor(referringDoctor);
         referral.setReferredDoctor(referredDoctor);
+
+        // Move patient ownership to referred doctor so they are removed from current doctor's queue
+        patient.setAssignedDoctor(referredDoctor);
+        patientRepository.save(patient);
         
         // Set default values
         if (referral.getStatus() == null) {
