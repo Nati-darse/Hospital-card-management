@@ -1,6 +1,7 @@
 package com.hospital.card.service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -58,7 +59,11 @@ public class PatientService {
             p.setAssignedDoctor(doctor);
         }
 
-        p.setMedicalRecordNumber(dto.getMedicalRecordNumber());
+        if (dto.getMedicalRecordNumber() != null && !dto.getMedicalRecordNumber().isBlank()) {
+            p.setMedicalRecordNumber(dto.getMedicalRecordNumber());
+        } else {
+            p.setMedicalRecordNumber(generateUniqueMedicalRecordNumber());
+        }
         p.setBloodGroup(dto.getBloodGroup());
         p.setEmergencyContactName(dto.getEmergencyContactName());
         p.setEmergencyContactPhone(dto.getEmergencyContactPhone());
@@ -111,6 +116,15 @@ public class PatientService {
         appointmentRepository.deleteByPatientId(id);
         hospitalCardRepository.deleteByPatientId(id);
         patientRepository.deleteById(id);
+    }
+
+    private String generateUniqueMedicalRecordNumber() {
+        String mrn;
+        do {
+            int random = ThreadLocalRandom.current().nextInt(100000, 1000000);
+            mrn = "ATL-" + random;
+        } while (patientRepository.findByMedicalRecordNumber(mrn).isPresent());
+        return mrn;
     }
 
 

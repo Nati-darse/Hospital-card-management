@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.hospital.card.dto.AuthResponse;
 import com.hospital.card.dto.LoginRequest;
@@ -53,7 +54,7 @@ public class AuthService {
         // Create Patient record
         com.hospital.card.entity.Patient patient = new com.hospital.card.entity.Patient();
         patient.setUser(savedUser);
-        patient.setMedicalRecordNumber("MRN-" + System.currentTimeMillis() + "-" + savedUser.getId());
+        patient.setMedicalRecordNumber(generateUniqueMedicalRecordNumber());
         patientRepository.save(patient);
 
         // No token returned for pending users
@@ -112,7 +113,7 @@ public class AuthService {
         } else if (savedUser.getRole() == com.hospital.card.entity.UserRole.PATIENT) {
             com.hospital.card.entity.Patient patient = new com.hospital.card.entity.Patient();
             patient.setUser(savedUser);
-            patient.setMedicalRecordNumber("MRN-" + System.currentTimeMillis() + "-" + savedUser.getId());
+            patient.setMedicalRecordNumber(generateUniqueMedicalRecordNumber());
             patientRepository.save(patient);
         }
 
@@ -170,5 +171,14 @@ public class AuthService {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    private String generateUniqueMedicalRecordNumber() {
+        String mrn;
+        do {
+            int random = ThreadLocalRandom.current().nextInt(100000, 1000000);
+            mrn = "ATL-" + random;
+        } while (patientRepository.findByMedicalRecordNumber(mrn).isPresent());
+        return mrn;
     }
 }
