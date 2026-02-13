@@ -323,28 +323,40 @@ export class DoctorPatientsComponent implements OnInit {
     }
 
     addCase(): void {
-        if (this.caseForm.invalid || !this.selectedPatient) return;
+        if (this.caseForm.invalid || !this.selectedPatient || !this.staffProfile?.id) return;
 
         // Check authentication first
         this.checkUserAuthentication();
 
         // Debug logging to check current user
         console.log('Current user for case creation:', this.currentUser);
-        console.log('Current user ID for case creation:', this.currentUser?.id);
+        console.log('Current staff ID for case creation:', this.staffProfile?.id);
 
         this.loading = true;
+        const diagnosis = (this.caseForm.value.diagnosis || '').trim();
+        const prescription = (this.caseForm.value.prescription || '').trim();
+        const labTests = (this.caseForm.value.labTests || '').trim();
+        const additionalComments = (this.caseForm.value.additionalComments || '').trim();
+        const followUpDate = this.caseForm.value.followUpDate || null;
+
+        if (!diagnosis) {
+            this.loading = false;
+            alert('Diagnosis is required.');
+            return;
+        }
+
         // Backend expects exact MedicalVisitDTO structure
         const caseData = {
             patientId: this.selectedPatient.id,
-            doctorId: this.currentUser?.id,
+            doctorId: this.staffProfile.id,
             visitDate: new Date().toISOString().split('T')[0],
-            diagnosis: this.caseForm.value.diagnosis,
-            prescription: this.caseForm.value.prescription,
-            labTests: this.caseForm.value.labTests,
-            followUpDate: this.caseForm.value.followUpDate,
+            diagnosis,
+            prescription: prescription || null,
+            labTests: labTests || null,
+            followUpDate,
             status: 'Active',
-            content: this.caseForm.value.diagnosis, // Use diagnosis as content
-            additionalComments: this.caseForm.value.additionalComments
+            content: diagnosis,
+            additionalComments: additionalComments || null
         };
 
         console.log('Adding medical case:', caseData);
@@ -378,7 +390,7 @@ export class DoctorPatientsComponent implements OnInit {
                     },
                     error: (err2) => {
                         this.loading = false;
-                        alert('Failed to add medical case. The backend service may be temporarily unavailable. Please try again later.');
+                        alert(err2?.error?.message || 'Failed to add medical case. Please verify all required fields and try again.');
                         console.error('Medical case creation failed:', err2);
                     }
                 });
@@ -421,7 +433,7 @@ export class DoctorPatientsComponent implements OnInit {
                 next: (doctors: any[]) => {
                     console.log('Doctors loaded:', doctors);
                     // Filter out current doctor
-                    this.referralDoctors = doctors.filter((d: any) => d.id !== this.currentUser?.id);
+                    this.referralDoctors = doctors.filter((d: any) => d.id !== this.staffProfile?.id);
                     this.referralLoading = false;
                 },
                 error: (err) => {
@@ -432,7 +444,7 @@ export class DoctorPatientsComponent implements OnInit {
                             console.log('All staff loaded, filtering by department:', department);
                             // Filter by department and exclude current doctor
                             this.referralDoctors = allStaff.filter((d: any) => 
-                                d.department === department && d.id !== this.currentUser?.id
+                                d.department === department && d.id !== this.staffProfile?.id
                             );
                             this.referralLoading = false;
                         },
@@ -450,9 +462,9 @@ export class DoctorPatientsComponent implements OnInit {
     }
 
     checkUserAuthentication(): void {
-        if (!this.currentUser || !this.currentUser.id) {
-            console.error('User not authenticated or missing ID');
-            alert('You are not properly logged in. Please log in again.');
+        if (!this.currentUser || !this.currentUser.id || !this.staffProfile?.id) {
+            console.error('User not authenticated or missing staff profile');
+            alert('You are not properly logged in as medical staff. Please log in again.');
             this.router.navigate(['/login']);
             return;
         }
@@ -461,22 +473,23 @@ export class DoctorPatientsComponent implements OnInit {
     }
 
     referPatient(): void {
-        if (this.referralForm.invalid || !this.selectedPatient) return;
+        if (this.referralForm.invalid || !this.selectedPatient || !this.staffProfile?.id) return;
 
         // Check authentication first
         this.checkUserAuthentication();
 
         // Debug logging to check current user
         console.log('Current user:', this.currentUser);
-        console.log('Current user ID:', this.currentUser?.id);
+        console.log('Current staff ID:', this.staffProfile?.id);
 
         this.referralLoading = true;
+        const reason = (this.referralForm.value.referralReason || '').trim();
         const referralData = {
             patientId: this.selectedPatient.id,
-            referringDoctorId: this.currentUser?.id,
+            referringDoctorId: this.staffProfile.id,
             referredDoctorId: Number(this.referralForm.value.referredDoctorId), // Convert to number
             department: this.referralForm.value.department,
-            reason: this.referralForm.value.referralReason,
+            reason,
             status: 'Pending',
             referralDate: new Date().toISOString().split('T')[0]
         };
