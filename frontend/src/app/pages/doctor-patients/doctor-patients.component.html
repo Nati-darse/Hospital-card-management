@@ -412,26 +412,32 @@
                                                     class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20"
                                                     placeholder="Enter prescription..."></textarea>
                                             </div>
-                                            <div class="space-y-2">
-                                                <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Follow-up Date</label>
-                                                <input type="date" formControlName="followUpDate"
-                                                    class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20">
-                                            </div>
-                                        </div>
                                         <div class="space-y-2">
-                                            <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Additional Comments</label>
-                                            <textarea formControlName="additionalComments" rows="2"
-                                                class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20"
-                                                placeholder="Enter additional comments..."></textarea>
+                                            <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Follow-up Date</label>
+                                            <input type="date" formControlName="followUpDate"
+                                                class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20">
                                         </div>
-                                        <div class="flex justify-end">
-                                            <button type="submit" [disabled]="caseForm.invalid || loading"
-                                                class="px-6 py-2 bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
-                                                Save Case
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-[10px] font-black text-secondary uppercase tracking-widest">Additional Comments</label>
+                                        <textarea formControlName="additionalComments" rows="2"
+                                            class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-bold focus:ring-2 focus:ring-primary/20"
+                                            placeholder="Enter additional comments..."></textarea>
+                                    </div>
+                                    <label class="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200">
+                                        <input type="checkbox" formControlName="closeCase" class="h-4 w-4">
+                                        <span class="text-[10px] font-black text-secondary uppercase tracking-widest">
+                                            Close case after saving (release patient from my list)
+                                        </span>
+                                    </label>
+                                    <div class="flex justify-end">
+                                        <button type="submit" [disabled]="caseForm.invalid || loading"
+                                            class="px-6 py-2 bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
+                                            {{ caseForm.value.closeCase ? 'Save & Close Case' : 'Save Case' }}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
 
                                 <!-- Cases List -->
                                 <div class="overflow-hidden rounded-3xl border border-slate-100 divide-y divide-slate-100">

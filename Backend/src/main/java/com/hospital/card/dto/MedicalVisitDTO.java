@@ -20,5 +20,6 @@ public class MedicalVisitDTO {
     private String status;
     private String content;
     private String additionalComments;
+    private String doctorName;
     private java.time.LocalDateTime createdAt;
 }

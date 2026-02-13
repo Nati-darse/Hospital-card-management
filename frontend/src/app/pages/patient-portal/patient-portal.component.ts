@@ -19,6 +19,8 @@ export class PatientPortalComponent implements OnInit {
     clinicalHistory: any[] = [];
     assignedDoctor: any = null;
     loading = false;
+    requestingAppointment = false;
+    appointmentRequestMessage = '';
 
     // Password Update
     showPasswordForm = false;
@@ -126,6 +128,33 @@ export class PatientPortalComponent implements OnInit {
     onLogout(): void {
         this.authService.logout();
         this.router.navigate(['/login']);
+    }
+
+    requestAppointment(): void {
+        if (!this.patientProfile?.id || this.requestingAppointment) {
+            return;
+        }
+
+        this.requestingAppointment = true;
+        this.appointmentRequestMessage = '';
+
+        const payload = {
+            reason: 'Patient requested appointment from portal',
+            notes: this.assignedDoctor
+                ? `Current assigned doctor: Dr. ${this.assignedDoctor.user?.firstName || ''} ${this.assignedDoctor.user?.lastName || ''}`.trim()
+                : 'Patient currently has no assigned doctor.'
+        };
+
+        this.apiService.post('appointments/request', payload).subscribe({
+            next: () => {
+                this.requestingAppointment = false;
+                this.appointmentRequestMessage = 'Appointment request submitted to admin successfully.';
+            },
+            error: (err) => {
+                this.requestingAppointment = false;
+                this.appointmentRequestMessage = err?.error?.message || 'Failed to submit appointment request.';
+            }
+        });
     }
 
     toggleMobileMenu(): void {

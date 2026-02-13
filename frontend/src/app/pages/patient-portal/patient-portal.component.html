@@ -253,9 +253,12 @@
                                     'General' }}</span>
                             </div>
                         </div>
-                        <button
-                            class="w-full py-4 bg-slate-50 text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all">Request
-                            Appointment</button>
+                        <button (click)="requestAppointment()" [disabled]="requestingAppointment"
+                            class="w-full py-4 bg-slate-50 text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                            {{ requestingAppointment ? 'Submitting...' : 'Request Appointment' }}
+                        </button>
+                        <p *ngIf="appointmentRequestMessage"
+                            class="text-[10px] font-black uppercase tracking-widest text-primary">{{ appointmentRequestMessage }}</p>
                     </div>
                 </div>
 

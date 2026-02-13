@@ -26,6 +26,7 @@ public class PatientService {
     private final com.hospital.card.repository.MedicalVisitRepository medicalVisitRepository;
     private final com.hospital.card.repository.HospitalCardRepository hospitalCardRepository;
     private final com.hospital.card.repository.BillRepository billRepository;
+    private final AppointmentService appointmentService;
 
     public List<PatientDTO> getAllPatients() {
         return patientRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
@@ -57,6 +58,11 @@ public class PatientService {
         if (dto.getAssignedDoctorId() != null) {
             com.hospital.card.entity.Staff doctor = staffService.getStaffEntity(dto.getAssignedDoctorId());
             p.setAssignedDoctor(doctor);
+            appointmentService.markLatestPatientRequestAssigned(p.getId(), doctor);
+            hospitalCardRepository.findByPatientId(p.getId()).ifPresent(card -> {
+                card.setStatus("ACTIVE");
+                hospitalCardRepository.save(card);
+            });
         }
 
         if (dto.getMedicalRecordNumber() != null && !dto.getMedicalRecordNumber().isBlank()) {

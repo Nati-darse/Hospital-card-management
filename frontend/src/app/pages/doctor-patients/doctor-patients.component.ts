@@ -81,7 +81,8 @@ export class DoctorPatientsComponent implements OnInit {
             labTests: [''],
             prescription: [''],
             followUpDate: [''],
-            additionalComments: ['']
+            additionalComments: [''],
+            closeCase: [false]
         });
 
         this.referralForm = this.fb.group({
@@ -330,6 +331,8 @@ export class DoctorPatientsComponent implements OnInit {
         this.showCaseForm = !this.showCaseForm;
         if (!this.showCaseForm) {
             this.caseForm.reset();
+        } else {
+            this.caseForm.patchValue({ closeCase: false });
         }
     }
 
@@ -349,6 +352,7 @@ export class DoctorPatientsComponent implements OnInit {
         const labTests = (this.caseForm.value.labTests || '').trim();
         const additionalComments = (this.caseForm.value.additionalComments || '').trim();
         const followUpDate = this.caseForm.value.followUpDate || null;
+        const closeCase = !!this.caseForm.value.closeCase;
 
         if (!diagnosis) {
             this.loading = false;
@@ -365,7 +369,7 @@ export class DoctorPatientsComponent implements OnInit {
             prescription: prescription || null,
             labTests: labTests || null,
             followUpDate,
-            status: 'Active',
+            status: closeCase ? 'CLOSED' : 'Active',
             content: diagnosis,
             additionalComments: additionalComments || null
         };
@@ -383,10 +387,14 @@ export class DoctorPatientsComponent implements OnInit {
         this.apiService.post('visits', caseData).subscribe({
             next: (response) => {
                 this.loading = false;
-                alert('Medical case added successfully.');
+                alert(closeCase ? 'Case completed and patient released successfully.' : 'Medical case added successfully.');
                 this.caseForm.reset();
                 this.showCaseForm = false;
-                this.loadPatientCases();
+                if (closeCase) {
+                    this.loadPatients();
+                } else {
+                    this.loadPatientCases();
+                }
             },
             error: (err) => {
                 console.error('Failed to add medical case, trying alternative endpoint:', err);
@@ -394,10 +402,14 @@ export class DoctorPatientsComponent implements OnInit {
                 this.apiService.post('visits', caseData).subscribe({
                     next: (response) => {
                         this.loading = false;
-                        alert('Medical case added successfully.');
+                        alert(closeCase ? 'Case completed and patient released successfully.' : 'Medical case added successfully.');
                         this.caseForm.reset();
                         this.showCaseForm = false;
-                        this.loadPatientCases();
+                        if (closeCase) {
+                            this.loadPatients();
+                        } else {
+                            this.loadPatientCases();
+                        }
                     },
                     error: (err2) => {
                         this.loading = false;

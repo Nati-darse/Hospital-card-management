@@ -20,6 +20,7 @@ public class ReferralService {
     private final ReferralRepository referralRepository;
     private final PatientRepository patientRepository;
     private final StaffRepository staffRepository;
+    private final com.hospital.card.repository.HospitalCardRepository hospitalCardRepository;
     private final NotificationService notificationService;
     
     public List<ReferralDTO> getAllReferrals() {
@@ -66,6 +67,10 @@ public class ReferralService {
         // Move patient ownership to referred doctor so they are removed from current doctor's queue
         patient.setAssignedDoctor(referredDoctor);
         patientRepository.save(patient);
+        hospitalCardRepository.findByPatientId(patient.getId()).ifPresent(card -> {
+            card.setStatus("ACTIVE");
+            hospitalCardRepository.save(card);
+        });
         
         // Set default values
         if (referral.getStatus() == null) {

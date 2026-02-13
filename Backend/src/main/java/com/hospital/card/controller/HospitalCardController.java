@@ -43,9 +43,10 @@ public class HospitalCardController {
   public ResponseEntity<List<Map<String, Object>>> getAssignedPatients() {
     List<Map<String, Object>> assignedPatients = patientRepository.findAll().stream()
         .filter(patient -> patient.getUser() != null && Boolean.TRUE.equals(patient.getUser().getIsActive()))
+        .filter(patient -> patient.getAssignedDoctor() != null)
         .map(patient -> {
           HospitalCard card = hospitalCardRepository.findByPatientId(patient.getId()).orElse(null);
-          if (card == null) {
+          if (card == null || !"ACTIVE".equalsIgnoreCase(card.getStatus())) {
             return null;
           }
 
@@ -79,15 +80,7 @@ public class HospitalCardController {
           }
 
           patientInfo.put("hasCaseHistory", hasCaseHistory);
-          if (hasAssignedDoctor && hasCaseHistory) {
-            patientInfo.put("status", "Completed");
-          } else if (hasAssignedDoctor) {
-            patientInfo.put("status", "Pending Check-in");
-          } else if (hasCaseHistory) {
-            patientInfo.put("status", "Awaiting Reassignment");
-          } else {
-            patientInfo.put("status", "Unassigned");
-          }
+          patientInfo.put("status", hasCaseHistory ? "In Treatment" : "Pending Check-in");
 
           return patientInfo;
         })

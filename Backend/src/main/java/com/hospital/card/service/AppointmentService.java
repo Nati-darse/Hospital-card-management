@@ -54,6 +54,31 @@ public class AppointmentService {
     return toDto(saved);
   }
 
+  public AppointmentDTO createPatientAppointmentRequest(Long userId, AppointmentDTO dto) {
+    Patient patient = patientRepository.findByUserId(userId)
+        .orElseThrow(() -> new RuntimeException("Patient profile not found for user"));
+
+    Appointment request = new Appointment();
+    request.setPatient(patient);
+    request.setDoctor(null);
+    request.setAppointmentDateTime(dto.getAppointmentDateTime());
+    request.setStatus("REQUESTED");
+    request.setReason(dto.getReason());
+    request.setNotes(dto.getNotes());
+
+    Appointment saved = appointmentRepository.save(request);
+    return toDto(saved);
+  }
+
+  public void markLatestPatientRequestAssigned(Long patientId, Staff doctor) {
+    appointmentRepository.findTopByPatientIdAndStatusIgnoreCaseOrderByCreatedAtDesc(patientId, "REQUESTED")
+        .ifPresent(request -> {
+          request.setDoctor(doctor);
+          request.setStatus("ASSIGNED");
+          appointmentRepository.save(request);
+        });
+  }
+
   public AppointmentDTO updateAppointment(Long id, AppointmentDTO dto) {
     Appointment a = appointmentRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Appointment not found"));

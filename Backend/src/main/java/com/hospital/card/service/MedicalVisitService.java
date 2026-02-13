@@ -7,6 +7,7 @@ import com.hospital.card.entity.Staff;
 import com.hospital.card.repository.MedicalVisitRepository;
 import com.hospital.card.repository.PatientRepository;
 import com.hospital.card.repository.StaffRepository;
+import com.hospital.card.repository.HospitalCardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class MedicalVisitService {
     private final MedicalVisitRepository medicalVisitRepository;
     private final PatientRepository patientRepository;
     private final StaffRepository staffRepository;
+    private final HospitalCardRepository hospitalCardRepository;
 
     public List<MedicalVisitDTO> getAll() {
         return medicalVisitRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
@@ -55,6 +57,20 @@ public class MedicalVisitService {
         visit.setAdditionalComments(dto.getAdditionalComments());
 
         MedicalVisit saved = medicalVisitRepository.save(visit);
+
+        // Closing a case detaches the patient from the current doctor and removes
+        // them from active access-card workflow.
+        String normalizedStatus = dto.getStatus() == null ? "" : dto.getStatus().trim().toUpperCase();
+        if ("CLOSED".equals(normalizedStatus) || "COMPLETED".equals(normalizedStatus)) {
+            patient.setAssignedDoctor(null);
+            patientRepository.save(patient);
+
+            hospitalCardRepository.findByPatientId(patient.getId()).ifPresent(card -> {
+                card.setStatus("INACTIVE");
+                hospitalCardRepository.save(card);
+            });
+        }
+
         return toDto(saved);
     }
 
@@ -71,6 +87,7 @@ public class MedicalVisitService {
         dto.setStatus(visit.getStatus());
         dto.setContent(visit.getContent());
         dto.setAdditionalComments(visit.getAdditionalComments());
+        dto.setDoctorName(visit.getDoctor().getUser().getFirstName() + " " + visit.getDoctor().getUser().getLastName());
         dto.setCreatedAt(visit.getCreatedAt());
         return dto;
     }

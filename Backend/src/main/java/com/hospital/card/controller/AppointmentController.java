@@ -2,6 +2,7 @@ package com.hospital.card.controller;
 
 import com.hospital.card.dto.AppointmentDTO;
 import com.hospital.card.service.AppointmentService;
+import com.hospital.card.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 public class AppointmentController {
 
   private final AppointmentService appointmentService;
+  private final UserService userService;
 
   @GetMapping
   @PreAuthorize("hasAnyRole('ADMIN','USER')")
@@ -34,6 +36,15 @@ public class AppointmentController {
   @PreAuthorize("hasAnyRole('ADMIN','USER')")
   public ResponseEntity<AppointmentDTO> create(@Valid @RequestBody AppointmentDTO dto) {
     AppointmentDTO created = appointmentService.createAppointment(dto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(created);
+  }
+
+  @PostMapping("/request")
+  @PreAuthorize("hasRole('PATIENT')")
+  public ResponseEntity<AppointmentDTO> createRequest(@RequestBody AppointmentDTO dto, java.security.Principal principal) {
+    com.hospital.card.entity.User user = userService.findByUsername(principal.getName())
+        .orElseThrow(() -> new RuntimeException("User not found"));
+    AppointmentDTO created = appointmentService.createPatientAppointmentRequest(user.getId(), dto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
   }
 
