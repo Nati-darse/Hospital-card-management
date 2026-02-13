@@ -238,4 +238,11 @@ export class PatientRegistrationComponent implements OnInit {
     toggleMobileMenu(): void {
         this.mobileMenuOpen = !this.mobileMenuOpen;
     }
+
+    handleError(err: any): void {
+        this.loading = false;
+        const errorMessage = err.error?.message || err.message || 'An error occurred';
+        this.error = errorMessage;
+        console.error('Error:', err);
+    }
 }
