@@ -5,7 +5,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.UUID;
 
 import com.hospital.card.dto.AuthResponse;
 import com.hospital.card.dto.LoginRequest;
@@ -150,8 +154,14 @@ public class AuthService {
             // Update last login
             userService.updateLastLogin(user.getUsername());
 
+            // Invalidate previous sessions by rotating active session token
+            String sessionToken = UUID.randomUUID().toString();
+            userService.updateActiveSessionToken(user.getUsername(), sessionToken);
+
             // Generate token
-            String jwtToken = jwtService.generateToken(user);
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("sessionToken", sessionToken);
+            String jwtToken = jwtService.generateToken(claims, user);
 
             AuthResponse response = new AuthResponse(
                     jwtToken,

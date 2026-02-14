@@ -235,6 +235,15 @@
                         {{ loading ? (isEdit ? 'UPDATING...' : 'ENROLLING...') : (isEdit ? 'SAVE CHANGES' : 'CONFIRM ENROLLMENT') }}
                     </button>
                 </div>
+
+                <div *ngIf="error || success" class="pb-8">
+                    <div *ngIf="error" class="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl font-bold">
+                        {{ error }}
+                    </div>
+                    <div *ngIf="success" class="p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-xl font-bold">
+                        {{ success }}
+                    </div>
+                </div>
             </form>
         </div>
     </main>

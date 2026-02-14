@@ -80,6 +80,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User updateActiveSessionToken(String username, String sessionToken) {
+        User user = userRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setActiveSessionToken(sessionToken);
+        return userRepository.save(user);
+    }
+
     public void deactivateUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));

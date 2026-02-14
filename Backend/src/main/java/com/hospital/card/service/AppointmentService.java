@@ -4,9 +4,11 @@ import com.hospital.card.dto.AppointmentDTO;
 import com.hospital.card.entity.Appointment;
 import com.hospital.card.entity.Patient;
 import com.hospital.card.entity.Staff;
+import com.hospital.card.entity.UserRole;
 import com.hospital.card.repository.AppointmentRepository;
 import com.hospital.card.repository.PatientRepository;
 import com.hospital.card.repository.StaffRepository;
+import com.hospital.card.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class AppointmentService {
   private final AppointmentRepository appointmentRepository;
   private final PatientRepository patientRepository;
   private final StaffRepository staffRepository;
+  private final UserRepository userRepository;
+  private final NotificationService notificationService;
 
   public List<AppointmentDTO> getAllAppointments() {
     return appointmentRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
@@ -58,6 +62,13 @@ public class AppointmentService {
     Patient patient = patientRepository.findByUserId(userId)
         .orElseThrow(() -> new RuntimeException("Patient profile not found for user"));
 
+    if (patient.getAssignedDoctor() != null) {
+      throw new RuntimeException("You already have an assigned doctor.");
+    }
+    if (appointmentRepository.existsByPatientIdAndStatusIgnoreCase(patient.getId(), "REQUESTED")) {
+      throw new RuntimeException("You already have a pending appointment request.");
+    }
+
     Appointment request = new Appointment();
     request.setPatient(patient);
     request.setDoctor(null);
@@ -67,6 +78,36 @@ public class AppointmentService {
     request.setNotes(dto.getNotes());
 
     Appointment saved = appointmentRepository.save(request);
+    notifyAdminsOfRequest(saved);
+    return toDto(saved);
+  }
+
+  public List<AppointmentDTO> getRequestedAppointments() {
+    return appointmentRepository.findByStatusIgnoreCase("REQUESTED")
+        .stream()
+        .map(this::toDto)
+        .collect(Collectors.toList());
+  }
+
+  public AppointmentDTO assignRequestedAppointment(Long appointmentId, Long doctorId) {
+    Appointment appointment = appointmentRepository.findById(appointmentId)
+        .orElseThrow(() -> new RuntimeException("Appointment request not found"));
+
+    Patient patient = appointment.getPatient();
+    if (patient == null) {
+      throw new RuntimeException("Appointment request has no patient");
+    }
+
+    Staff doctor = staffRepository.findById(doctorId)
+        .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+    appointment.setDoctor(doctor);
+    appointment.setStatus("ASSIGNED");
+    Appointment saved = appointmentRepository.save(appointment);
+
+    patient.setAssignedDoctor(doctor);
+    patientRepository.save(patient);
+
     return toDto(saved);
   }
 
@@ -125,5 +166,16 @@ public class AppointmentService {
     dto.setNotes(a.getNotes());
     dto.setCreatedAt(a.getCreatedAt());
     return dto;
+  }
+
+  private void notifyAdminsOfRequest(Appointment appointment) {
+    if (appointment.getPatient() == null || appointment.getPatient().getUser() == null) {
+      return;
+    }
+    String patientName = appointment.getPatient().getUser().getFirstName() + " " + appointment.getPatient().getUser().getLastName();
+    String message = "New appointment request from " + patientName + " (" + appointment.getPatient().getMedicalRecordNumber() + ")";
+    userRepository.findByRole(UserRole.ADMIN).forEach(admin ->
+        notificationService.createNotification(admin, "Appointment Request", message, "appointment_request", appointment.getId())
+    );
   }
 }

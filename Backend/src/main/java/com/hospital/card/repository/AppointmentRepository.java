@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     java.util.List<Appointment> findByPatientId(Long patientId);
     java.util.List<Appointment> findByStatusIgnoreCase(String status);
+    boolean existsByPatientIdAndStatusIgnoreCase(Long patientId, String status);
     java.util.Optional<Appointment> findTopByPatientIdAndStatusIgnoreCaseOrderByCreatedAtDesc(Long patientId, String status);
     void deleteByPatientId(Long patientId);
 }

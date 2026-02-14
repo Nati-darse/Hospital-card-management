@@ -26,6 +26,12 @@ public class AppointmentController {
     return ResponseEntity.ok(appointmentService.getAllAppointments());
   }
 
+  @GetMapping("/requests")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<List<AppointmentDTO>> getRequestedAppointments() {
+    return ResponseEntity.ok(appointmentService.getRequestedAppointments());
+  }
+
   @GetMapping("/{id}")
   @PreAuthorize("hasAnyRole('ADMIN','USER')")
   public ResponseEntity<AppointmentDTO> getById(@PathVariable Long id) {
@@ -46,6 +52,13 @@ public class AppointmentController {
         .orElseThrow(() -> new RuntimeException("User not found"));
     AppointmentDTO created = appointmentService.createPatientAppointmentRequest(user.getId(), dto);
     return ResponseEntity.status(HttpStatus.CREATED).body(created);
+  }
+
+  @PutMapping("/{id}/assign")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<AppointmentDTO> assignRequest(@PathVariable Long id, @RequestParam Long doctorId) {
+    AppointmentDTO assigned = appointmentService.assignRequestedAppointment(id, doctorId);
+    return ResponseEntity.ok(assigned);
   }
 
   @PutMapping("/{id}")

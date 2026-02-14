@@ -141,6 +141,11 @@ export class PatientPortalComponent implements OnInit {
             return;
         }
 
+        if (this.assignedDoctor) {
+            this.appointmentRequestMessage = 'You already have an assigned doctor.';
+            return;
+        }
+
         this.requestingAppointment = true;
         this.appointmentRequestMessage = '';
 
@@ -154,7 +159,7 @@ export class PatientPortalComponent implements OnInit {
         this.apiService.post('appointments/request', payload).subscribe({
             next: () => {
                 this.requestingAppointment = false;
-                this.appointmentRequestMessage = 'Appointment request submitted to admin successfully.';
+                this.appointmentRequestMessage = 'Appointment request submitted. Admin will assign a doctor.';
             },
             error: (err) => {
                 this.requestingAppointment = false;

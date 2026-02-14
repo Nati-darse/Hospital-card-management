@@ -119,6 +119,36 @@
             </div>
         </header>
 
+        <section *ngIf="isAdmin && pendingRequests.length > 0" class="px-4 sm:px-6 lg:px-10 pt-6">
+            <div class="bg-amber-50 border border-amber-100 rounded-3xl p-6">
+                <h3 class="text-sm font-black text-amber-700 uppercase tracking-widest mb-4">
+                    Pending Appointment Requests ({{ pendingRequests.length }})
+                </h3>
+                <div class="space-y-3">
+                    <div *ngFor="let req of pendingRequests"
+                        class="bg-white border border-amber-100 rounded-2xl p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                        <div>
+                            <p class="text-sm font-black text-secondary">{{ getPatientNameById(req.patientId) }}</p>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Requested: {{ req.createdAt | date:'medium' }}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select [(ngModel)]="requestDoctorByAppointment[req.id]"
+                                class="bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold">
+                                <option value="">Select doctor</option>
+                                <option *ngFor="let doctor of doctors" [value]="doctor.id">
+                                    Dr. {{ doctor.user?.firstName }} {{ doctor.user?.lastName }} ({{ doctor.department || 'General' }})
+                                </option>
+                            </select>
+                            <button (click)="assignDoctorForRequest(req)" [disabled]="loading"
+                                class="px-4 py-2 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest disabled:opacity-60">
+                                Assign
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Content Grid -->
         <div class="p-4 sm:p-6 lg:p-10 flex flex-col xl:flex-row gap-6 sm:gap-8 flex-1 overflow-hidden">
             <!-- Left Side: Table -->

@@ -20,6 +20,8 @@ export class PatientsComponent implements OnInit {
   filteredPatients: any[] = [];
   searchQuery = '';
   doctors: any[] = [];
+  pendingRequests: any[] = [];
+  requestDoctorByAppointment: Record<number, string> = {};
   loading = false;
   assigningId: number | null = null;
   showDetailModal = false;
@@ -58,6 +60,9 @@ export class PatientsComponent implements OnInit {
     this.isAdmin = this.currentUser?.role === 'ADMIN';
     this.loadPatients();
     this.loadDoctors();
+    if (this.isAdmin) {
+      this.loadPendingRequests();
+    }
   }
 
   loadDoctors(): void {
@@ -80,6 +85,9 @@ export class PatientsComponent implements OnInit {
         const previousSelectedId = this.detailPatient?.id;
         this.detailPatient = this.filteredPatients.find((p: any) => p.id === previousSelectedId) || this.filteredPatients[0] || null;
         this.loading = false;
+        if (this.isAdmin) {
+          this.loadPendingRequests();
+        }
       },
       error: (err) => {
         console.error('Error loading patients', err);
@@ -158,6 +166,46 @@ export class PatientsComponent implements OnInit {
         alert('Failed to assign doctor.');
       }
     });
+  }
+
+  loadPendingRequests(): void {
+    this.apiService.get('appointments/requests').subscribe({
+      next: (data: any[]) => {
+        this.pendingRequests = data || [];
+      },
+      error: (err) => {
+        console.error('Error loading pending appointment requests', err);
+        this.pendingRequests = [];
+      }
+    });
+  }
+
+  assignDoctorForRequest(request: any): void {
+    const doctorId = this.requestDoctorByAppointment[request.id];
+    if (!doctorId) {
+      alert('Please select a doctor first.');
+      return;
+    }
+    this.loading = true;
+    this.apiService.put(`appointments/${request.id}/assign?doctorId=${doctorId}`, {}).subscribe({
+      next: () => {
+        this.loading = false;
+        alert('Doctor assigned for appointment request.');
+        delete this.requestDoctorByAppointment[request.id];
+        this.loadPendingRequests();
+        this.loadPatients();
+      },
+      error: (err) => {
+        this.loading = false;
+        alert(err?.error?.message || 'Failed to assign doctor for request.');
+      }
+    });
+  }
+
+  getPatientNameById(patientId: number): string {
+    const patient = this.patients.find(p => p.id === patientId);
+    if (!patient) return `Patient #${patientId}`;
+    return `${patient.user?.firstName || ''} ${patient.user?.lastName || ''}`.trim() || `Patient #${patientId}`;
   }
 
   editPatient(patient: any): void {

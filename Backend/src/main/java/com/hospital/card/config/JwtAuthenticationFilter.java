@@ -1,6 +1,7 @@
 package com.hospital.card.config;
 
 import com.hospital.card.service.JwtService;
+import com.hospital.card.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -42,6 +44,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
+                String tokenSession = jwtService.extractSessionToken(jwt);
+                String activeSession = userRepository.findByUsernameIgnoreCase(userEmail)
+                        .map(com.hospital.card.entity.User::getActiveSessionToken)
+                        .orElse(null);
+
+                // Reject token if another login has rotated session token
+                if (tokenSession == null || activeSession == null || !tokenSession.equals(activeSession)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"Session expired due to login from another device/location.\"}");
+                    return;
+                }
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

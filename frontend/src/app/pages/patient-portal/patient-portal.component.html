@@ -253,13 +253,23 @@
                                     'General' }}</span>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Unassigned Doctor / Appointment Request -->
+                    <div *ngIf="!assignedDoctor"
+                        class="bg-white rounded-[40px] shadow-sm border border-slate-100 p-8 space-y-6">
+                        <div class="leading-none">
+                            <p class="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-1.5">Doctor Assignment</p>
+                            <h4 class="text-lg font-black text-secondary leading-none">No Doctor Assigned</h4>
+                        </div>
+                        <p class="text-xs font-bold text-slate-500">Request an appointment and admin will assign a doctor.</p>
                         <button (click)="requestAppointment()" [disabled]="requestingAppointment"
                             class="w-full py-4 bg-slate-50 text-secondary rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-secondary hover:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed">
                             {{ requestingAppointment ? 'Submitting...' : 'Request Appointment' }}
                         </button>
-                        <p *ngIf="appointmentRequestMessage"
-                            class="text-[10px] font-black uppercase tracking-widest text-primary">{{ appointmentRequestMessage }}</p>
                     </div>
+                    <p *ngIf="appointmentRequestMessage"
+                        class="text-[10px] font-black uppercase tracking-widest text-primary">{{ appointmentRequestMessage }}</p>
                 </div>
 
                 <!-- Right: Clinical Timeline & Prescriptions -->

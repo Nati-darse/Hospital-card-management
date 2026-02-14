@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, finalize } from 'rxjs';
 
 @Component({
     selector: 'app-patient-registration',
@@ -226,13 +226,14 @@ export class PatientRegistrationComponent implements OnInit {
         const userUpdate$ = this.apiService.put(`users/${userId}`, userData);
         const patientUpdate$ = this.apiService.put(`patients/${this.editId}`, patientData);
 
-        forkJoin([userUpdate$, patientUpdate$]).subscribe({
-            next: () => {
-                this.loading = false;
-                this.success = 'Patient updated successfully!';
-            },
-            error: (err: any) => this.handleError(err)
-        });
+        forkJoin([userUpdate$, patientUpdate$])
+            .pipe(finalize(() => this.loading = false))
+            .subscribe({
+                next: () => {
+                    this.success = 'Patient updated successfully!';
+                },
+                error: (err: any) => this.handleError(err)
+            });
     }
 
     toggleMobileMenu(): void {

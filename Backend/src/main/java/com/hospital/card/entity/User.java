@@ -65,6 +65,9 @@ public class User implements org.springframework.security.core.userdetails.UserD
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @Column(name = "active_session_token")
+    private String activeSessionToken;
+
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
