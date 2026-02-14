@@ -1,112 +1,159 @@
-# Atlas Hospital Management System
+# Atlas Hospital Card Management
 
-Atlas Hospital is a state-of-art medical management platform designed for high-precision healthcare coordination. Built with a secure Spring Boot backend and a premium Angular frontend, it provides a centralized hub for patient records, secure NFC access cards, and staff management.
+Atlas is a full-stack hospital workflow system for patient lifecycle management, doctor assignment, referrals, prescriptions, medical case history, and access-card tracking.
 
-## 🏛️ System Architecture
+It includes:
+- Angular frontend (`frontend/`)
+- Spring Boot backend (`Backend/`)
+- PostgreSQL persistence
 
-The project follows a modern full-stack architecture with a clear separation between the data, logic, and presentation layers.
+## Overview
 
-```mermaid
-graph TD
-    subgraph Frontend [Angular 21 Client]
-        A[App Components] --> B[Auth Guard]
-        B --> C[Auth Interceptor]
-        C --> D[Auth Service]
-        D --> E[REST Client]
-    end
+The system is role-driven:
+- `ADMIN` manages users, patients, assignments, and card/access operations.
+- `USER` (Doctor) handles currently assigned patients, treatment, referrals, prescriptions, and case closure.
+- `PATIENT` views profile/history/prescriptions and can request appointments when unassigned.
 
-    subgraph Backend [Spring Boot API]
-        E --> F[Auth Controller]
-        F --> G[JWT Filter]
-        G --> H[Security Config]
-        H --> I[Auth Service]
-        I --> J[User Repository]
-    end
+## Current Workflow Logic
 
-    subgraph Database [PostgreSQL]
-        J --> K[(Hospital DB)]
-    end
-```
+### Admin to Doctor assignment
+- Admin assigns a doctor to a patient.
+- Patient appears immediately in that doctor's patient queue.
+- Access-card list includes patients with active cards and active doctor assignment.
 
-## 🚀 Tech Stack
+### Doctor treatment flow
+- Doctor can add prescriptions.
+- Prescription is automatically written to prescription history and also auto-logged into medical case history.
+- Doctor can:
+1. Refer patient to another doctor:
+   - Patient is removed from current doctor queue.
+   - Patient appears in referred doctor queue immediately.
+   - Assigned doctor updates on patient/admin views.
+2. Close case:
+   - Case is saved with closed/completed status.
+   - Patient is detached from doctor assignment.
+   - Card is set inactive and removed from active access-card workflow.
+
+### Patient appointment request flow
+- "Request Appointment" appears only when patient has no assigned doctor.
+- Request creates a pending appointment request for admin.
+- Admin sees pending requests and can assign a doctor directly from admin patient interface.
+- Assignment updates both:
+  - appointment request status (`ASSIGNED`)
+  - patient's assigned doctor
+
+## Security Model
+
+### Authentication and authorization
+- JWT-based authentication via Spring Security.
+- Role-based endpoint protection (`ADMIN`, `USER`, `PATIENT`).
+
+### Single active session per account
+- New login rotates the user's active session token.
+- Previous JWT becomes invalid and is rejected on next request.
+- Result: latest login wins, old login is terminated.
+
+### Frontend session hardening
+- Session state stored in `sessionStorage` (tab-scoped).
+- Automatic logout after 10 minutes of inactivity.
+
+## Tech Stack
 
 ### Backend
-- **Framework**: Spring Boot 3.x
-- **Security**: Spring Security with JWT (JSON Web Tokens)
-- **Database**: PostgreSQL 15+
-- **Persistence**: Spring Data JPA / Hibernate
-- **Utility**: Lombok, Jakarta Validation
+- Java 21
+- Spring Boot 3.x
+- Spring Security + JWT
+- Spring Data JPA / Hibernate
+- PostgreSQL
 
 ### Frontend
-- **Framework**: Angular 21 (Standalone Components)
-- **Styling**: Tailwind CSS 4.x (Premium Design System)
-- **State Management**: RxJS & Observables
-- **Theming**: Atlas Precision (Blue/Black/White)
+- Angular (standalone components)
+- RxJS
+- Tailwind CSS
 
----
+## Repository Structure
 
-## 🔐 Core Features
+```text
+Backend/     Spring Boot API and domain logic
+frontend/    Angular client application
+README.md    Project documentation
+```
 
-### 1. Advanced Authentication
-- **Secure Onboarding**: Multi-role registration (DOCTOR, NURSE, ADMIN, STAFF).
-- **JWT Protection**: Stateless session management with automatic token attachment via HTTP Interceptors.
-- **Role-Based Access**: Specialized views and restricted navigation based on staff hierarchy.
-
-### 2. Clinical Patient Records
-- **Vitals Tracking**: Comprehensive database of enrolled patients with clinical identities.
-- **Advanced Search**: Real-time filtering and search via clinical parameters.
-- **Profile Management**: Rich tabular views for rapid record access and updates.
-
-### 3. NFC Card Security
-- **Digital Identity**: Stylized visual representations of physical hospital access cards.
-- **3D Interaction**: Premium UI with 3D hover effects for card verification.
-- **Life-cycle Management**: Ability to issue, rotate, and revoke cards digitally.
-
-### 4. Personnel Directory
-- **Staff Health**: Online status indicators and professional role tracking.
-- **Administrative Control**: Advanced tools for managing medical practitioners and support staff.
-
----
-
-## 🛠️ Development Setup
+## Setup
 
 ### Prerequisites
 - JDK 21
-- PostgreSQL 15+
-- Node.js & npm (latest)
-- Angular CLI (`npm install -g @angular/cli`)
+- Node.js + npm
+- PostgreSQL
 
-### Backend Setup
-1. Configure your database in `Backend/src/main/resources/application.properties`.
-2. Run the application:
-   ```bash
-   cd Backend
-   ./mvnw spring-boot:run
-   ```
+### Backend
+1. Configure environment variables or `Backend/src/main/resources/application.properties`:
+   - `DB_URL`
+   - `DB_USERNAME`
+   - `DB_PASSWORD`
+   - `JWT_SECRET`
+2. Run backend:
+   - Windows:
+     ```bash
+     cd Backend
+     .\\mvnw.cmd spring-boot:run
+     ```
+   - Unix/macOS:
+     ```bash
+     cd Backend
+     ./mvnw spring-boot:run
+     ```
 
-### Frontend Setup
-1. Install dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
-2. Start the development server:
-   ```bash
-   ng serve
-   ```
-3. Access at `http://localhost:4200`
+### Frontend
+```bash
+cd frontend
+npm install
+npm run start
+```
 
----
+Default URL: `http://localhost:4200`
 
-## 🚥 API Reference
+## Build and Test
 
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :--- |
-| POST | `/api/auth/login` | Staff Authentication | ❌ No |
-| POST | `/api/auth/register` | Staff Registration | ❌ No |
-| GET | `/api/patients` | Fetch All Patient Records | ✅ Yes |
-| POST | `/api/cards` | Issue New Access Card | ✅ Yes |
-| GET | `/api/users` | List Staff Directory | ✅ Yes (Admin) |
+### Backend
+```bash
+cd Backend
+.\\mvnw.cmd -DskipTests compile
+.\\mvnw.cmd test
+```
 
----
-*Created with precision for Atlas Hospital Medical Center.*
+### Frontend
+```bash
+cd frontend
+npm run build
+```
+
+## Main API Endpoints
+
+### Auth
+- `POST /api/auth/login`
+- `POST /api/auth/register-patient`
+- `GET /api/auth/me`
+
+### Patients and assignment
+- `GET /api/patients`
+- `GET /api/patients/{id}`
+- `PUT /api/patients/{id}`
+
+### Appointments
+- `POST /api/appointments/request` (patient)
+- `GET /api/appointments/requests` (admin pending requests)
+- `PUT /api/appointments/{id}/assign?doctorId={doctorId}` (admin assignment)
+
+### Doctor operations
+- `POST /api/referrals`
+- `POST /api/prescriptions`
+- `POST /api/visits`
+
+### Cards
+- `GET /api/cards/assigned-patients`
+
+## Notes
+
+- Database schema auto-updates via Hibernate (`spring.jpa.hibernate.ddl-auto=update`).
+- Existing active sessions are invalidated when same user logs in from another place.
