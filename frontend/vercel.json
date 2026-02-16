@@ -12,7 +12,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://hospital-card-management-backend.onrender.com/api/$1"
+      "destination": "https://hospital-card-management.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
