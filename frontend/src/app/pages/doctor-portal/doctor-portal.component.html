@@ -192,6 +192,42 @@
                 </div>
             </div>
 
+            <!-- Referred Cases -->
+            <div *ngIf="pendingReferrals.length > 0"
+                class="bg-white rounded-[30px] sm:rounded-[40px] lg:rounded-[50px] shadow-sm border border-slate-100 p-6 sm:p-8 lg:p-10">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg sm:text-xl font-black text-secondary">Referred Cases</h3>
+                    <span class="px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                        {{ pendingReferrals.length }} Referred
+                    </span>
+                </div>
+                <div class="space-y-4">
+                    <div *ngFor="let referral of pendingReferrals" class="border border-slate-100 rounded-2xl p-4 bg-slate-50/40">
+                        <div class="flex items-center justify-between gap-4">
+                            <div>
+                                <p class="font-black text-secondary text-sm">{{ referral.patientName }}</p>
+                                <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500">MRN: {{ referral.patientMRN }}</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[9px] font-black uppercase tracking-widest">
+                                    Referred
+                                </span>
+                                <button (click)="toggleReferralDetails(referral.id)"
+                                    class="px-3 py-2 bg-primary text-white rounded-lg text-[10px] font-black uppercase tracking-widest">
+                                    {{ expandedReferralId === referral.id ? 'Hide' : 'See' }}
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngIf="expandedReferralId === referral.id" class="mt-4 p-4 bg-white rounded-xl border border-slate-100">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">From</p>
+                            <p class="text-sm font-bold text-secondary mb-3">{{ referral.referringDoctorName }}</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Referral Note</p>
+                            <p class="text-sm text-slate-600">{{ referral.reason || 'No referral note provided.' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
                 <div

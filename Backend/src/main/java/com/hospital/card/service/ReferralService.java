@@ -100,9 +100,13 @@ public class ReferralService {
     
     private void createReferralNotification(Referral referral) {
         String title = "New Patient Referral";
-        String message = String.format("You have been referred a new patient: %s (%s)", 
+        String reasonText = (referral.getReason() == null || referral.getReason().isBlank())
+                ? "No referral note provided."
+                : referral.getReason();
+        String message = String.format("You have been referred a new patient: %s (%s). Note: %s", 
                 referral.getPatient().getUser().getFirstName() + " " + referral.getPatient().getUser().getLastName(),
-                referral.getPatient().getMedicalRecordNumber());
+                referral.getPatient().getMedicalRecordNumber(),
+                reasonText);
         
         notificationService.createNotification(
                 referral.getReferredDoctor().getUser(),

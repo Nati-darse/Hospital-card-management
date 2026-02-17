@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } 
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { User } from '../../models/auth.models';
+import { forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-doctor-prescriptions',
@@ -21,6 +22,8 @@ export class DoctorPrescriptionsComponent implements OnInit {
     patientHistory: any[] = [];
     prescriptionForm: FormGroup;
     loading = false;
+    actionSuccess = '';
+    actionError = '';
 
     // Password Update
     showPasswordForm = false;
@@ -142,22 +145,35 @@ export class DoctorPrescriptionsComponent implements OnInit {
         if (this.prescriptionForm.invalid || !this.selectedPatient) return;
 
         this.loading = true;
+        this.actionSuccess = '';
+        this.actionError = '';
         const visitData = {
             ...this.prescriptionForm.value,
             doctorId: this.staffProfile.id,
             visitDate: new Date().toISOString().split('T')[0]
         };
 
-        this.apiService.post('visits', visitData).subscribe({
+        const prescriptionPayload = {
+            patientId: this.selectedPatient.id,
+            doctorId: this.staffProfile.id,
+            medication: this.prescriptionForm.value.prescription,
+            dosage: '',
+            instructions: this.prescriptionForm.value.content || this.prescriptionForm.value.diagnosis || ''
+        };
+
+        forkJoin([
+            this.apiService.post('visits', visitData),
+            this.apiService.post('prescriptions', prescriptionPayload)
+        ]).subscribe({
             next: () => {
                 this.loading = false;
-                alert('Medical record saved successfully!');
+                this.actionSuccess = 'Prescription and medical record saved successfully.';
                 this.prescriptionForm.reset({ status: 'Stable', patientId: this.selectedPatient.id });
                 this.loadPatientHistory(this.selectedPatient.id);
             },
             error: (err) => {
                 this.loading = false;
-                alert(err.error?.message || 'Failed to save record.');
+                this.actionError = err?.error?.message || 'Failed to save prescription/record.';
             }
         });
     }

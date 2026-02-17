@@ -19,6 +19,8 @@ export class DoctorPortalComponent implements OnInit {
     patientsCount = 0;
     todaysVisitsCount = 0;
     recentPatients: any[] = [];
+    pendingReferrals: any[] = [];
+    expandedReferralId: number | null = null;
     loading = false;
 
     // Password Update
@@ -84,10 +86,27 @@ export class DoctorPortalComponent implements OnInit {
             next: (visits: any[]) => {
                 const today = new Date().toISOString().split('T')[0];
                 this.todaysVisitsCount = visits.filter(v => v.visitDate === today).length;
+                this.loadPendingReferrals();
+            },
+            error: () => this.loadPendingReferrals()
+        });
+    }
+
+    loadPendingReferrals(): void {
+        this.apiService.get(`referrals/doctor/${this.staffProfile.id}/pending`).subscribe({
+            next: (referrals: any[]) => {
+                this.pendingReferrals = referrals || [];
                 this.loading = false;
             },
-            error: () => this.loading = false
+            error: () => {
+                this.pendingReferrals = [];
+                this.loading = false;
+            }
         });
+    }
+
+    toggleReferralDetails(referralId: number): void {
+        this.expandedReferralId = this.expandedReferralId === referralId ? null : referralId;
     }
 
     togglePasswordForm(): void {
