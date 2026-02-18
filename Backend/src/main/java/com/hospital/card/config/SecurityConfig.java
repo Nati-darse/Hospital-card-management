@@ -40,7 +40,15 @@ public class SecurityConfig {
                         org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/register-patient", "/api/auth/test").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/health",
+                                "/api/test/health",
+                                "/api/version",
+                                "/api/auth/login",
+                                "/api/auth/register-patient",
+                                "/api/auth/test"
+                        ).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
