@@ -6,8 +6,11 @@
         </svg>
     </button>
 
+    <!-- Mobile Backdrop -->
+    <div *ngIf="mobileMenuOpen" (click)="mobileMenuOpen = false" class="lg:hidden fixed inset-0 bg-black/40 z-30"></div>
+
     <!-- Sidebar -->
-    <aside [class]="mobileMenuOpen ? 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden lg:static lg:inset-auto lg:translate-x-0' : 'fixed inset-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full lg:static lg:inset-auto lg:translate-x-0'">
+    <aside [class]="mobileMenuOpen ? 'fixed inset-y-0 left-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden transition-transform duration-300 lg:static lg:inset-auto lg:translate-x-0' : 'fixed inset-y-0 left-0 z-40 w-72 bg-secondary text-white flex-shrink-0 flex flex-col shadow-2xl overflow-hidden -translate-x-full transition-transform duration-300 lg:static lg:inset-auto lg:translate-x-0'">
         <div class="p-8 flex items-center gap-4 bg-primary/10">
             <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
@@ -81,7 +84,7 @@
     <main class="flex-1 overflow-y-auto relative flex flex-col">
         <!-- Header -->
         <header
-            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 border-b border-slate-100 flex items-center justify-between">
+            class="bg-white/80 backdrop-blur-md sticky top-0 z-10 pl-16 pr-4 sm:pl-6 sm:pr-6 lg:px-10 py-4 sm:py-6 lg:py-8 border-b border-slate-100 flex items-center justify-between gap-3">
             <div>
                 <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-secondary tracking-tight">Staff Dashboard</h1>
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Welcome back, Dr. {{
@@ -97,7 +100,7 @@
             </button>
         </header>
 
-        <div class="p-4 sm:p-6 lg:p-10 space-y-6 sm:space-y-8 lg:space-y-10">
+        <div class="p-4 sm:p-6 lg:p-10 pb-8 space-y-6 sm:space-y-8 lg:space-y-10">
             <!-- Password Update Modal Overflow -->
             <div *ngIf="showPasswordForm" class="bg-white rounded-[20px] sm:rounded-[30px] lg:rounded-[40px] shadow-2xl border border-primary/20 p-4 sm:p-6 lg:p-10">
                 <div class="flex items-center justify-between mb-6 sm:mb-8">
@@ -203,12 +206,12 @@
                 </div>
                 <div class="space-y-4">
                     <div *ngFor="let referral of pendingReferrals" class="border border-slate-100 rounded-2xl p-4 bg-slate-50/40">
-                        <div class="flex items-center justify-between gap-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div>
                                 <p class="font-black text-secondary text-sm">{{ referral.patientName }}</p>
                                 <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500">MRN: {{ referral.patientMRN }}</p>
                             </div>
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 self-start sm:self-auto">
                                 <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-[9px] font-black uppercase tracking-widest">
                                     Referred
                                 </span>
@@ -257,7 +260,7 @@
                         <p class="text-slate-400 font-bold text-sm max-w-xs leading-relaxed">Record visit notes,
                             prescribe medications, and track clinical history timelines for your patients.</p>
                         <button routerLink="/doctor-prescriptions"
-                            class="mt-4 px-8 py-3 bg-secondary text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-secondary/20">Write
+                            class="mt-3 sm:mt-4 px-6 sm:px-8 py-2 sm:py-3 bg-secondary text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-secondary/20">Write
                             Prescription</button>
                     </div>
                     <div class="absolute right-[-10%] top-[20%] opacity-5">
